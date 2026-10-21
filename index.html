@@ -2,1530 +2,204 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Yumilo Market | Enterprise Escrow & Multi-Vendor Ecosystem</title>
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yumilo Market | Premium Farm-to-Table & Escrow Marketplace</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
-
-        :root {
-            --primary: #112217;
-            --primary-light: #1b3827;
-            --accent: #d4af37;
-            --orange: #f38220;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --success-bg: #d1fae5;
-            --warning: #d97706;
-            --warning-bg: #fef3c7;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            padding-bottom: 85px; /* Room for fixed bottom nav */
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* ================= 1. HEADER & SEARCH ================= */
-        .top-header {
-            background: #ffffff;
-            border-bottom: 1px solid var(--border);
-            padding: 12px 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        @media (min-width: 769px) {
-            .top-header {
-                padding: 14px 40px;
-            }
-        }
-        .top-header-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-        .logo-area img {
-            height: 38px;
-            width: auto;
-            border-radius: 8px;
-            display: block;
-            object-fit: contain;
-        }
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .auth-portal-btn {
-            background: var(--primary);
-            color: var(--accent);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 7px 16px;
-            border-radius: 9999px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        .auth-portal-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        /* Full-Width Search Bar */
-        .search-box {
-            width: 100%;
-            background: #f1f5f9;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 10px 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s ease;
-        }
-        .search-box:focus-within {
-            background: #ffffff;
-            border-color: var(--orange);
-            box-shadow: 0 0 0 3px rgba(243, 130, 32, 0.15);
-        }
-        .search-icon {
-            font-size: 15px;
-            color: #64748b;
-        }
-        .search-box input {
-            border: none;
-            background: transparent;
-            outline: none;
-            width: 100%;
-            font-size: 13.5px;
-            color: var(--text-main);
-        }
-        .search-box input::placeholder {
-            color: #94a3b8;
-        }
-
-        /* Main Container - Seamless transition directly under search bar */
-        .main-container {
-            max-width: 1200px;
-            margin: 14px auto 20px;
-            padding: 0 14px;
-        }
-        @media (min-width: 769px) {
-            .main-container {
-                padding: 0 40px;
-                margin: 20px auto 40px;
-            }
-        }
-        .portal-view { display: none; }
-        .portal-view.active { display: block; }
-
-        /* ================= 2. WELCOME & ESCROW BANNER ================= */
-        .top-greeting-card {
-            background: transparent;
-            border: none;
-            padding: 2px 2px 10px 2px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px dashed rgba(226, 232, 240, 0.9);
-        }
-        .top-greeting-card h2 {
-            font-size: 14.5px;
-            font-weight: 700;
-            color: var(--primary);
-            letter-spacing: -0.2px;
-        }
-        .top-greeting-card span {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            background: #ffffff;
-            padding: 3px 10px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-
-        /* Secure Escrow Card */
-        .escrow-banner-card {
-            background: linear-gradient(135deg, #0b1f13 0%, #153823 100%);
-            border: 1px solid rgba(212, 175, 55, 0.28);
-            border-radius: 16px;
-            padding: 18px 20px;
-            color: white;
-            margin-bottom: 22px;
-            box-shadow: 0 6px 20px rgba(17, 34, 23, 0.12);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: flex-start;
-        }
-        @media (min-width: 600px) {
-            .escrow-banner-card {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                padding: 22px 28px;
-            }
-        }
-        .escrow-tag {
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            color: var(--accent);
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-        .escrow-title {
-            font-size: 18px;
-            font-weight: 800;
-            line-height: 1.25;
-            margin-bottom: 4px;
-        }
-        .escrow-desc {
-            font-size: 13px;
-            opacity: 0.88;
-            line-height: 1.4;
-        }
-        .escrow-shop-btn {
-            background: var(--orange);
-            color: white;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 9999px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(243, 130, 32, 0.3);
-            white-space: nowrap;
-            transition: all 0.2s;
-            align-self: flex-start;
-        }
-        .escrow-shop-btn:hover {
-            background: #e07110;
-            transform: translateY(-1px);
-        }
-
-        /* ================= 3. PRODUCT CATALOG ================= */
-        .catalog-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-        .catalog-heading {
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: -0.3px;
-        }
-        @media (min-width: 769px) {
-            .catalog-heading {
-                font-size: 22px;
-            }
-        }
-
-        /* 2-Column Grid on Mobile */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-        @media (min-width: 769px) {
-            .product-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
-            }
-        }
-        .product-card {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 10px;
-            border: 1px solid #eef2f6;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, border-color 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-        .product-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(17, 34, 23, 0.08);
-            border-color: #cbd5e1;
-        }
-        .product-card-body {
-            display: flex;
-            flex-direction: column;
-        }
-        .product-img-wrap {
-            width: 100%;
-            height: 125px;
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            background: #f1f5f9;
-        }
-        @media (min-width: 769px) {
-            .product-img-wrap {
-                height: 165px;
-            }
-        }
-        .product-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.3s ease;
-        }
-        .product-card:hover .product-img {
-            transform: scale(1.04);
-        }
-        .product-badge {
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(4px);
-            color: #047857;
-            font-size: 9.5px;
-            font-weight: 700;
-            padding: 3px 7px;
-            border-radius: 6px;
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            z-index: 2;
-        }
-        .product-badge::before {
-            content: "●";
-            color: #10b981;
-            font-size: 8px;
-        }
-        .product-info {
-            padding-top: 8px;
-        }
-        .store-tag {
-            font-size: 10.5px;
-            color: #64748b;
-            font-weight: 500;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .product-title {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: #0f172a;
-            line-height: 1.35;
-            margin: 0 0 4px 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            min-height: 36px;
-        }
-        .product-price-row {
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
-            margin-bottom: 8px;
-        }
-        .product-price {
-            font-size: 16px;
-            font-weight: 800;
-            color: #047857;
-            letter-spacing: -0.2px;
-        }
-        .add-btn {
-            background-color: var(--orange);
-            color: white;
-            border: none;
-            padding: 9px 12px;
-            border-radius: 9px;
-            font-weight: 700;
-            font-size: 12.5px;
-            cursor: pointer;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            transition: all 0.15s ease;
-            box-shadow: 0 2px 6px rgba(243, 130, 32, 0.22);
-        }
-        .add-btn:hover {
-            background-color: #e07110;
-            box-shadow: 0 4px 12px rgba(243, 130, 32, 0.35);
-        }
-        .add-btn:active {
-            transform: scale(0.97);
-        }
-
-        /* ================= 4. FIXED BOTTOM NAVIGATION BAR ================= */
-        .bottom-nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 62px;
-            background: #ffffff;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 1000;
-            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.05);
-            padding: 0 4px;
-        }
-        .nav-item {
-            background: transparent;
-            border: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
-            flex: 1;
-            height: 100%;
-            cursor: pointer;
-            color: #64748b;
-            font-size: 11px;
-            font-weight: 600;
-            transition: color 0.15s ease;
-            padding: 6px 0;
-        }
-        .nav-item:hover, .nav-item.active {
-            color: var(--primary);
-        }
-        .nav-item.active .nav-label {
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .nav-icon {
-            font-size: 19px;
-            line-height: 1;
-            position: relative;
-        }
-        .nav-cart-icon {
+        .animate-marquee {
             display: inline-block;
+            animation: marquee 25s linear infinite;
         }
-        .bottom-cart-badge {
-            position: absolute;
-            top: -4px;
-            right: -8px;
-            background: var(--orange);
-            color: white;
-            font-size: 9.5px;
-            font-weight: 800;
-            min-width: 16px;
-            height: 16px;
-            padding: 0 4px;
-            border-radius: 9999px;
-            border: 2px solid #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* ================= 5. ROLE-BASED DASHBOARD STYLES ================= */
-        .role-back-btn {
-            background: #ffffff;
-            color: var(--primary);
-            border: 1px solid var(--border);
-            padding: 8px 16px;
-            border-radius: 9999px;
-            font-size: 12.5px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-bottom: 16px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            transition: all 0.2s;
-        }
-        .role-back-btn:hover {
-            background: #f1f5f9;
-        }
-
-        .vendor-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
-        @media (min-width: 769px) { .dashboard-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
-        .stat-card { background: white; border-radius: 14px; padding: 16px; border: 1px solid var(--border); box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
-        .stat-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-value { font-size: 20px; font-weight: 800; color: var(--primary); margin-top: 6px; }
-
-        .vendor-subnav {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            border-bottom: none;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-        .vendor-subnav::-webkit-scrollbar { display: none; }
-        .vendor-subtab {
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
-            padding: 8px 16px;
-            border-radius: 9999px;
-            font-weight: 600;
-            font-size: 12.5px;
-            cursor: pointer;
-            color: #475569;
-            transition: all 0.2s;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .vendor-subtab.active {
-            background: var(--primary);
-            color: var(--accent);
-            border-color: var(--primary);
-            box-shadow: 0 2px 6px rgba(17, 34, 23, 0.15);
-        }
-        .vendor-section { display: none; }
-        .vendor-section.active { display: block; }
-        .dashboard-card { background: white; border-radius: 16px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
-
-        .pro-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13.5px; }
-        .pro-table th { background: #f8fafc; padding: 12px 14px; font-weight: 700; color: var(--primary); border-bottom: 2px solid var(--border); }
-        .pro-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text-main); vertical-align: middle; }
-
-        .btn-sm { padding: 7px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; border: none; }
-        .btn-success { background: var(--success); color: white; }
-        .btn-danger { background: #fee2e2; color: #991b1b; }
-        .btn-primary { background: var(--primary); color: var(--accent); }
-
-        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 11px; }
-        .status-pending { background: var(--warning-bg); color: var(--warning); }
-        .status-verified { background: var(--success-bg); color: var(--success); }
-
-        /* Modals */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-            display: none; justify-content: center; align-items: center; z-index: 2000;
-        }
-        .modal-card {
-            background: white; padding: 24px 20px; border-radius: 18px; width: 500px;
-            max-width: 92%; box-shadow: 0 20px 40px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto;
-        }
-        .modal-title { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 5px; color: var(--primary); }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 11px 13px; border: 1px solid var(--border); border-radius: 10px;
-            font-size: 13.5px; background: #f8fafc; box-sizing: border-box; outline: none;
-        }
-        .primary-submit-btn {
-            background-color: var(--primary); color: var(--accent); border: none; padding: 13px;
-            border-radius: 11px; font-weight: 700; font-size: 14.5px; width: 100%; cursor: pointer; margin-top: 8px;
-        }
-        .cam-preview-box {
-            width: 100%; height: 140px; background: #112217; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center; color: white; font-size: 12.5px;
-            margin-bottom: 8px; position: relative; overflow: hidden; border: 2px dashed var(--accent);
-        }
-        .cam-preview-box video { width: 100%; height: 100%; object-fit: cover; position: absolute; }
-
-        /* Footer */
-        footer { background-color: var(--primary); color: #cbd5e1; padding: 32px 16px; margin-top: 40px; font-size: 13.5px; }
-        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 24px; }
-        @media (min-width: 769px) { .footer-content { grid-template-columns: 2fr 1fr; gap: 40px; } }
-        .footer-card { background-color: var(--primary-light); border-radius: 14px; padding: 20px; border: 1px solid rgba(255,255,255,0.08); }
-        .footer-title { color: var(--accent); font-weight: 700; font-size: 14.5px; margin-bottom: 8px; }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-900 pb-28 md:pb-12">
 
-    <!-- 1. Header & Search -->
-    <header class="top-header">
-        <div class="top-header-row">
-            <div class="logo-area">
-                <img src="logo.jpg" alt="Yumilo Market">
-            </div>
-            <div class="header-actions">
-                <button class="auth-portal-btn" onclick="openAuthModal()">Join / Sign Up</button>
+    <!-- Top Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
+        <div class="flex items-center space-x-3">
+            <img src="logo.jpg" alt="Yumilo Market Logo" class="h-10 w-10 md:h-11 md:w-11 object-cover rounded-2xl shadow-sm border border-slate-100" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=120&q=80'">
+            <div>
+                <span class="font-extrabold text-base md:text-lg text-slate-900 tracking-tight block leading-none">Yumilo<span class="text-emerald-600">Market</span></span>
+                <span class="text-[10px] md:text-xs text-slate-400 font-medium">Mansa District, Zambia</span>
             </div>
         </div>
-        <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="search-input" placeholder="Search Poultry, Feed & Equipment" onkeyup="filterProducts()">
+        
+        <!-- Desktop Nav Links -->
+        <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
+            <a href="#" class="text-emerald-600">Marketplace</a>
+            <a href="#" class="hover:text-slate-900 transition">Categories</a>
+            <a href="#" class="hover:text-slate-900 transition">Escrow Protection</a>
+            <a href="#" class="hover:text-slate-900 transition">Vendor Central</a>
+        </nav>
+
+        <div class="flex items-center space-x-3">
+            <a href="#auth" class="bg-slate-900 text-white px-4 md:px-5 py-2 rounded-full text-xs md:text-sm font-bold shadow-md hover:bg-slate-800 transition">
+                Join / Sign Up
+            </a>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="main-container">
+    <!-- Live Provenance Ticker -->
+    <div class="bg-emerald-900 text-emerald-100 text-[11px] font-medium py-1.5 px-4 overflow-hidden whitespace-nowrap shadow-inner">
+        <div class="animate-marquee tracking-wide">
+            🌾 Direct from Mansa District &bull; 100% Secure Mobile Money Escrow Protected &bull; Farm-Fresh Quality Guaranteed
+        </div>
+    </div>
 
-        <!-- ================= 1. CUSTOMER PORTAL (Pure Shopping Focus) ================= -->
-        <div id="portal-customer" class="portal-view active">
+    <!-- Main Container: Adapts from mobile app width to wide desktop store -->
+    <main class="max-w-md md:max-w-6xl mx-auto px-4 md:px-6 pt-5 space-y-6">
+
+        <!-- Search Bar & Desktop Layout Wrapper -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="relative flex-1">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </span>
+                <input type="text" placeholder="Search Poultry, Feed & Equipment..." class="w-full pl-10 pr-4 py-3 bg-white border border-slate-200/80 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm">
+            </div>
+        </div>
+
+        <!-- Cinematic Billboard Carousel (Hero Section) -->
+        <section class="relative rounded-3xl overflow-hidden shadow-xl bg-slate-900 text-white">
+            <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar">
+                <!-- Slide 1 -->
+                <div class="min-w-full snap-start relative h-52 md:h-72 flex items-end p-6 md:p-10 bg-gradient-to-t from-black/85 via-black/40 to-transparent">
+                    <img src="https://images.unsplash.com/photo-1587486913049-53fc88980cfc?auto=format&fit=crop&w=1200&q=80" alt="Smoked Farm Chicken" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-75">
+                    <div class="relative z-10 space-y-2 max-w-lg">
+                        <span class="bg-emerald-500 text-white text-[10px] md:text-xs uppercase font-extrabold tracking-wider px-3 py-1 rounded-full shadow-sm">New Arrival</span>
+                        <h2 class="text-2xl md:text-4xl font-black tracking-tight text-white">Smoked Farm Chicken</h2>
+                        <p class="text-xs md:text-sm text-slate-200 font-medium">Prepared fresh from Mansa farm-gates with traditional rich flavor.</p>
+                        <button class="mt-2 bg-amber-500 text-slate-950 px-5 py-2 rounded-xl text-xs md:text-sm font-extrabold shadow-md hover:bg-amber-400 transition">Shop Now</button>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="min-w-full snap-start relative h-52 md:h-72 flex items-end p-6 md:p-10 bg-gradient-to-t from-black/85 via-black/40 to-transparent">
+                    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1200&q=80" alt="Fresh Farm Veggie Box" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-75">
+                    <div class="relative z-10 space-y-2 max-w-lg">
+                        <span class="bg-emerald-500 text-white text-[10px] md:text-xs uppercase font-extrabold tracking-wider px-3 py-1 rounded-full shadow-sm">Organic Harvest</span>
+                        <h2 class="text-2xl md:text-4xl font-black tracking-tight text-white">Fresh Farm Veggie Box</h2>
+                        <p class="text-xs md:text-sm text-slate-200 font-medium">Harvested daily from local fields for peak nutrition and taste.</p>
+                        <button class="mt-2 bg-amber-500 text-slate-950 px-5 py-2 rounded-xl text-xs md:text-sm font-extrabold shadow-md hover:bg-amber-400 transition">Explore Box</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Secure Escrow Trust Card -->
+        <div class="bg-gradient-to-br from-emerald-950 to-emerald-900 text-white p-5 md:p-6 rounded-3xl shadow-md border border-emerald-800/50 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="space-y-1">
+                <div class="flex items-center space-x-1.5 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    <span>Secure Escrow Protection</span>
+                </div>
+                <h3 class="text-base md:text-lg font-bold">Trusted Mobile Money Payments</h3>
+                <p class="text-xs md:text-sm text-emerald-200/90 leading-relaxed">Funds are securely held in escrow and released only after your delivery confirmation.</p>
+            </div>
+        </div>
+
+        <!-- Shop by Category Grid -->
+        <section class="space-y-3">
+            <div class="flex items-center justify-between px-1">
+                <h3 class="text-base font-bold text-slate-900">Shop by Category</h3>
+                <span class="text-xs text-emerald-600 font-semibold cursor-pointer">View All</span>
+            </div>
+            <div class="grid grid-cols-4 md:grid-cols-8 gap-3 text-center">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center space-y-2 hover:border-emerald-500 hover:shadow-md transition cursor-pointer">
+                    <span class="text-3xl">🥚</span>
+                    <span class="text-xs font-semibold text-slate-700">Eggs</span>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center space-y-2 hover:border-emerald-500 hover:shadow-md transition cursor-pointer">
+                    <span class="text-3xl">🥦</span>
+                    <span class="text-xs font-semibold text-slate-700">Produce</span>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center space-y-2 hover:border-emerald-500 hover:shadow-md transition cursor-pointer">
+                    <span class="text-3xl">🌶️</span>
+                    <span class="text-xs font-semibold text-slate-700">Spices</span>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center space-y-2 hover:border-emerald-500 hover:shadow-md transition cursor-pointer">
+                    <span class="text-3xl">🧀</span>
+                    <span class="text-xs font-semibold text-slate-700">Dairy</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Verified Products Catalog -->
+        <section class="space-y-3">
+            <div class="flex items-center justify-between px-1">
+                <h3 class="text-base font-bold text-slate-900">Verified Products Catalog</h3>
+                <span class="text-xs text-slate-500 font-medium">2 Items Live</span>
+            </div>
             
-            <!-- Welcome Line -->
-            <div class="top-greeting-card">
-                <h2 id="standalone-greeting-title">Welcome, Henry Mwansa!</h2>
-                <span id="realtime-clock-display">12:00 PM</span>
-            </div>
-
-            <!-- Dark Green Secure Escrow Card -->
-            <div class="escrow-banner-card">
-                <div class="escrow-banner-content">
-                    <div class="escrow-tag">🛡️ YUMILO MARKET · SECURE ESCROW</div>
-                    <div class="escrow-title">Trusted Mobile Money Payments</div>
-                    <div class="escrow-desc">Funds held in escrow until delivery confirmation.</div>
-                </div>
-                <button class="escrow-shop-btn" onclick="document.getElementById('catalog-heading').scrollIntoView({behavior: 'smooth'})">Shop Now</button>
-            </div>
-
-            <!-- Product Catalog -->
-            <div class="catalog-header-row">
-                <h2 class="catalog-heading" id="catalog-heading">Verified Products Catalog</h2>
-            </div>
-            
-            <div class="product-grid" id="product-grid">
-                <!-- Products loaded dynamically with high-resolution photos -->
-            </div>
-        </div>
-
-        <!-- ================= 2. VENDOR CENTRAL DASHBOARD (Role-Based) ================= -->
-        <div id="portal-vendor" class="portal-view">
-            <button class="role-back-btn" onclick="switchPortal('customer')">← Back to Marketplace Store</button>
-
-            <!-- KYC Approval Notice Banner -->
-            <div id="kyc-banner" style="background: var(--warning-bg); border: 1px solid #fde68a; padding: 14px 16px; border-radius: 14px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px;">
-                <div>
-                    <strong>⚠️ Account Status: Pending Mandatory KYC Capture</strong><br>
-                    <span style="font-size: 13px; color: #92400e;">You must capture live photos of your Front NRC, Back NRC, and Selfie. Listings cannot be published until approved.</span>
-                </div>
-                <button class="btn-sm btn-primary" style="width: 100%; padding: 10px;" onclick="openKycModal()">Capture Live KYC Photos</button>
-            </div>
-
-            <div class="vendor-header-flex">
-                <div>
-                    <div style="font-size: 22px; font-weight: 800; color: var(--primary);">🏪 Vendor Central Dashboard</div>
-                    <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 3px;">Manage your media listings, secure escrow orders, and in-app customer chat.</div>
-                </div>
-                <button onclick="openAddProductModal()" style="background:var(--orange); color:white; border:none; padding:10px 16px; border-radius:10px; font-weight:700; font-size:13px; cursor:pointer; white-space:nowrap;">+ Publish Product</button>
-            </div>
-
-            <!-- KPI Metric Cards -->
-            <div class="dashboard-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Active SKUs</div>
-                    <div class="stat-value" id="v-stat-skus">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Orders to Prepare</div>
-                    <div class="stat-value" id="v-stat-orders" style="color: var(--warning);">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Escrow Payout Ready</div>
-                    <div class="stat-value" id="v-stat-revenue" style="color: var(--success);">K0.00</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Store Verification</div>
-                    <div class="stat-value" id="v-stat-verification" style="color: #b8860b;">Pending ⏳</div>
-                </div>
-            </div>
-
-            <!-- Vendor Sub-Navigation Pills -->
-            <div class="vendor-subnav">
-                <div class="vendor-subtab active" onclick="switchVendorTab('catalog', this)">📦 Inventory & Listings</div>
-                <div class="vendor-subtab" onclick="switchVendorTab('orders', this)">📋 Order Lifecycle & Queue</div>
-                <div class="vendor-subtab" onclick="switchVendorTab('messages', this)">💬 In-App Customer Chat</div>
-                <div class="vendor-subtab" onclick="switchVendorTab('settings', this)">⚙️ Payout Settings</div>
-            </div>
-
-            <!-- TAB 1: INVENTORY -->
-            <div id="v-sec-catalog" class="vendor-section active">
-                <div class="dashboard-card">
-                    <div style="font-weight: 800; font-size: 17px; color: var(--primary); margin-bottom: 14px;">Approved Store Listings</div>
-                    <div style="overflow-x: auto;">
-                        <table class="pro-table">
-                            <thead>
-                                <tr>
-                                    <th>SKU</th>
-                                    <th>Title</th>
-                                    <th>Price</th>
-                                    <th>Stock</th>
-                                    <th>Media Assets</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="vendor-catalog-table">
-                                <tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Loading inventory...</td></tr>
-                            </tbody>
-                        </table>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Product Card 1 -->
+                <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex flex-col justify-between space-y-3 hover:shadow-md transition">
+                    <div class="relative">
+                        <span class="absolute top-2 left-2 z-10 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-200 shadow-sm">● Available now</span>
+                        <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=500&q=80" alt="Whole Broiler Chicken" class="w-full h-40 md:h-48 object-cover rounded-2xl shadow-sm">
                     </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 font-medium">🏪 Yumilo Official Store</span>
+                        <h4 class="text-sm font-bold text-slate-800 line-clamp-1 mt-0.5">Whole Broiler Chicken</h4>
+                    </div>
+                    <div class="flex items-center justify-between pt-1">
+                        <span class="text-base font-extrabold text-emerald-700">K95.00</span>
+                    </div>
+                    <button class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-2.5 rounded-xl text-xs md:text-sm transition shadow-sm">
+                        Add to Cart
+                    </button>
+                </div>
+
+                <!-- Product Card 2 -->
+                <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex flex-col justify-between space-y-3 hover:shadow-md transition">
+                    <div class="relative">
+                        <span class="absolute top-2 left-2 z-10 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-200 shadow-sm">● Available now</span>
+                        <img src="https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=500&q=80" alt="Chicken Breast Fillets" class="w-full h-40 md:h-48 object-cover rounded-2xl shadow-sm">
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 font-medium">🏪 Yumilo Official Store</span>
+                        <h4 class="text-sm font-bold text-slate-800 line-clamp-1 mt-0.5">Chicken Breast Fillets</h4>
+                    </div>
+                    <div class="flex items-center justify-between pt-1">
+                        <span class="text-base font-extrabold text-emerald-700">K120.00</span>
+                    </div>
+                    <button class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-2.5 rounded-xl text-xs md:text-sm transition shadow-sm">
+                        Add to Cart
+                    </button>
                 </div>
             </div>
-
-            <!-- TAB 2: ORDERS -->
-            <div id="v-sec-orders" class="vendor-section">
-                <div class="dashboard-card">
-                    <div class="vendor-header-flex" style="margin-bottom: 14px;">
-                        <div style="font-weight: 800; font-size: 17px; color: var(--primary);">Escrow Order Lifecycle</div>
-                        <button class="btn-sm btn-primary" onclick="loadVendorDashboard()">🔄 Refresh</button>
-                    </div>
-                    <div style="overflow-x: auto;">
-                        <table class="pro-table">
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer</th>
-                                    <th>Items</th>
-                                    <th>Total Paid</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="vendor-orders-table">
-                                <tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Loading orders...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB 3: IN-APP CUSTOMER CHAT -->
-            <div id="v-sec-messages" class="vendor-section">
-                <div class="dashboard-card">
-                    <div style="font-weight: 800; font-size: 17px; color: var(--primary); margin-bottom: 4px;">💬 Secure In-App Customer Chat</div>
-                    <div style="font-size: 12px; color: var(--warning); margin-bottom: 12px;">🔒 Security Notice: For your safety and escrow compliance, all communications must remain strictly within this chat.</div>
-                    
-                    <div id="vendor-chat-box" style="background:#f8fafc; padding:14px; border-radius:12px; border:1px solid var(--border); max-height:250px; overflow-y:auto; margin-bottom:12px;">
-                        <p style="color:var(--text-muted);">No customer messages.</p>
-                    </div>
-                    <div style="display:flex; gap:8px;">
-                        <input type="text" id="vendor-chat-input" placeholder="Type reply..." style="flex:1; padding:10px 12px; border:1px solid var(--border); border-radius:10px; font-size:13.5px;">
-                        <button class="btn-sm btn-primary" onclick="sendVendorMessage()">Send</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB 4: SETTINGS -->
-            <div id="v-sec-settings" class="vendor-section">
-                <div class="dashboard-card" style="max-width: 600px;">
-                    <div style="font-weight: 800; font-size: 17px; color: var(--primary); margin-bottom: 14px;">Payout Mobile Money Settings</div>
-                    <div class="form-group">
-                        <label>Store Name</label>
-                        <input type="text" id="setting-store-name" value="Yumilo Official Farm">
-                    </div>
-                    <div class="form-group">
-                        <label>Mobile Money Payout Number (Airtel / MTN)</label>
-                        <input type="text" id="setting-momo" value="0978512767">
-                        <span style="font-size: 11px; color: var(--text-muted);">Net of 8% platform commission is deposited here after customer delivery confirmation.</span>
-                    </div>
-                    <button class="primary-submit-btn" onclick="alert('Settings saved successfully!')">Save Settings</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= 3. LOGISTICS PORTAL (Role-Based) ================= -->
-        <div id="portal-courier" class="portal-view">
-            <button class="role-back-btn" onclick="switchPortal('customer')">← Back to Marketplace Store</button>
-
-            <div class="vendor-header-flex">
-                <div style="font-size: 22px; font-weight: 800; color: var(--primary);">🚴 Courier & Logistics Hub (K15 Local Delivery Fee)</div>
-            </div>
-            <div class="dashboard-card">
-                <div style="font-weight: 800; font-size: 17px; color: var(--primary); margin-bottom: 14px;">Active Small Orders Dispatch Queue</div>
-                <div id="courier-orders-list"><p style="color: var(--text-muted);">No active dispatches.</p></div>
-            </div>
-        </div>
+        </section>
 
     </main>
 
-    <!-- Fixed Bottom Navigation Bar -->
-    <nav class="bottom-nav-bar">
-        <button class="nav-item active" onclick="switchBottomTab('home', this)">
-            <span class="nav-icon">🏠</span>
-            <span class="nav-label">Home</span>
-        </button>
-        <button class="nav-item" onclick="openCartModal()">
-            <span class="nav-icon nav-cart-icon">🛒<span class="bottom-cart-badge" id="bottom-cart-count">0</span></span>
-            <span class="nav-label">Cart</span>
-        </button>
-        <button class="nav-item" onclick="switchBottomTab('orders', this)">
-            <span class="nav-icon">📋</span>
-            <span class="nav-label">Orders</span>
-        </button>
-        <button class="nav-item" onclick="switchBottomTab('profile', this)">
-            <span class="nav-icon">👤</span>
-            <span class="nav-label">Profile</span>
-        </button>
+    <!-- Sticky Bottom Navigation Bar (Visible on Mobile only, hidden on desktop screens) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-100 py-2.5 px-6 flex justify-between items-center z-50 max-w-md mx-auto shadow-lg">
+        <a href="#" class="flex flex-col items-center text-emerald-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span class="text-[10px] font-bold mt-0.5">Home</span>
+        </a>
+        <a href="#" class="flex flex-col items-center text-slate-400 hover:text-slate-600 relative">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            <span class="absolute -top-1 -right-1 bg-amber-500 text-slate-950 text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+            <span class="text-[10px] font-medium mt-0.5">Cart</span>
+        </a>
+        <a href="#" class="flex flex-col items-center text-slate-400 hover:text-slate-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+            <span class="text-[10px] font-medium mt-0.5">Orders</span>
+        </a>
+        <a href="#" class="flex flex-col items-center text-slate-400 hover:text-slate-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            <span class="text-[10px] font-medium mt-0.5">Profile</span>
+        </a>
     </nav>
 
-    <!-- ================= ADD PRODUCT MODAL ================= -->
-    <div class="modal-overlay" id="product-modal">
-        <div class="modal-card">
-            <div class="modal-title">Publish Product (Rich Media)</div>
-            <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:16px;">Upload up to 5 photos and a short 30s video.</div>
-            
-            <div class="form-group"><label>Product Title</label><input type="text" id="new-prod-title" placeholder="Broiler Chicken"></div>
-            <div class="form-group"><label>SKU Code</label><input type="text" id="new-prod-sku" value="YML-BR-001"></div>
-            <div class="form-group"><label>Price (ZMW)</label><input type="number" id="new-prod-price" placeholder="95.00"></div>
-            <div class="form-group"><label>Stock Quantity</label><input type="number" id="new-prod-stock" value="100"></div>
-            <div class="form-group"><label>Upload Photos (Up to 5)</label><input type="file" id="new-prod-photos" multiple accept="image/*"></div>
-            <div class="form-group"><label>Upload Video (Max 30s)</label><input type="file" id="new-prod-video" accept="video/mp4"></div>
-
-            <button class="primary-submit-btn" onclick="saveNewProductWithMedia()">Publish SKU Live</button>
-            <button onclick="closeAddProductModal()" style="background:transparent; border:none; width:100%; margin-top:10px; cursor:pointer; color:var(--text-muted); font-weight:600; font-size:13px;">Cancel</button>
-        </div>
-    </div>
-
-    <!-- ================= LIVE CAMERA KYC CAPTURE MODAL ================= -->
-    <div class="modal-overlay" id="kyc-modal">
-        <div class="modal-card">
-            <div class="modal-title">Live Camera KYC Verification</div>
-            <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:16px;">Mandatory for all vendors. Photos must be captured live via camera.</div>
-            
-            <div class="form-group">
-                <label>1. Capture Front NRC</label>
-                <div class="cam-preview-box" id="box-front"><video id="video-front" autoplay playsinline></video><span id="txt-front">Camera inactive</span></div>
-                <button class="btn-sm btn-primary" onclick="startCamera('front')">Open Camera</button>
-                <button class="btn-sm btn-success" onclick="captureSnapshot('front')">Capture Front NRC 📸</button>
-            </div>
-
-            <div class="form-group">
-                <label>2. Capture Back NRC</label>
-                <div class="cam-preview-box" id="box-back"><video id="video-back" autoplay playsinline></video><span id="txt-back">Camera inactive</span></div>
-                <button class="btn-sm btn-primary" onclick="startCamera('back')">Open Camera</button>
-                <button class="btn-sm btn-success" onclick="captureSnapshot('back')">Capture Back NRC 📸</button>
-            </div>
-
-            <div class="form-group">
-                <label>3. Capture Your Live Picture (Selfie)</label>
-                <div class="cam-preview-box" id="box-selfie"><video id="video-selfie" autoplay playsinline></video><span id="txt-selfie">Camera inactive</span></div>
-                <button class="btn-sm btn-primary" onclick="startCamera('selfie')">Open Camera</button>
-                <button class="btn-sm btn-success" onclick="captureSnapshot('selfie')">Capture Selfie 📸</button>
-            </div>
-
-            <button class="primary-submit-btn" onclick="submitLiveKyc()">Submit Verified KYC</button>
-            <button onclick="closeKycModal()" style="background:transparent; border:none; width:100%; margin-top:10px; cursor:pointer; color:var(--text-muted); font-weight:600; font-size:13px;">Cancel</button>
-        </div>
-    </div>
-
-    <!-- ================= AUTH REGISTRATION MODAL ================= -->
-    <div class="modal-overlay" id="auth-modal">
-        <div class="modal-card">
-            <div class="modal-title">Join Yumilo Ecosystem</div>
-            <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">Register with Province, Town, and Supabase Native Email Verification.</div>
-            
-            <div class="form-group"><label>Register As:</label><select id="reg-role" onchange="toggleCertField()"><option value="customer">Customer</option><option value="vendor">Vendor (Seller)</option><option value="courier">Courier Partner</option></select></div>
-            <div class="form-group"><label>Full Name / Store Name</label><input type="text" id="reg-name" placeholder="Henry Mwansa"></div>
-            <div class="form-group"><label>Mobile Money Phone</label><input type="text" id="reg-phone" placeholder="0978512767"></div>
-            
-            <div class="form-group">
-                <label>Email Address</label>
-                <div style="display:flex; gap:8px;">
-                    <input type="email" id="reg-email" placeholder="henry@example.com" style="flex:1;">
-                    <button class="btn-sm btn-primary" type="button" onclick="sendSupabaseEmailOtp()" style="white-space:nowrap;">Send Code</button>
-                </div>
-            </div>
-            <div class="form-group" id="code-group" style="display:none;">
-                <label>Enter 6-Digit Verification Code</label>
-                <div style="display:flex; gap:8px;">
-                    <input type="text" id="reg-ver-code" placeholder="Enter 6-digit code" style="flex:1;">
-                    <button class="btn-sm btn-success" type="button" onclick="verifySupabaseEmailOtp()" style="white-space:nowrap;">Verify Code ✓</button>
-                </div>
-                <span id="ver-status-text" style="font-size:11.5px; color:var(--warning); display:block; margin-top:4px;">Verification code sent to your email!</span>
-            </div>
-
-            <div class="form-group">
-                <label>Province</label>
-                <select id="reg-province" onchange="updateTownsList()">
-                    <option value="">Select Province</option>
-                    <option value="Lusaka Province">Lusaka Province</option>
-                    <option value="Copperbelt Province">Copperbelt Province</option>
-                    <option value="Southern Province">Southern Province</option>
-                    <option value="Central Province">Central Province</option>
-                    <option value="Eastern Province">Eastern Province</option>
-                    <option value="Luapula Province">Luapula Province</option>
-                    <option value="Northern Province">Northern Province</option>
-                    <option value="North-Western Province">North-Western Province</option>
-                    <option value="Western Province">Western Province</option>
-                    <option value="Muchinga Province">Muchinga Province</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Town / District</label>
-                <select id="reg-town">
-                    <option value="">Select Province First</option>
-                </select>
-            </div>
-
-            <div class="form-group" id="business-check-group" style="display:none;"><label><input type="checkbox" id="reg-is-business" onchange="toggleCertField()"> Is this a Registered Business? (Requires Certificate)</label></div>
-            <div class="form-group" id="cert-group" style="display:none;"><label>Business Registration Certificate</label><input type="file" id="reg-cert-file"></div>
-
-            <button class="primary-submit-btn" id="complete-reg-btn" style="opacity: 0.6; pointer-events: none;" onclick="registerUser()">Complete Registration (Verify Email First)</button>
-            
-            <!-- Quick Role View Switcher for Admins & Partners -->
-            <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border);">
-                <div style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Switch Role Dashboard View:</div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button type="button" class="btn-sm btn-primary" onclick="switchPortal('customer'); closeAuthModal();">🛍️ Customer View</button>
-                    <button type="button" class="btn-sm" style="background:#f1f5f9; color:var(--primary); border:1px solid var(--border);" onclick="switchPortal('vendor'); closeAuthModal();">🏪 Vendor Central</button>
-                    <button type="button" class="btn-sm" style="background:#f1f5f9; color:var(--primary); border:1px solid var(--border);" onclick="switchPortal('courier'); closeAuthModal();">🚴 Logistics Hub</button>
-                </div>
-            </div>
-
-            <button onclick="closeAuthModal()" style="background:transparent; border:none; width:100%; margin-top:12px; cursor:pointer; color:var(--text-muted); font-weight:600; font-size:13px;">Close</button>
-        </div>
-    </div>
-
-    <!-- ================= CART & ESCROW CHECKOUT MODAL ================= -->
-    <div class="modal-overlay" id="cart-modal">
-        <div class="modal-card">
-            <div class="modal-title">Secure Escrow Checkout</div>
-            <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">Includes K5 escrow service fee & K15 local delivery fee.</div>
-            
-            <div id="cart-items-list" style="margin-bottom: 12px; max-height: 180px; overflow-y: auto;"></div>
-            <div style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 3px;">Escrow Platform Fee: <strong>K5.00</strong></div>
-            <div style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 10px;">Local Courier Delivery Fee: <strong>K15.00</strong></div>
-            <div style="font-weight: 800; font-size: 17px; margin-bottom: 16px; border-top: 1px solid var(--border); padding-top: 10px; color: var(--primary);" id="cart-total">Total: K0.00</div>
-            
-            <div class="form-group"><label>Your Full Name</label><input type="text" id="cust-name" placeholder="Henry Mwansa"></div>
-            <div class="form-group"><label>Mobile Money Number (Airtel / MTN)</label><input type="text" id="cust-phone" placeholder="0978512767"></div>
-            <div class="form-group"><label>Delivery Address / Street / Landmark</label><textarea id="cust-address" rows="2" placeholder="Street name, house number or landmark"></textarea></div>
-
-            <button class="primary-submit-btn" style="background-color: var(--success);" onclick="submitEscrowOrder()">Pay & Hold in Escrow</button>
-            <button onclick="closeCartModal()" style="background:transparent; border:none; width:100%; margin-top:10px; cursor:pointer; color:var(--text-muted); font-weight:600; font-size:13px;">Close</button>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-card">
-                <div class="footer-title">Yumilo Market Ecosystem</div>
-                <p style="color: #fff; margin-bottom: 6px;">Quality at Every Step across Zambia.</p>
-                <p><strong>Secure Escrow:</strong> 8% platform commission. Funds released only upon delivery confirmation.</p>
-            </div>
-            <div>
-                <p><strong>Contact Support:</strong> +260 978 512767</p>
-                <p style="margin-top: 10px; opacity: 0.7;">© Yumilo Foods Zambia</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Script Logic -->
-    <script>
-        const SUPABASE_URL = 'https://ebsrbxvaajrabvspycyg.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_pN7Znx6127mAGYUbqM5p3Q_Uozj5AoJ';
-
-        const { createClient } = supabase;
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        let cart = [];
-        let loggedInVendor = { name: 'Henry Mwansa', isApproved: false, isRegistered: false, role: 'customer' };
-        let isEmailVerified = false;
-
-        // Default high-resolution stock poultry & produce catalog
-        const defaultProducts = [
-            {
-                title: "Whole Broiler Chicken",
-                price: 95.00,
-                badge: "Available now",
-                store_name: "Yumilo Official Store",
-                image: "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=600&q=80",
-                category: "Broilers & Poultry"
-            },
-            {
-                title: "Chicken Breast Fillets",
-                price: 120.00,
-                badge: "Available now",
-                store_name: "Yumilo Official Store",
-                image: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=600&q=80",
-                category: "Broilers & Poultry"
-            },
-            {
-                title: "Grilled Chicken Platter",
-                price: 110.00,
-                badge: "Available now",
-                store_name: "Yumilo Official Store",
-                image: "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=600&q=80",
-                category: "Prepared Meals"
-            },
-            {
-                title: "Mixed Farm Produce Box",
-                price: 65.00,
-                badge: "Available now",
-                store_name: "Yumilo Official Store",
-                image: "https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=600&q=80",
-                category: "Farm Groceries"
-            }
-        ];
-
-        // Welcome & Real-Time Clock
-        function initRealtimeGreetingAndClock() {
-            const now = new Date();
-            const userName = loggedInVendor.name || "Henry Mwansa";
-            
-            let hours = now.getHours();
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12;
-            const timeString = `${hours}:${minutes} ${ampm}`;
-
-            const greetingEl = document.getElementById('standalone-greeting-title');
-            const clockEl = document.getElementById('realtime-clock-display');
-
-            if (greetingEl) {
-                greetingEl.innerText = `Welcome, ${userName}!`;
-            }
-            if (clockEl) {
-                clockEl.innerText = timeString;
-            }
-        }
-        setInterval(initRealtimeGreetingAndClock, 1000);
-        initRealtimeGreetingAndClock();
-
-        // Search Filter Function
-        function filterProducts() {
-            const term = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
-            const cards = document.querySelectorAll('#product-grid .product-card');
-            cards.forEach(card => {
-                const title = card.querySelector('.product-title')?.innerText.toLowerCase() || '';
-                const store = card.querySelector('.store-tag')?.innerText.toLowerCase() || '';
-                if (!term || title.includes(term) || store.includes(term)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // Load Products with High-Resolution Photos
-        async function loadProducts(filterStoreName = null) {
-            const grid = document.getElementById('product-grid');
-            const heading = document.getElementById('catalog-heading');
-            
-            let productsToRender = [];
-
-            try {
-                let query = _supabase.from('products').select('*');
-                if (filterStoreName) {
-                    query = query.eq('store_name', filterStoreName);
-                    heading.innerText = `Storefront: ${filterStoreName}`;
-                } else {
-                    heading.innerText = 'Verified Products Catalog';
-                }
-
-                const { data: remoteProducts, error } = await query;
-                if (!error && remoteProducts && remoteProducts.length > 0) {
-                    productsToRender = remoteProducts;
-                }
-            } catch (err) {
-                console.log('Using local catalog fallback:', err);
-            }
-
-            if (productsToRender.length === 0) {
-                productsToRender = defaultProducts;
-            }
-
-            grid.innerHTML = '';
-            productsToRender.forEach(p => {
-                const title = p.title || 'Fresh Broiler Product';
-                const titleLower = title.toLowerCase();
-                const price = parseFloat(p.price || 95).toFixed(2);
-                const storeName = p.store_name || 'Yumilo Official Store';
-                const badge = p.badge || 'Available now';
-
-                // Map clean high-resolution stock photos
-                let photoUrl = p.image_url || p.image;
-                if (!photoUrl || typeof photoUrl !== 'string' || !photoUrl.startsWith('http')) {
-                    if (titleLower.includes('breast') || titleLower.includes('fillet')) {
-                        photoUrl = 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=600&q=80';
-                    } else if (titleLower.includes('grilled') || titleLower.includes('platter') || titleLower.includes('pieces')) {
-                        photoUrl = 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=600&q=80';
-                    } else if (titleLower.includes('produce') || titleLower.includes('box') || titleLower.includes('grocery')) {
-                        photoUrl = 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=600&q=80';
-                    } else {
-                        photoUrl = 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=600&q=80';
-                    }
-                }
-
-                const safeTitle = title.replace(/'/g, "\\'");
-
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <div class="product-card-body">
-                            <div class="product-img-wrap">
-                                <img src="${photoUrl}" alt="${title}" class="product-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=600&q=80'">
-                                <span class="product-badge">${badge}</span>
-                            </div>
-                            <div class="product-info">
-                                <div class="store-tag">🏪 ${storeName}</div>
-                                <h3 class="product-title" title="${title}">${title}</h3>
-                                <div class="product-price-row">
-                                    <span class="product-price">K${price}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('${safeTitle}', ${p.price || 95})">
-                            <span>🛒</span> Add to Cart
-                        </button>
-                    </div>
-                `;
-            });
-        }
-
-        // Role-Based Navigation Switcher
-        function switchPortal(portalName) {
-            document.querySelectorAll('.portal-view').forEach(v => v.classList.remove('active'));
-            const view = document.getElementById('portal-' + portalName);
-            if (view) view.classList.add('active');
-
-            // Update bottom nav active indicator
-            document.querySelectorAll('.bottom-nav-bar .nav-item').forEach(btn => btn.classList.remove('active'));
-            const homeBtn = document.querySelectorAll('.bottom-nav-bar .nav-item')[0];
-            if (portalName === 'customer' && homeBtn) homeBtn.classList.add('active');
-
-            if (portalName === 'vendor') loadVendorDashboard();
-            if (portalName === 'customer') loadProducts();
-        }
-
-        function switchVendorTab(tabName, tabEl) {
-            document.querySelectorAll('.vendor-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.vendor-subtab').forEach(t => t.classList.remove('active'));
-
-            document.getElementById('v-sec-' + tabName).classList.add('active');
-            if (tabEl) tabEl.classList.add('active');
-        }
-
-        // Fixed Bottom Navigation Bar Switcher
-        function switchBottomTab(tabName, el) {
-            document.querySelectorAll('.bottom-nav-bar .nav-item').forEach(btn => btn.classList.remove('active'));
-            if (el) el.classList.add('active');
-
-            if (tabName === 'home') {
-                switchPortal('customer');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else if (tabName === 'orders') {
-                if (loggedInVendor && loggedInVendor.isRegistered) {
-                    switchPortal('vendor');
-                    switchVendorTab('orders', document.querySelectorAll('.vendor-subtab')[1]);
-                } else {
-                    openCartModal();
-                }
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else if (tabName === 'profile') {
-                openAuthModal();
-            }
-        }
-
-        // Cart Logic
-        function addToCart(title, price) {
-            cart.push({ title, price: parseFloat(price) });
-            updateCartBadges();
-            alert(title + ' added to cart!');
-        }
-
-        function updateCartBadges() {
-            const count = cart.length;
-            const bottomBadge = document.getElementById('bottom-cart-count');
-            if (bottomBadge) bottomBadge.innerText = count;
-        }
-
-        function openCartModal() {
-            const list = document.getElementById('cart-items-list');
-            list.innerHTML = '';
-            let subtotal = 0;
-            
-            if (cart.length === 0) {
-                list.innerHTML = '<p style="color:var(--text-muted); font-size:13px; text-align:center; padding:16px;">Your cart is currently empty.</p>';
-            } else {
-                cart.forEach((item, index) => {
-                    subtotal += item.price;
-                    list.innerHTML += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:13.5px;">
-                            <span>${item.title}</span>
-                            <div>
-                                <strong>K${item.price.toFixed(2)}</strong>
-                                <button onclick="removeFromCart(${index})" style="background:none; border:none; color:#ef4444; margin-left:8px; cursor:pointer; font-weight:bold;">✕</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            
-            const serviceFee = cart.length > 0 ? 5.00 : 0;
-            const deliveryFee = cart.length > 0 ? 15.00 : 0;
-            const grandTotal = subtotal + serviceFee + deliveryFee;
-
-            document.getElementById('cart-total').innerText = `Total: K${grandTotal.toFixed(2)} (Subtotal K${subtotal.toFixed(2)} + K5 Fee + K15 Delivery)`;
-            document.getElementById('cart-modal').style.display = 'flex';
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartBadges();
-            openCartModal();
-        }
-
-        function closeCartModal() { document.getElementById('cart-modal').style.display = 'none'; }
-
-        async function submitEscrowOrder() {
-            if (cart.length === 0) { alert('Cart is empty.'); return; }
-            const name = document.getElementById('cust-name').value;
-            const phone = document.getElementById('cust-phone').value;
-            const address = document.getElementById('cust-address').value;
-
-            if (!name || !phone || !address) {
-                alert('Please provide your name, phone number, and delivery address.');
-                return;
-            }
-            
-            const subtotal = cart.reduce((s, i) => s + i.price, 0);
-            const grandTotal = subtotal + 5.00 + 15.00;
-            const items = cart.map(i => i.title).join(', ');
-
-            try {
-                await _supabase.from('orders').insert([
-                    { customer_name: name, phone_number: phone, delivery_address: address, items: items, total_price: grandTotal, order_status: 'Pending Verification' }
-                ]);
-            } catch (e) {
-                console.log('Order logged locally:', e);
-            }
-
-            alert(`Order placed successfully! Total K${grandTotal.toFixed(2)} (inc. K5 service & K15 delivery) secured safely in Yumilo Escrow.`);
-            cart = [];
-            updateCartBadges();
-            closeCartModal();
-        }
-
-        // Vendor Dashboard Handlers
-        async function loadVendorDashboard() {
-            await loadVendorCatalogTable();
-            await loadVendorOrdersTable();
-            await loadVendorMessages();
-        }
-
-        async function loadVendorCatalogTable() {
-            const tbody = document.getElementById('vendor-catalog-table');
-            try {
-                const { data: products } = await _supabase.from('products').select('*').order('created_at', { ascending: false });
-                document.getElementById('v-stat-skus').innerText = products ? products.length : defaultProducts.length;
-                
-                const list = (products && products.length > 0) ? products : defaultProducts;
-                tbody.innerHTML = '';
-                list.forEach((p, idx) => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><strong>${p.sku || 'YML-BR-00' + (idx + 1)}</strong></td>
-                            <td>${p.title}</td>
-                            <td><strong>K${parseFloat(p.price).toFixed(2)}</strong></td>
-                            <td>${p.stock_quantity ?? 100}</td>
-                            <td><span style="color:var(--success); font-weight:600;">✓ High-Res Photo</span></td>
-                            <td><button class="btn-sm btn-danger" onclick="alert('Demo: SKU archived')">Archive</button></td>
-                        </tr>
-                    `;
-                });
-            } catch (err) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Loaded offline inventory.</td></tr>';
-            }
-        }
-
-        async function loadVendorOrdersTable() {
-            const tbody = document.getElementById('vendor-orders-table');
-            try {
-                const { data: orders } = await _supabase.from('orders').select('*').order('created_at', { ascending: false });
-                document.getElementById('v-stat-orders').innerText = orders ? orders.filter(o => o.order_status !== 'Delivered & Confirmed').length : 1;
-
-                let netRevenue = 0;
-                orders?.forEach(o => { 
-                    if (o.order_status === 'Delivered & Confirmed') {
-                        netRevenue += parseFloat(o.total_price) * 0.92;
-                    } 
-                });
-                document.getElementById('v-stat-revenue').innerText = 'K' + netRevenue.toFixed(2);
-
-                if (!orders || orders.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td>#YML-8821</td>
-                            <td><strong>Henry Mwansa</strong><br>0978512767</td>
-                            <td>Whole Broiler Chicken (x2)</td>
-                            <td><strong>K210.00</strong></td>
-                            <td><span class="status-badge status-pending">Pending Verification</span></td>
-                            <td><button class="btn-sm btn-success" onclick="alert('Order Verified for Preparation')">Verify & Prep</button></td>
-                        </tr>
-                    `;
-                    return;
-                }
-
-                tbody.innerHTML = '';
-                orders.forEach(o => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>#${o.id.slice(0, 8)}</td>
-                            <td><strong>${o.customer_name}</strong><br>${o.phone_number}</td>
-                            <td>${o.items}</td>
-                            <td><strong>K${o.total_price}</strong></td>
-                            <td><span class="status-badge status-pending">${o.order_status}</span></td>
-                            <td>
-                                ${o.order_status === 'Pending Verification' ? `<button class="btn-sm btn-success" onclick="updateOrderStatus('${o.id}', 'Payment Verified - Start Preparing')">Verify & Prep</button>` : ''}
-                                ${o.order_status === 'Payment Verified - Start Preparing' ? `<button class="btn-sm btn-primary" onclick="updateOrderStatus('${o.id}', 'Dispatched')">Dispatch</button>` : ''}
-                                ${o.order_status === 'Dispatched' ? `<button class="btn-sm btn-success" onclick="confirmDeliveryAndReleasePayout('${o.id}', ${o.total_price})">Release Payout</button>` : ''}
-                                ${o.order_status === 'Delivered & Confirmed' ? `<span style="color:var(--success); font-weight:700;">Paid (Net 8%) ✓</span>` : ''}
-                            </td>
-                        </tr>
-                    `;
-                });
-            } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Loaded orders queue.</td></tr>';
-            }
-        }
-
-        async function loadVendorMessages() {
-            const chatBox = document.getElementById('vendor-chat-box');
-            try {
-                const { data: msgs } = await _supabase.from('chat_messages').select('*').order('created_at', { ascending: true });
-                if (msgs && msgs.length > 0) {
-                    chatBox.innerHTML = '';
-                    msgs.forEach(m => {
-                        chatBox.innerHTML += `<div style="margin-bottom:8px; font-size:13px;"><strong>${m.sender_name}:</strong> ${m.message}</div>`;
-                    });
-                }
-            } catch (e) {}
-        }
-
-        async function sendVendorMessage() {
-            const input = document.getElementById('vendor-chat-input');
-            const msg = input.value;
-            if (!msg) return;
-            try {
-                await _supabase.from('chat_messages').insert([{ sender_name: loggedInVendor.name, receiver_name: 'Customer', message: msg }]);
-            } catch (e) {}
-            const chatBox = document.getElementById('vendor-chat-box');
-            chatBox.innerHTML += `<div style="margin-bottom:8px; font-size:13px;"><strong>${loggedInVendor.name}:</strong> ${msg}</div>`;
-            input.value = '';
-        }
-
-        async function updateOrderStatus(orderId, newStatus) {
-            await _supabase.from('orders').update({ order_status: newStatus }).eq('id', orderId);
-            alert('Order status updated!');
-            loadVendorDashboard();
-        }
-
-        async function confirmDeliveryAndReleasePayout(orderId, amount) {
-            const netPayout = amount * 0.92;
-            await _supabase.from('orders').update({ order_status: 'Delivered & Confirmed' }).eq('id', orderId);
-            alert(`Delivery confirmed! Net payout of K${netPayout.toFixed(2)} released to registered Mobile Money.`);
-            loadVendorDashboard();
-        }
-
-        // Add Product Modal
-        function openAddProductModal() {
-            if (!loggedInVendor.isApproved) {
-                alert('Access Denied: Your live camera KYC has not been approved by admin yet.');
-                return;
-            }
-            document.getElementById('product-modal').style.display = 'flex';
-        }
-        function closeAddProductModal() { document.getElementById('product-modal').style.display = 'none'; }
-
-        async function saveNewProductWithMedia() {
-            const title = document.getElementById('new-prod-title').value;
-            const sku = document.getElementById('new-prod-sku').value;
-            const price = document.getElementById('new-prod-price').value;
-            const stock = document.getElementById('new-prod-stock').value;
-
-            if (!title || !price) { alert('Please enter product title and price.'); return; }
-
-            const { error } = await _supabase.from('products').insert([
-                { 
-                    title: title, sku: sku, price: parseFloat(price), stock_quantity: parseInt(stock), 
-                    badge: 'Available now', store_name: loggedInVendor.name, is_verified_store: loggedInVendor.isRegistered,
-                    image_url: 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=600&q=80'
-                }
-            ]);
-
-            alert('Product published live successfully!');
-            closeAddProductModal();
-            loadVendorDashboard();
-            loadProducts();
-        }
-
-        // Live Camera KYC
-        let activeStreams = {};
-        async function startCamera(type) {
-            try {
-                const videoEl = document.getElementById(`video-${type}`);
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                videoEl.srcObject = stream;
-                activeStreams[type] = stream;
-                document.getElementById(`txt-${type}`).style.display = 'none';
-            } catch (err) {
-                alert('Could not access camera: ' + err.message);
-            }
-        }
-
-        function captureSnapshot(type) {
-            if (!activeStreams[type]) { alert('Please open camera first.'); return; }
-            activeStreams[type].getTracks().forEach(track => track.stop());
-            document.getElementById(`box-${type}`).innerHTML = `<div style="color:var(--success); font-weight:800; padding:20px;">✓ Captured Successfully!</div>`;
-            alert(`${type.toUpperCase()} captured successfully!`);
-        }
-
-        function openKycModal() { document.getElementById('kyc-modal').style.display = 'flex'; }
-        function closeKycModal() { document.getElementById('kyc-modal').style.display = 'none'; }
-
-        async function submitLiveKyc() {
-            alert('Live KYC captured successfully! Awaiting admin verification.');
-            closeKycModal();
-            loggedInVendor.isApproved = true;
-            const banner = document.getElementById('kyc-banner');
-            banner.style.background = 'var(--success-bg)';
-            banner.style.borderColor = '#a7f3d0';
-            banner.innerHTML = `<div><strong>✅ KYC Approved & Active</strong><br><span style="font-size:13px; color:var(--success);">Your live camera captures were verified. You can now publish listings!</span></div>`;
-            document.getElementById('v-stat-verification').innerText = 'Verified ✓';
-        }
-
-        // Auth & Supabase OTP
-        function openAuthModal() { document.getElementById('auth-modal').style.display = 'flex'; }
-        function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
-
-        function toggleCertField() {
-            const isBusiness = document.getElementById('reg-is-business')?.checked || false;
-            document.getElementById('cert-group').style.display = isBusiness ? 'block' : 'none';
-        }
-
-        async function sendSupabaseEmailOtp() {
-            const email = document.getElementById('reg-email').value;
-            if (!email || !email.includes('@')) {
-                alert('Please enter a valid email address.');
-                return;
-            }
-            document.getElementById('code-group').style.display = 'block';
-
-            try {
-                await _supabase.auth.signInWithOtp({ email: email });
-            } catch (e) {}
-            alert(`Verification code successfully sent via Supabase to ${email}! Check your inbox.`);
-        }
-
-        async function verifySupabaseEmailOtp() {
-            const email = document.getElementById('reg-email').value;
-            const token = document.getElementById('reg-ver-code').value;
-
-            if (!token || token.length < 6) {
-                alert('Please enter the 6-digit verification code.');
-                return;
-            }
-
-            try {
-                const { data, error } = await _supabase.auth.verifyOtp({ email, token, type: 'email' });
-                if (error) {
-                    alert('Verification error: ' + error.message);
-                    return;
-                }
-            } catch (e) {}
-
-            isEmailVerified = true;
-            document.getElementById('ver-status-text').innerHTML = '<span style="color:var(--success); font-weight:700;">✓ Email Verified Successfully via Supabase!</span>';
-            const regBtn = document.getElementById('complete-reg-btn');
-            regBtn.style.opacity = '1';
-            regBtn.style.pointerEvents = 'auto';
-            alert('Email verified successfully! You can now complete your registration.');
-        }
-
-        const zambiaTowns = {
-            "Lusaka Province": ["Lusaka", "Chongwe", "Kafue", "Luangwa"],
-            "Copperbelt Province": ["Ndola", "Kitwe", "Luanshya", "Mufulira", "Chingola", "Kalulushi"],
-            "Southern Province": ["Livingstone", "Choma", "Mazabuka", "Monze", "Kalomo"],
-            "Central Province": ["Kabwe", "Kapiri Mposhi", "Serenje", "Mumbwa"],
-            "Eastern Province": ["Chipata", "Petauke", "Katete", "Lundazi"],
-            "Luapula Province": ["Mansa", "Samfya", "Kawambwa", "Nchelenge"],
-            "Northern Province": ["Kasama", "Mbala", "Mporokoso", "Luwingu"],
-            "North-Western Province": ["Solwezi", "Kasempa", "Mwinilunga"],
-            "Western Province": ["Mongu", "Senanga", "Kaoma", "Sesheke"],
-            "Muchinga Province": ["Chinsali", "Mpika", "Isoka", "Nakonde"]
-        };
-
-        function updateTownsList() {
-            const provSelect = document.getElementById('reg-province').value;
-            const townSelect = document.getElementById('reg-town');
-            townSelect.innerHTML = '<option value="">Select Town</option>';
-            if (zambiaTowns[provSelect]) {
-                zambiaTowns[provSelect].forEach(town => {
-                    townSelect.innerHTML += `<option value="${town}">${town}</option>`;
-                });
-            }
-        }
-
-        async function registerUser() {
-            if (!isEmailVerified) {
-                alert('Email verification is required before you can complete registration.');
-                return;
-            }
-            const role = document.getElementById('reg-role').value;
-            const name = document.getElementById('reg-name').value;
-            const phone = document.getElementById('reg-phone').value;
-            const email = document.getElementById('reg-email').value;
-            const province = document.getElementById('reg-province').value;
-            const town = document.getElementById('reg-town').value;
-            const isBusiness = document.getElementById('reg-is-business')?.checked || false;
-
-            if (!province || !town) {
-                alert('Please select your Province and Town.');
-                return;
-            }
-
-            loggedInVendor = { name: name, isApproved: false, isRegistered: isBusiness, role: role };
-            initRealtimeGreetingAndClock();
-
-            try {
-                await _supabase.from('profiles').insert([
-                    { full_name: name, phone, email, province, town, role, is_registered_business: isBusiness, kyc_status: 'pending' }
-                ]);
-            } catch (e) {}
-
-            alert(`Registered successfully as ${role.toUpperCase()} from ${town}, ${province}!`);
-            closeAuthModal();
-            if (role === 'vendor') {
-                switchPortal('vendor');
-                openKycModal();
-            } else if (role === 'courier') {
-                switchPortal('courier');
-            } else {
-                switchPortal('customer');
-            }
-        }
-
-        // Initialize on Load
-        loadProducts();
-    </script>
 </body>
 </html>
