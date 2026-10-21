@@ -6,7 +6,7 @@
     <title>Yumilo Market | Enterprise Escrow & Multi-Vendor Ecosystem</title>
     <!-- Include Supabase JS Client Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-        <style>
+            <style>
         *, *::before, *::after {
             box-sizing: border-box;
         }
@@ -16,10 +16,10 @@
             --primary-light: #1b3827;
             --accent: #d4af37;
             --orange: #f38220;
-            --bg: #f4f6f8;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text-main: #1a2e22;
-            --text-muted: #667085;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
             --border: #e2e8f0;
             --success: #10b981;
             --success-bg: #d1fae5;
@@ -35,95 +35,444 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Top Header */
+        /* ================= 1. STREAMLINED HEADER ================= */
         .top-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 16px 40px; background-color: #fff; border-bottom: 1px solid var(--border);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            grid-template-areas:
+                "logo . actions"
+                "search search search";
+            row-gap: 12px;
+            padding: 12px 16px;
+            background: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
-        .logo-area img { height: 42px; width: auto; display: block; }
+        .logo-area {
+            grid-area: logo;
+            display: flex;
+            align-items: center;
+        }
+        .logo-area img {
+            height: 38px;
+            width: auto;
+            border-radius: 8px;
+            display: block;
+            object-fit: contain;
+        }
         .search-box {
-            display: flex; align-items: center; background: #f8fafc; border: 1px solid var(--border);
-            border-radius: 24px; padding: 10px 20px; gap: 12px; flex: 1; max-width: 520px; margin: 0 32px;
+            grid-area: search;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 16px;
+            gap: 10px;
+            transition: all 0.2s ease;
         }
-        .search-box input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; color: var(--text-main); }
-        .header-actions { display: flex; align-items: center; gap: 16px; }
+        .search-box:focus-within {
+            background: #ffffff;
+            border-color: var(--orange);
+            box-shadow: 0 0 0 3px rgba(243, 130, 32, 0.15);
+        }
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 13.5px;
+            color: var(--text-main);
+        }
+        .search-box input::placeholder {
+            color: #94a3b8;
+        }
+        .header-actions {
+            grid-area: actions;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
         .auth-portal-btn {
-            background: var(--primary); color: var(--accent); border: none; padding: 10px 20px;
-            border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; transition: opacity 0.2s;
+            background: var(--primary);
+            color: var(--accent);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 8px 14px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
-        .auth-portal-btn:hover { opacity: 0.9; }
+        .auth-portal-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
         
         .icon-btn {
-            width: 42px; height: 42px; border-radius: 50%; background: #f8fafc;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px solid var(--border); font-size: 16px; cursor: pointer; position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.2s;
+        }
+        .icon-btn:hover {
+            background: #f1f5f9;
         }
         .cart-badge {
-            position: absolute; top: -4px; right: -4px; background: var(--orange);
-            color: white; font-size: 10px; font-weight: bold; width: 18px; height: 18px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            background: var(--orange);
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Portal Navigation Bar */
+        /* Desktop Header Alignment */
+        @media (min-width: 769px) {
+            .top-header {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 14px 40px;
+            }
+            .logo-area img {
+                height: 42px;
+            }
+            .search-box {
+                flex: 1;
+                max-width: 520px;
+                margin: 0 32px;
+            }
+        }
+
+        /* ================= NAVIGATION PILLS ================= */
         .portal-nav {
-            display: flex; background: white; padding: 0 40px; border-bottom: 1px solid var(--border); gap: 8px;
+            display: flex;
+            background: #ffffff;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            gap: 8px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .portal-nav::-webkit-scrollbar {
+            display: none;
         }
         .portal-tab {
-            padding: 14px 24px; font-weight: 700; font-size: 14px; color: var(--text-muted);
-            cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s;
+            padding: 8px 16px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #475569;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
-        .portal-tab:hover { color: var(--primary); }
-        .portal-tab.active { color: var(--primary); border-bottom-color: var(--orange); }
+        .portal-tab:hover {
+            color: var(--primary);
+            background: #e2e8f0;
+        }
+        .portal-tab.active {
+            color: #ffffff;
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(17, 34, 23, 0.2);
+            font-weight: 700;
+        }
 
-        .main-container { max-width: 1200px; margin: 32px auto; padding: 0 24px; }
+        .main-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 16px;
+        }
         .portal-view { display: none; }
         .portal-view.active { display: block; }
 
-        /* Standalone Bold Greeting Header */
+        /* ================= 2. SLIM ELEGANT GREETING BANNER ================= */
         .top-greeting-card {
-            background: #ffffff; border: 1px solid var(--border); border-radius: 16px;
-            padding: 20px 28px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-            display: flex; justify-content: space-between; align-items: center;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 4px 2px 14px 2px;
+            margin-bottom: 12px;
+            box-shadow: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed rgba(226, 232, 240, 0.8);
         }
         .top-greeting-card h2 {
-            font-size: 20px; font-weight: 800; color: var(--primary); margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         .top-greeting-card span {
-            font-size: 14px; font-weight: 600; color: var(--text-muted); background: #f8fafc; padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border);
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: #ffffff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: inline-flex;
+            align-items: center;
         }
 
         /* Slowed Moving Billboard Carousel (7 seconds rotation) */
         .moving-billboard {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            border-radius: 20px; padding: 36px 48px; color: white; 
-            box-shadow: 0 10px 25px rgba(17,34,23,0.1); margin-bottom: 36px;
-            position: relative; overflow: hidden; min-height: 150px; display: flex; align-items: center;
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            background: linear-gradient(135deg, #0d1e14 0%, #173623 100%);
+            border-radius: 18px;
+            padding: 26px 36px;
+            color: white; 
+            box-shadow: 0 8px 24px rgba(17, 34, 23, 0.12);
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(212, 175, 55, 0.25);
         }
         .billboard-slide {
-            position: absolute; width: 100%; left: 100%; opacity: 0; transition: all 0.8s ease-in-out;
-            display: flex; justify-content: space-between; align-items: center; padding-right: 90px; box-sizing: border-box;
+            position: absolute;
+            width: 100%;
+            left: 100%;
+            opacity: 0;
+            transition: all 0.8s ease-in-out;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-right: 40px;
+            box-sizing: border-box;
         }
         .billboard-slide.active { left: 0; opacity: 1; }
-        .billboard-tag { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; color: var(--accent); text-transform: uppercase; margin-bottom: 6px; }
-        .billboard-title { font-size: 26px; font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
-        .billboard-desc { font-size: 14px; opacity: 0.85; max-width: 600px; }
-
-        /* Product Grid */
-        .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px; }
-        .product-card {
-            background: var(--card-bg); border-radius: 16px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between;
-            transition: transform 0.2s, box-shadow 0.2s;
+        .billboard-tag {
+            font-size: 10.5px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 6px;
         }
-        .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
-        .product-img { width: 100%; height: 160px; background-color: #f1f5f9; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 13px; font-weight: 600; }
-        .badge { display: inline-block; background-color: var(--success-bg); color: var(--success); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; margin: 12px 0 6px 0; }
-        .product-title { font-size: 15px; font-weight: 700; color: var(--primary); margin: 4px 0; }
-        .product-price { font-size: 17px; font-weight: 800; color: #b8860b; margin: 4px 0 12px 0; }
-        .store-tag { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
-        .add-btn { background-color: var(--orange); color: white; border: none; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; width: 100%; text-align: center; }
+        .billboard-title {
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 6px;
+        }
+        .billboard-desc {
+            font-size: 13.5px;
+            opacity: 0.88;
+            max-width: 580px;
+            line-height: 1.4;
+        }
+
+        /* ================= 3. MODERN PRODUCT CARDS ================= */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, border-color 0.2s;
+            position: relative;
+        }
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 22px rgba(17, 34, 23, 0.09);
+            border-color: #cbd5e1;
+        }
+        .product-card-body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* High-End Poultry & Market Placeholder Backgrounds */
+        .product-img {
+            width: 100%;
+            height: 150px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .product-real-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+        }
+        .placeholder-art {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px;
+            text-align: center;
+            user-select: none;
+        }
+        .placeholder-icon {
+            font-size: 38px;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.08));
+            line-height: 1;
+        }
+        .placeholder-tag {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: var(--primary);
+            opacity: 0.88;
+            background: rgba(255, 255, 255, 0.75);
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        /* Clean Poultry & Market Theme Palettes */
+        .theme-poultry {
+            background: linear-gradient(135deg, #e8f5e9 0%, #fef9c3 50%, #fff7ed 100%);
+        }
+        .theme-meal {
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 60%, #fef08a 100%);
+        }
+        .theme-produce {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #dcfce7 100%);
+        }
+        .theme-market {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+        }
+
+        /* Floating Badge */
+        .product-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(4px);
+            color: #065f46;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .product-info {
+            padding-top: 10px;
+        }
+        .store-tag {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .product-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0 0 6px 0;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 38px;
+        }
+        .product-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+        .product-price {
+            font-size: 17px;
+            font-weight: 800;
+            color: #047857;
+            letter-spacing: -0.3px;
+        }
+
+        .add-btn {
+            background-color: var(--orange);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 6px rgba(243, 130, 32, 0.25);
+        }
+        .add-btn:hover {
+            background-color: #e07110;
+            box-shadow: 0 4px 12px rgba(243, 130, 32, 0.35);
+        }
+        .add-btn:active {
+            transform: scale(0.97);
+        }
 
         /* Vendor Dashboard Styles */
         .vendor-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
@@ -132,12 +481,38 @@
         .stat-label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
         .stat-value { font-size: 24px; font-weight: 800; color: var(--primary); margin-top: 8px; }
 
-        .vendor-subnav { display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 12px; overflow-x: auto; }
-        .vendor-subtab {
-            background: white; border: 1px solid var(--border); padding: 10px 18px; border-radius: 10px;
-            font-weight: 700; font-size: 13px; cursor: pointer; color: var(--text-muted); transition: all 0.2s; white-space: nowrap;
+        /* Vendor Subnav Pills */
+        .vendor-subnav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: none;
+            padding-bottom: 6px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
-        .vendor-subtab.active { background: var(--primary); color: var(--accent); border-color: var(--primary); }
+        .vendor-subnav::-webkit-scrollbar { display: none; }
+        .vendor-subtab {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            color: #475569;
+            transition: all 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .vendor-subtab.active {
+            background: var(--primary);
+            color: var(--accent);
+            border-color: var(--primary);
+            box-shadow: 0 2px 6px rgba(17, 34, 23, 0.15);
+        }
 
         .vendor-section { display: none; }
         .vendor-section.active { display: block; }
@@ -190,9 +565,9 @@
         .footer-card { background-color: var(--primary-light); border-radius: 16px; padding: 24px; border: 1px solid rgba(255,255,255,0.08); }
         .footer-title { color: var(--accent); font-weight: 700; font-size: 15px; margin-bottom: 8px; }
 
-        /* ================= RESPONSIVE & MOBILE STYLES ================= */
+        /* ================= MOBILE APP OPTIMIZATION ================= */
         @media (max-width: 1024px) {
-            .product-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+            .product-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
             .dashboard-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
         }
 
@@ -201,104 +576,109 @@
                 padding-bottom: 80px;
             }
 
-            /* 1. Header & Navigation Tabs (No crowding / Clean horizontal scroll) */
+            /* Header on Mobile */
             .top-header {
-                flex-wrap: wrap;
-                padding: 12px 16px;
-                gap: 12px;
-            }
-            .logo-area {
-                order: 1;
+                padding: 10px 14px 12px;
+                row-gap: 10px;
             }
             .logo-area img {
-                height: 34px;
-            }
-            .header-actions {
-                order: 2;
-                gap: 8px;
-            }
-            .auth-portal-btn {
-                padding: 8px 14px;
-                font-size: 12px;
-                border-radius: 16px;
-            }
-            .icon-btn {
-                width: 38px;
-                height: 38px;
-                font-size: 15px;
+                height: 35px;
             }
             .search-box {
-                order: 3;
-                width: 100%;
-                max-width: 100%;
-                margin: 0;
                 padding: 8px 14px;
-                gap: 8px;
             }
             .search-box input {
                 font-size: 13px;
             }
-
-            /* Portal Navigation Tabs - Horizontal Touch Scroll */
-            .portal-nav {
-                padding: 0 16px;
-                gap: 6px;
-                overflow-x: auto;
-                white-space: nowrap;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
+            .auth-portal-btn {
+                padding: 7px 12px;
+                font-size: 11px;
             }
-            .portal-nav::-webkit-scrollbar {
-                display: none;
+            .icon-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+
+            /* Navigation Pills - Native Touch Scroll */
+            .portal-nav {
+                padding: 8px 12px;
+                gap: 6px;
             }
             .portal-tab {
-                flex-shrink: 0;
-                white-space: nowrap;
-                padding: 12px 14px;
-                font-size: 13px;
-            }
-
-            /* Vendor Sub-Navigation Tabs - Horizontal Touch Scroll */
-            .vendor-subnav {
-                padding: 0 2px 10px 2px;
-                gap: 8px;
-                overflow-x: auto;
-                white-space: nowrap;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
-            .vendor-subnav::-webkit-scrollbar {
-                display: none;
-            }
-            .vendor-subtab {
-                flex-shrink: 0;
-                white-space: nowrap;
-                padding: 8px 14px;
+                padding: 6px 13px;
                 font-size: 12px;
             }
 
             .main-container {
-                margin: 16px auto;
-                padding: 0 14px;
+                margin: 12px auto;
+                padding: 0 12px;
             }
 
-            /* 2. Vendor Banners, Billboard & Headers Stacking (Prevent Collisions) */
+            /* Slim Greeting Banner */
+            .top-greeting-card {
+                padding: 2px 0 10px 0;
+                margin-bottom: 10px;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+            }
+            .top-greeting-card h2 {
+                font-size: 13.5px;
+            }
+            .top-greeting-card span {
+                font-size: 10.5px;
+                padding: 2px 8px;
+            }
+
+            /* Promo Billboard - Compact & Stacked */
+            .moving-billboard {
+                padding: 20px 16px;
+                border-radius: 14px;
+                min-height: 205px;
+                margin-bottom: 20px;
+            }
+            .billboard-slide {
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                padding-right: 0;
+                gap: 10px;
+            }
+            .billboard-tag {
+                font-size: 9.5px;
+            }
+            .billboard-title {
+                font-size: 17px;
+                line-height: 1.25;
+            }
+            .billboard-desc {
+                font-size: 12px;
+                line-height: 1.35;
+            }
+            .billboard-slide button {
+                align-self: flex-start;
+                padding: 8px 18px !important;
+                font-size: 12px !important;
+                border-radius: 9999px !important;
+            }
+
+            /* Vendor Alerts & Headers */
             #kyc-banner {
                 flex-direction: column !important;
                 align-items: flex-start !important;
-                gap: 14px !important;
-                padding: 16px !important;
+                gap: 12px !important;
+                padding: 14px !important;
             }
             #kyc-banner button {
                 width: 100% !important;
-                padding: 10px 16px;
+                padding: 10px;
                 text-align: center;
             }
-
             .vendor-header-flex {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 12px;
+                gap: 10px;
             }
             .vendor-header-flex > button,
             .vendor-header-flex .hero-btn {
@@ -306,80 +686,52 @@
                 text-align: center;
             }
 
-            .top-greeting-card {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-                padding: 16px;
-            }
-            .top-greeting-card h2 {
-                font-size: 17px;
-            }
-
-            .moving-billboard {
-                padding: 24px 18px;
-                border-radius: 16px;
-                min-height: 230px;
-                margin-bottom: 24px;
-            }
-            .billboard-slide {
-                flex-direction: column;
-                align-items: flex-start;
-                justify-content: center;
-                padding-right: 0;
-                gap: 12px;
-            }
-            .billboard-tag {
-                font-size: 10px;
-                letter-spacing: 1px;
-            }
-            .billboard-title {
-                font-size: 18px;
-                line-height: 1.25;
-            }
-            .billboard-desc {
-                font-size: 13px;
-                line-height: 1.4;
-            }
-            .billboard-slide button {
-                align-self: flex-start;
-                padding: 10px 20px !important;
-                font-size: 13px !important;
-            }
-
-            /* 3. Product Catalog Grid - Clean 2-Column Layout on Mobile */
+            /* Clean 2-Column Product Grid */
             .product-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-                margin-bottom: 30px;
+                gap: 10px;
+                margin-bottom: 24px;
             }
             .product-grid > [style*="grid-column"] {
                 grid-column: 1 / -1 !important;
             }
             .product-card {
-                padding: 12px;
+                padding: 10px;
                 border-radius: 14px;
             }
             .product-img {
                 height: 120px;
-                font-size: 12px;
+                border-radius: 10px;
             }
-            .badge {
-                font-size: 10px;
-                padding: 3px 8px;
-                margin: 8px 0 4px 0;
+            .placeholder-icon {
+                font-size: 32px;
             }
-            .product-title {
-                font-size: 14px;
-                line-height: 1.3;
-                margin: 2px 0;
+            .placeholder-tag {
+                font-size: 9px;
+                padding: 1px 5px;
             }
-            .product-price {
-                font-size: 15px;
-                margin: 2px 0 8px 0;
+            .product-badge {
+                font-size: 9px;
+                padding: 2px 6px;
+                top: 6px; left: 6px;
+            }
+            .product-info {
+                padding-top: 8px;
             }
             .store-tag {
-                font-size: 11px;
+                font-size: 10px;
+                margin-bottom: 2px;
+            }
+            .product-title {
+                font-size: 13px;
+                min-height: 34px;
+                line-height: 1.3;
+                margin-bottom: 4px;
+            }
+            .product-price {
+                font-size: 15.5px;
+            }
+            .product-price-row {
                 margin-bottom: 8px;
             }
             .add-btn {
@@ -388,21 +740,21 @@
                 border-radius: 8px;
             }
 
-            /* Vendor Central Metric Cards & Containers */
+            /* Vendor Central Metric Cards */
             .dashboard-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-                margin-bottom: 20px;
+                gap: 10px;
+                margin-bottom: 16px;
             }
             .stat-card {
-                padding: 14px;
+                padding: 12px;
                 border-radius: 12px;
             }
             .stat-value {
-                font-size: 18px;
+                font-size: 17px;
             }
             .stat-label {
-                font-size: 11px;
+                font-size: 10.5px;
             }
             .dashboard-card {
                 padding: 16px;
@@ -422,30 +774,30 @@
 
             /* Footer on Mobile */
             footer {
-                padding: 32px 16px;
-                margin-top: 40px;
+                padding: 28px 16px;
+                margin-top: 36px;
             }
             .footer-content {
                 grid-template-columns: 1fr;
-                gap: 24px;
+                gap: 20px;
             }
         }
 
-        @media (max-width: 380px) {
+        @media (max-width: 360px) {
             .product-grid {
                 gap: 8px;
             }
             .product-card {
-                padding: 10px;
+                padding: 8px;
             }
             .product-img {
                 height: 105px;
             }
             .product-title {
-                font-size: 13px;
+                font-size: 12.5px;
             }
             .product-price {
-                font-size: 14px;
+                font-size: 14.5px;
             }
         }
     </style>
@@ -983,22 +1335,81 @@
             const { data: products } = await query;
             
             if (!products || products.length === 0) {
-                grid.innerHTML = '<p style="grid-column: span 4; text-align:center; color:var(--text-muted);">No products found.</p>';
+                grid.innerHTML = '<p style="grid-column: 1 / -1; text-align:center; color:var(--text-muted); padding:40px;">No products found.</p>';
                 return;
             }
 
             grid.innerHTML = '';
             products.forEach(p => {
+                const titleLower = (p.title || '').toLowerCase();
+                const catLower = (p.category || '').toLowerCase();
+                
+                // Determine clean poultry / farm theme & icon
+                let icon = '🐔';
+                let tag = 'Verified Poultry';
+                let themeClass = 'theme-poultry';
+                
+                if (titleLower.includes('egg') || catLower.includes('egg')) {
+                    icon = '🥚';
+                    tag = 'Farm Fresh Eggs';
+                    themeClass = 'theme-poultry';
+                } else if (titleLower.includes('fillet') || titleLower.includes('breast') || titleLower.includes('meat') || titleLower.includes('broiler') || titleLower.includes('chicken') || catLower.includes('poultry')) {
+                    icon = '🐔';
+                    tag = 'Local Broiler Farm';
+                    themeClass = 'theme-poultry';
+                } else if (titleLower.includes('grilled') || titleLower.includes('platter') || catLower.includes('prepared') || titleLower.includes('meal')) {
+                    icon = '🍗';
+                    tag = 'Prepared Farm Meal';
+                    themeClass = 'theme-meal';
+                } else if (titleLower.includes('produce') || titleLower.includes('box') || titleLower.includes('vegetable') || catLower.includes('grocery') || catLower.includes('farm')) {
+                    icon = '🥬';
+                    tag = 'Fresh Harvest';
+                    themeClass = 'theme-produce';
+                } else {
+                    icon = '🛒';
+                    tag = 'Verified Market';
+                    themeClass = 'theme-market';
+                }
+
+                const hasImg = p.image_url || (Array.isArray(p.media_photos) && p.media_photos.length > 0 && typeof p.media_photos[0] === 'string' && p.media_photos[0].startsWith('http'));
+                const imgSrc = hasImg ? (p.image_url || p.media_photos[0]) : '';
+
+                const imgHtml = hasImg ? `
+                    <div class="product-img ${themeClass}">
+                        <img src="${imgSrc}" alt="${p.title}" class="product-real-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="placeholder-art" style="display:none;">
+                            <div class="placeholder-icon">${icon}</div>
+                            <div class="placeholder-tag">${tag}</div>
+                        </div>
+                        <span class="product-badge">${p.badge || '● Available now'}</span>
+                    </div>
+                ` : `
+                    <div class="product-img ${themeClass}">
+                        <div class="placeholder-art">
+                            <div class="placeholder-icon">${icon}</div>
+                            <div class="placeholder-tag">${tag}</div>
+                        </div>
+                        <span class="product-badge">${p.badge || '● Available now'}</span>
+                    </div>
+                `;
+
+                const safeTitle = (p.title || '').replace(/'/g, "\\'");
+
                 grid.innerHTML += `
                     <div class="product-card">
-                        <div>
-                            <div class="product-img">📷 Media Attached</div>
-                            <span class="badge">${p.badge || '● Available now'}</span>
-                            <div class="product-title">${p.title}</div>
-                            <div class="store-tag">Store: <strong>${p.store_name || 'Yumilo Official'}</strong></div>
-                            <div class="product-price">K${parseFloat(p.price).toFixed(2)}</div>
+                        <div class="product-card-body">
+                            ${imgHtml}
+                            <div class="product-info">
+                                <div class="store-tag">🏪 ${p.store_name || 'Yumilo Official Store'}</div>
+                                <h3 class="product-title" title="${p.title}">${p.title}</h3>
+                                <div class="product-price-row">
+                                    <span class="product-price">K${parseFloat(p.price).toFixed(2)}</span>
+                                </div>
+                            </div>
                         </div>
-                        <button class="add-btn" onclick="addToCart('${p.title}', ${p.price})">Add to cart +</button>
+                        <button class="add-btn" onclick="addToCart('${safeTitle}', ${p.price})">
+                            <span style="font-size:14px; line-height:1;">🛒</span> Add to Cart
+                        </button>
                     </div>
                 `;
             });
