@@ -6,7 +6,11 @@
     <title>Yumilo Market | Enterprise Escrow & Multi-Vendor Ecosystem</title>
     <!-- Include Supabase JS Client Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
+        <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         :root {
             --primary: #112217;
             --primary-light: #1b3827;
@@ -185,6 +189,265 @@
         .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
         .footer-card { background-color: var(--primary-light); border-radius: 16px; padding: 24px; border: 1px solid rgba(255,255,255,0.08); }
         .footer-title { color: var(--accent); font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+
+        /* ================= RESPONSIVE & MOBILE STYLES ================= */
+        @media (max-width: 1024px) {
+            .product-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+            .dashboard-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 80px;
+            }
+
+            /* 1. Header & Navigation Tabs (No crowding / Clean horizontal scroll) */
+            .top-header {
+                flex-wrap: wrap;
+                padding: 12px 16px;
+                gap: 12px;
+            }
+            .logo-area {
+                order: 1;
+            }
+            .logo-area img {
+                height: 34px;
+            }
+            .header-actions {
+                order: 2;
+                gap: 8px;
+            }
+            .auth-portal-btn {
+                padding: 8px 14px;
+                font-size: 12px;
+                border-radius: 16px;
+            }
+            .icon-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 15px;
+            }
+            .search-box {
+                order: 3;
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                padding: 8px 14px;
+                gap: 8px;
+            }
+            .search-box input {
+                font-size: 13px;
+            }
+
+            /* Portal Navigation Tabs - Horizontal Touch Scroll */
+            .portal-nav {
+                padding: 0 16px;
+                gap: 6px;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .portal-nav::-webkit-scrollbar {
+                display: none;
+            }
+            .portal-tab {
+                flex-shrink: 0;
+                white-space: nowrap;
+                padding: 12px 14px;
+                font-size: 13px;
+            }
+
+            /* Vendor Sub-Navigation Tabs - Horizontal Touch Scroll */
+            .vendor-subnav {
+                padding: 0 2px 10px 2px;
+                gap: 8px;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .vendor-subnav::-webkit-scrollbar {
+                display: none;
+            }
+            .vendor-subtab {
+                flex-shrink: 0;
+                white-space: nowrap;
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+
+            .main-container {
+                margin: 16px auto;
+                padding: 0 14px;
+            }
+
+            /* 2. Vendor Banners, Billboard & Headers Stacking (Prevent Collisions) */
+            #kyc-banner {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 14px !important;
+                padding: 16px !important;
+            }
+            #kyc-banner button {
+                width: 100% !important;
+                padding: 10px 16px;
+                text-align: center;
+            }
+
+            .vendor-header-flex {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .vendor-header-flex > button,
+            .vendor-header-flex .hero-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .top-greeting-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 16px;
+            }
+            .top-greeting-card h2 {
+                font-size: 17px;
+            }
+
+            .moving-billboard {
+                padding: 24px 18px;
+                border-radius: 16px;
+                min-height: 230px;
+                margin-bottom: 24px;
+            }
+            .billboard-slide {
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                padding-right: 0;
+                gap: 12px;
+            }
+            .billboard-tag {
+                font-size: 10px;
+                letter-spacing: 1px;
+            }
+            .billboard-title {
+                font-size: 18px;
+                line-height: 1.25;
+            }
+            .billboard-desc {
+                font-size: 13px;
+                line-height: 1.4;
+            }
+            .billboard-slide button {
+                align-self: flex-start;
+                padding: 10px 20px !important;
+                font-size: 13px !important;
+            }
+
+            /* 3. Product Catalog Grid - Clean 2-Column Layout on Mobile */
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                margin-bottom: 30px;
+            }
+            .product-grid > [style*="grid-column"] {
+                grid-column: 1 / -1 !important;
+            }
+            .product-card {
+                padding: 12px;
+                border-radius: 14px;
+            }
+            .product-img {
+                height: 120px;
+                font-size: 12px;
+            }
+            .badge {
+                font-size: 10px;
+                padding: 3px 8px;
+                margin: 8px 0 4px 0;
+            }
+            .product-title {
+                font-size: 14px;
+                line-height: 1.3;
+                margin: 2px 0;
+            }
+            .product-price {
+                font-size: 15px;
+                margin: 2px 0 8px 0;
+            }
+            .store-tag {
+                font-size: 11px;
+                margin-bottom: 8px;
+            }
+            .add-btn {
+                padding: 8px 10px;
+                font-size: 12px;
+                border-radius: 8px;
+            }
+
+            /* Vendor Central Metric Cards & Containers */
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+            .stat-card {
+                padding: 14px;
+                border-radius: 12px;
+            }
+            .stat-value {
+                font-size: 18px;
+            }
+            .stat-label {
+                font-size: 11px;
+            }
+            .dashboard-card {
+                padding: 16px;
+                border-radius: 14px;
+            }
+
+            /* Modals on Mobile */
+            .modal-card {
+                width: 94%;
+                max-width: 94%;
+                padding: 20px 16px;
+                border-radius: 16px;
+            }
+            .modal-title {
+                font-size: 19px;
+            }
+
+            /* Footer on Mobile */
+            footer {
+                padding: 32px 16px;
+                margin-top: 40px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .product-grid {
+                gap: 8px;
+            }
+            .product-card {
+                padding: 10px;
+            }
+            .product-img {
+                height: 105px;
+            }
+            .product-title {
+                font-size: 13px;
+            }
+            .product-price {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
