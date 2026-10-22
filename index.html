@@ -370,19 +370,60 @@
         Notification message
     </div>
 
-    <!-- SUPABASE CONFIGURATION & REAL FUNCTIONALITY SCRIPT -->
+    <!-- SAFE ROBUST SCRIPT -->
     <script>
-        // Safe Supabase Client Initialization
-        let supabase = null;
-        try {
-            const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
-            const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
-            if (window.supabase) {
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Global UI functions guaranteed to be available immediately
+        window.showToast = function(message) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-[-20px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-[-20px]');
+            }, 4000);
+        };
+
+        window.toggleCategoriesMenu = function() {
+            const drawer = document.getElementById('categoriesDrawer');
+            if (drawer) drawer.classList.toggle('hidden');
+        };
+
+        window.openAuthModal = function(mode) {
+            const modal = document.getElementById('authModal');
+            if (modal) modal.classList.remove('hidden');
+            window.switchAuthTab(mode);
+        };
+
+        window.closeAuthModal = function() {
+            const modal = document.getElementById('authModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.switchAuthTab = function(mode) {
+            const tabSignin = document.getElementById('tabSignin');
+            const tabSignup = document.getElementById('tabSignup');
+            const signinForm = document.getElementById('signinForm');
+            const signupForm = document.getElementById('signupForm');
+            const verifyForm = document.getElementById('verifyForm');
+
+            if (!tabSignin || !tabSignup) return;
+
+            if (mode === 'signin') {
+                tabSignin.className = "flex-1 py-2 text-xs font-bold rounded-xl transition bg-white shadow-sm text-slate-900 cursor-pointer";
+                tabSignup.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-stone-500 cursor-pointer";
+                if (signinForm) signinForm.classList.remove('hidden');
+                if (signupForm) signupForm.classList.add('hidden');
+                if (verifyForm) verifyForm.classList.add('hidden');
+            } else {
+                tabSignup.className = "flex-1 py-2 text-xs font-bold rounded-xl transition bg-white shadow-sm text-slate-900 cursor-pointer";
+                tabSignin.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-stone-500 cursor-pointer";
+                if (signupForm) signupForm.classList.remove('hidden');
+                if (signinForm) signinForm.classList.add('hidden');
+                if (verifyForm) verifyForm.classList.add('hidden');
             }
-        } catch (e) {
-            console.error('Supabase init error:', e);
-        }
+        };
 
         // Zambia Provinces and Cities mapping
         const zambiaData = {
@@ -398,9 +439,10 @@
             "North-Western": ["Solwezi", "Kasempa", "Zambezi", "Mwinilunga"]
         };
 
-        function updateCities() {
+        window.updateCities = function() {
             const provinceSelect = document.getElementById('signupProvince');
             const citySelect = document.getElementById('signupCity');
+            if (!provinceSelect || !citySelect) return;
             const selectedProvince = provinceSelect.value;
             
             citySelect.innerHTML = '<option value="">-- Choose City / Town --</option>';
@@ -412,21 +454,22 @@
                     citySelect.appendChild(opt);
                 });
             }
-        }
+        };
 
         // Cart state
         let cart = [];
         let pendingEmail = '';
 
-        function addToCart(name, price) {
+        window.addToCart = function(name, price) {
             cart.push({ name, price });
-            updateCartUI();
-            showToast(`🛒 Added ${name} (K${price}) to cart!`);
-        }
+            window.updateCartUI();
+            window.showToast(`🛒 Added ${name} (K${price}) to cart!`);
+        };
 
-        function updateCartUI() {
+        window.updateCartUI = function() {
             const total = cart.reduce((sum, item) => sum + item.price, 0);
-            document.getElementById('cartTotalBtn').textContent = `K${total.toFixed(2)}`;
+            const totalBtn = document.getElementById('cartTotalBtn');
+            if (totalBtn) totalBtn.textContent = `K${total.toFixed(2)}`;
             
             const badges = document.querySelectorAll('.cart-badge');
             badges.forEach(b => b.textContent = cart.length);
@@ -435,59 +478,82 @@
             if (cart.length === 0) {
                 summaryHTML = '<p class="text-stone-400 text-center py-2">Your cart is empty</p>';
             } else {
-                cart.forEach((item, index) => {
+                cart.forEach((item) => {
                     summaryHTML += `<div class="flex justify-between border-b py-1"><span>${item.name}</span><strong>K${item.price}</strong></div>`;
                 });
                 summaryHTML += `<div class="flex justify-between pt-2 font-bold text-sm"><span>Total:</span><span class="text-emerald-800">K${total.toFixed(2)}</span></div>`;
             }
-            document.getElementById('cartSummary').innerHTML = summaryHTML;
-        }
+            const summaryEl = document.getElementById('cartSummary');
+            if (summaryEl) summaryEl.innerHTML = summaryHTML;
+        };
 
-        function openCheckoutModal() {
+        window.openCheckoutModal = function() {
             if (cart.length === 0) {
-                showToast('⚠️ Your cart is empty!');
+                window.showToast('⚠️ Your cart is empty!');
                 return;
             }
-            document.getElementById('checkoutModal').classList.remove('hidden');
+            const modal = document.getElementById('checkoutModal');
+            if (modal) modal.classList.remove('hidden');
+        };
+
+        window.closeCheckoutModal = function() {
+            const modal = document.getElementById('checkoutModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.filterProducts = function(category) {
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            window.showToast(`Filtered department: ${category.toUpperCase()}`);
+        };
+
+        // Supabase safe initialization
+        let supabaseClient = null;
+        try {
+            if (window.supabase) {
+                supabaseClient = window.supabase.createClient('https://syxibiyrbgwsgghwwgej.supabase.co', 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG');
+            }
+        } catch (e) {
+            console.error('Supabase init note:', e);
         }
 
-        function closeCheckoutModal() {
-            document.getElementById('checkoutModal').classList.add('hidden');
-        }
-
-        async function submitOrder() {
+        window.submitOrder = async function() {
             const phone = document.getElementById('momoPhone').value;
             const provider = document.getElementById('momoProvider').value;
             if (!phone) {
-                showToast('⚠️ Please enter your Mobile Money phone number.');
+                window.showToast('⚠️ Please enter your Mobile Money phone number.');
                 return;
             }
 
-            if (!supabase) {
-                showToast('✅ Order placed successfully! (Offline mode)');
+            if (!supabaseClient) {
+                window.showToast('✅ Order placed successfully! (Offline mode)');
                 cart = [];
-                updateCartUI();
-                closeCheckoutModal();
+                window.updateCartUI();
+                window.closeCheckoutModal();
                 return;
             }
 
-            // Save order to Supabase database
-            const { data, error } = await supabase.from('orders').insert([
+            const { error } = await supabaseClient.from('orders').insert([
                 { items: cart, provider: provider, phone: phone, status: 'Escrow Pending' }
             ]);
 
             if (error) {
-                showToast('❌ Order error: ' + error.message);
+                window.showToast('❌ Order error: ' + error.message);
             } else {
-                showToast('✅ Order placed successfully! Escrow mobile money prompt sent.');
+                window.showToast('✅ Order placed successfully! Escrow mobile money prompt sent.');
                 cart = [];
-                updateCartUI();
-                closeCheckoutModal();
+                window.updateCartUI();
+                window.closeCheckoutModal();
             }
-        }
+        };
 
-        // Real Sign Up with Supabase Auth
-        async function handleSignUp(event) {
+        window.handleSignUp = async function(event) {
             event.preventDefault();
             const name = document.getElementById('signupName').value;
             const email = document.getElementById('signupEmail').value;
@@ -498,161 +564,74 @@
 
             pendingEmail = email;
 
-            if (!supabase) {
-                showToast('📧 Verification code simulated for ' + email);
+            if (!supabaseClient) {
+                window.showToast('📧 Verification code simulated for ' + email);
                 document.getElementById('signupForm').classList.add('hidden');
                 document.getElementById('verifyForm').classList.remove('hidden');
                 return;
             }
 
-            const { data, error } = await supabase.auth.signUp({
+            const { error } = await supabaseClient.auth.signUp({
                 email: email,
                 password: password,
                 options: {
-                    data: {
-                        full_name: name,
-                        phone: phone,
-                        province: province,
-                        city: city,
-                        country: 'Zambia'
-                    }
+                    data: { full_name: name, phone: phone, province: province, city: city, country: 'Zambia' }
                 }
             });
 
             if (error) {
-                showToast('❌ Sign Up Error: ' + error.message);
+                window.showToast('❌ Sign Up Error: ' + error.message);
             } else {
-                showToast('📧 Verification email sent! Please check your inbox.');
+                window.showToast('📧 Verification email sent! Please check your inbox.');
                 document.getElementById('signupForm').classList.add('hidden');
                 document.getElementById('verifyForm').classList.remove('hidden');
             }
-        }
+        };
 
-        // Real Email Verification (OTP confirmation code)
-        async function handleVerifyEmail(event) {
+        window.handleVerifyEmail = async function(event) {
             event.preventDefault();
             const code = document.getElementById('verifyCode').value;
 
-            if (!supabase) {
-                showToast('🎉 Email verified successfully! You are now logged in.');
-                closeAuthModal();
+            if (!supabaseClient) {
+                window.showToast('🎉 Email verified successfully! You are now logged in.');
+                window.closeAuthModal();
                 return;
             }
 
-            const { data, error } = await supabase.auth.verifyOtp({
+            const { error } = await supabaseClient.auth.verifyOtp({
                 email: pendingEmail,
                 token: code,
                 type: 'signup'
             });
 
             if (error) {
-                showToast('❌ Invalid verification code: ' + error.message);
+                window.showToast('❌ Invalid verification code: ' + error.message);
             } else {
-                showToast('🎉 Email verified successfully! You are now logged in.');
-                closeAuthModal();
-                checkUserSession();
+                window.showToast('🎉 Email verified successfully! You are now logged in.');
+                window.closeAuthModal();
             }
-        }
+        };
 
-        // Real Sign In
-        async function handleSignIn(event) {
+        window.handleSignIn = async function(event) {
             event.preventDefault();
             const email = document.getElementById('signinEmail').value;
             const password = document.getElementById('signinPassword').value;
 
-            if (!supabase) {
-                showToast('✅ Welcome back!');
-                closeAuthModal();
+            if (!supabaseClient) {
+                window.showToast('✅ Welcome back!');
+                window.closeAuthModal();
                 return;
             }
 
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
+            const { error } = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
 
             if (error) {
-                showToast('❌ Sign In Error: ' + error.message);
+                window.showToast('❌ Sign In Error: ' + error.message);
             } else {
-                showToast('✅ Welcome back!');
-                closeAuthModal();
-                checkUserSession();
+                window.showToast('✅ Welcome back!');
+                window.closeAuthModal();
             }
-        }
-
-        // Check active login state
-        async function checkUserSession() {
-            if (!supabase) return;
-            const { data: { session } } = await supabase.auth.getSession();
-            const nav = document.getElementById('authHeaderNav');
-            if (session) {
-                nav.innerHTML = `
-                    <span class="text-xs font-bold text-emerald-800">Hi, ${session.user.user_metadata.full_name || 'Customer'}</span>
-                    <button onclick="handleSignOut()" class="bg-stone-200 text-stone-800 px-3 py-1.5 rounded-full text-xs font-bold hover:bg-stone-300 transition cursor-pointer">Sign Out</button>
-                `;
-            }
-        }
-
-        async function handleSignOut() {
-            if (supabase) await supabase.auth.signOut();
-            showToast('Signed out successfully.');
-            location.reload();
-        }
-
-        if (supabase) checkUserSession();
-
-        // UI helpers
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.remove('opacity-0', 'translate-y-[-20px]');
-            toast.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'translate-y-[-20px]');
-            }, 4000);
-        }
-
-        function toggleCategoriesMenu() {
-            document.getElementById('categoriesDrawer').classList.toggle('hidden');
-        }
-
-        function openAuthModal(mode) {
-            document.getElementById('authModal').classList.remove('hidden');
-            switchAuthTab(mode);
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.add('hidden');
-        }
-
-        function switchAuthTab(mode) {
-            if (mode === 'signin') {
-                document.getElementById('tabSignin').className = "flex-1 py-2 text-xs font-bold rounded-xl transition bg-white shadow-sm text-slate-900 cursor-pointer";
-                document.getElementById('tabSignup').className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-stone-500 cursor-pointer";
-                document.getElementById('signinForm').classList.remove('hidden');
-                document.getElementById('signupForm').classList.add('hidden');
-                document.getElementById('verifyForm').classList.add('hidden');
-            } else {
-                document.getElementById('tabSignup').className = "flex-1 py-2 text-xs font-bold rounded-xl transition bg-white shadow-sm text-slate-900 cursor-pointer";
-                document.getElementById('tabSignin').className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-stone-500 cursor-pointer";
-                document.getElementById('signupForm').classList.remove('hidden');
-                document.getElementById('signinForm').classList.add('hidden');
-                document.getElementById('verifyForm').classList.add('hidden');
-            }
-        }
-
-        function filterProducts(category) {
-            const cards = document.querySelectorAll('.product-card');
-            cards.forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-            showToast(`Filtered department: ${category.toUpperCase()}`);
-        }
+        };
     </script>
 </body>
 </html>
