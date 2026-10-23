@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yumilo Market - Admin Login</title>
+  <title>Yumilo Market - Admin Sign In</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS Client v2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
@@ -32,10 +34,10 @@
     </form>
   </div>
 
+  <!-- Application Logic -->
   <script>
     const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
-    // Make sure your full public anon key is pasted here:
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; 
+    const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
 
     let supabaseClient;
     try {
@@ -56,15 +58,11 @@
       submitBtn.disabled = true;
 
       try {
-        console.log("Submitting login for:", email);
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
         if (error) throw error;
-
-        console.log("Login successful! Redirecting to admin dashboard...");
-        // Direct jump to admin since you are the super admin
+        
+        // Successfully signed in, jump straight to the admin command center
         window.location.href = 'admin.html';
-
       } catch (err) {
         console.error("Login error caught:", err);
         errorMsg.textContent = err.message || 'Login failed. Check your password.';
