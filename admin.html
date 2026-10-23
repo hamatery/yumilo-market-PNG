@@ -20,7 +20,6 @@
       </div>
       <div class="flex items-center space-x-4">
         <span id="userName" class="text-sm font-medium text-emerald-100">Yumilo Admin</span>
-        <!-- Direct onclick ensures logout works instantly even if scripts are loading -->
         <button onclick="handleLogout()" class="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 rounded font-medium transition cursor-pointer">
           Logout
         </button>
@@ -79,15 +78,11 @@
 
   <!-- Application Logic -->
   <script>
-    // Supabase Configuration
     const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
-    // Replace with your public anon key if your setup requires it explicitly here
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; 
-    
-    // Initialize Supabase client (or use window.supabase if initialized globally)
+    const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Global Logout Function (Guaranteed to work instantly)
+    // Instant Logout
     async function handleLogout() {
       try {
         await supabaseClient.auth.signOut();
@@ -99,28 +94,9 @@
       window.location.href = 'login.html';
     }
 
-    // Load Admin Data & Orders with Fail-safe Error Catching
+    // Load Admin Orders & Stats
     async function loadAdminData() {
       try {
-        // 1. Check active session
-        const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
-        if (!session || sessionError) {
-          window.location.href = 'login.html';
-          return;
-        }
-
-        // 2. Fetch User Profile
-        const { data: profile } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-
-        if (profile && profile.full_name) {
-          document.getElementById('userName').textContent = profile.full_name;
-        }
-
-        // 3. Fetch Orders
         const { data: orders, error: ordersError } = await supabaseClient
           .from('orders')
           .select('*')
@@ -136,11 +112,9 @@
           return;
         }
 
-        // Calculate Stats
         let totalOrders = orders.length;
         let activeEscrow = 0;
         let completedCount = 0;
-
         tableBody.innerHTML = '';
 
         orders.forEach(order => {
@@ -163,25 +137,29 @@
             </td>
             <td class="py-4 px-6 text-gray-500 text-xs">${new Date(order.created_at).toLocaleDateString()}</td>
             <td class="py-4 px-6">
-              <button onclick="alert('Viewing order ${order.id}')" class="text-emerald-600 hover:text-emerald-900 font-semibold text-xs">Manage</button>
+              <button onclick="alert('Managing order ${order.id}')" class="text-emerald-600 hover:text-emerald-900 font-semibold text-xs">Manage</button>
             </td>
           `;
           tableBody.appendChild(row);
         });
 
-        // Update Stats Counters
         document.getElementById('totalOrdersCount').textContent = totalOrders;
         document.getElementById('activeEscrowAmount').textContent = `K${activeEscrow.toFixed(2)}`;
         document.getElementById('completedOrdersCount').textContent = completedCount;
 
       } catch (err) {
-        console.error("Unexpected error loading admin dashboard:", err);
-        document.getElementById('ordersTableBody').innerHTML = `<tr><td colspan="6" class="text-center py-8 text-red-500 font-medium">Failed to load dashboard data. Please check your connection.</td></tr>`;
+        console.error("Error loading dashboard data:", err);
       }
     }
 
-    // Run on page load
-    loadAdminData();
+    // Safely wait for session to hydrate before checking or loading data
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        window.location.href = 'login.html';
+      } else {
+        loadAdminData();
+      }
+    });
   </script>
 </body>
 </html>
