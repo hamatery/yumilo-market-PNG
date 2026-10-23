@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - Yumilo Market</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-emerald-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <h1 class="text-xl font-bold tracking-wide">Yumilo Market</h1>
+                <span class="bg-emerald-800 text-emerald-200 text-xs px-2.5 py-1 rounded-full font-semibold">Admin Panel</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="admin-greeting" class="text-sm text-emerald-100">Loading...</span>
+                <button onclick="logout()" class="bg-emerald-800 hover:bg-emerald-700 px-3 py-1.5 rounded text-sm font-medium transition cursor-pointer">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- Summary Stats Banner -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <p class="text-xs font-semibold text-gray-400 uppercase">Total Orders</p>
+                <h3 id="stat-total-orders" class="text-2xl font-bold text-gray-800 mt-1">0</h3>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <p class="text-xs font-semibold text-gray-400 uppercase">Active Escrow Funds</p>
+                <h3 id="stat-escrow-amount" class="text-2xl font-bold text-blue-600 mt-1">K0.00</h3>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <p class="text-xs font-semibold text-gray-400 uppercase">Delivered & Completed</p>
+                <h3 id="stat-completed" class="text-2xl font-bold text-emerald-600 mt-1">0</h3>
+            </div>
+        </div>
+
+        <!-- Orders Management Section -->
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Customer Orders & Escrow Tracking</h3>
+                <button onclick="loadAdminData()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-2 rounded transition cursor-pointer">Refresh Orders</button>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase bg-gray-50">
+                            <th class="p-3">Order ID</th>
+                            <th class="p-3">Customer & Location</th>
+                            <th class="p-3">Amount</th>
+                            <th class="p-3">Payment / Escrow Status</th>
+                            <th class="p-3">Date</th>
+                            <th class="p-3 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-orders-table" class="divide-y divide-gray-100 text-sm">
+                        <tr>
+                            <td colspan="6" class="p-4 text-center text-gray-500">Loading orders...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function initAdmin() {
+            // 1. Check Auth Session
+            const { data: { session }, error } = await supabase.auth.getSession();
+            
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // 2. Verify Admin Role
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', session.user.id)
+                .single();
+
+            if (!profile || (profile.role !== 'super_admin' && profile.role !== 'manager')) {
+                alert('Access Denied: You do not have administrator permissions.');
+                window.location.href = 'customer-dashboard.html';
+                return;
+            }
+
+            document.getElementById('admin-greeting').innerText = `Admin: ${profile.full_name}`;
+
+            // 3. Load All Orders
+            loadAdminData();
+        }
+
+        async function loadAdminData() {
+            const tbody = document.getElementById('admin-orders-table');
+
+            const { data: orders, error } = await supabase
+                .from('orders')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500">Error loading orders: ${error.message}</td></tr>`;
+                return;
+            }
+
+            if (!orders || orders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-500">No orders found in the system yet.</td></tr>`;
+                document.getElementById('stat-total-orders').innerText = '0';
+                document.getElementById('stat-escrow-amount').innerText = 'K0.00';
+                document.getElementById('stat-completed').innerText = '0';
+                return;
+            }
+
+            // Calculate stats
+            let totalOrders = orders.length;
+            let escrowTotal = 0;
+            let completedCount = 0;
+
+            tbody.innerHTML = '';
+
+            orders.forEach(order => {
+                if (order.payment_status === 'Paid & Secured') {
+                    escrowTotal += Number(order.total_amount || 0);
+                }
+                if (order.payment_status === 'Delivered & Confirmed' || order.payment_status === 'Completed') {
+                    completedCount++;
+                }
+
+                let badgeColor = 'bg-yellow-100 text-yellow-800 border-yellow-200';
+                if (order.payment_status === 'Paid & Secured') badgeColor = 'bg-blue-100 text-blue-800 border-blue-200';
+                if (order.payment_status === 'Delivered & Confirmed' || order.payment_status === 'Completed') badgeColor = 'bg-green-100 text-green-800 border-green-200';
+
+                const orderDate = new Date(order.created_at).toLocaleDateString('en-ZM', { 
+                    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                });
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-3 font-mono text-xs text-gray-600">#${order.id.slice(0, 8)}</td>
+                        <td class="p-3">
+                            <p class="font-semibold text-gray-800">${order.delivery_city || 'City not set'}, ${order.delivery_province || 'Province'}</p>
+                            <p class="text-xs text-gray-500">Method: ${order.payment_method}</p>
+                        </td>
+                        <td class="p-3 font-bold text-gray-800">K${order.total_amount}</td>
+                        <td class="p-3">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-medium border ${badgeColor}">${order.payment_status}</span>
+                        </td>
+                        <td class="p-3 text-xs text-gray-500">${orderDate}</td>
+                        <td class="p-3 text-right space-x-2">
+                            <select onchange="updateOrderStatus('${order.id}', this.value)" class="text-xs border border-gray-300 rounded p-1 bg-white cursor-pointer">
+                                <option value="" disabled selected>Update Status...</option>
+                                <option value="Paid & Secured">Mark: Paid & Secured</option>
+                                <option value="Out for Delivery">Mark: Out for Delivery</option>
+                                <option value="Delivered & Confirmed">Mark: Delivered & Confirmed</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // Update stats banner
+            document.getElementById('stat-total-orders').innerText = totalOrders;
+            document.getElementById('stat-escrow-amount').innerText = `K${escrowTotal.toLocaleString()}`;
+            document.getElementById('stat-completed').innerText = completedCount;
+        }
+
+        async function updateOrderStatus(orderId, newStatus) {
+            const { error } = await supabase
+                .from('orders')
+                .update({ payment_status: newStatus })
+                .eq('id', orderId);
+
+            if (error) {
+                alert('Failed to update status: ' + error.message);
+            } else {
+                alert(`Order status updated to: ${newStatus}`);
+                loadAdminData();
+            }
+        }
+
+        async function logout() {
+            await supabase.auth.signOut();
+            window.location.href = 'login.html';
+        }
+
+        initAdmin();
+    </script>
+</body>
+</html>
