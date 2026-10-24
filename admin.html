@@ -192,6 +192,7 @@
     let startDateFilter = '';
     let endDateFilter = '';
     let windowActiveConfirm = null;
+    let initialLoadDone = false;
 
     // Instant Logout
     async function handleLogout() {
@@ -268,7 +269,7 @@
       }
     }
 
-    // HTML Templates for Views with Calendar Date Pickers
+    // HTML Templates for Views
     function renderOverviewHTML() {
       return `
         <div class="flex flex-wrap justify-between items-center gap-4">
@@ -280,7 +281,7 @@
             <input type="date" id="startDateInput" value="${startDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1 focus:outline-none focus:ring-1 focus:ring-emerald-600">
             <span>to</span>
             <input type="date" id="endDateInput" value="${endDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1 focus:outline-none focus:ring-1 focus:ring-emerald-600">
-            <button onclick="clearDateFilter()" class="text-red-600 hover:underline font-semibold ml-1">Reset</button>
+            <button onclick="clearDateFilter()" class="text-red-600 hover:underline font-semibold ml-1 cursor-pointer">Reset</button>
           </div>
         </div>
 
@@ -448,14 +449,20 @@
     function renderOrdersViewHTML() {
       return `
         <div class="space-y-6">
-          <div class="flex justify-between items-center">
+          <div class="flex flex-wrap justify-between items-center gap-4">
             <div>
               <h3 class="text-2xl font-bold text-gray-900">Orders & Delivery Management</h3>
               <p class="text-xs text-gray-500">Manage all customer purchases and escrow fulfillment.</p>
             </div>
-            <button onclick="loadOrdersTable()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
-              Refresh Orders
-            </button>
+            
+            <!-- Calendar Date Range Filter for Orders -->
+            <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-3 py-1.5 shadow-sm text-xs font-medium text-gray-700">
+              <span>📅 Calendar:</span>
+              <input type="date" id="startDateInput" value="${startDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+              <span>to</span>
+              <input type="date" id="endDateInput" value="${endDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+              <button onclick="clearDateFilter()" class="text-red-600 hover:underline font-semibold ml-1 cursor-pointer">Reset</button>
+            </div>
           </div>
 
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -680,9 +687,12 @@
 
     // Calendar Date Filter Handlers
     function updateDateFilter() {
-      startDateFilter = document.getElementById('startDateInput').value;
-      endDateFilter = document.getElementById('endDateInput').value;
+      const startEl = document.getElementById('startDateInput');
+      const endEl = document.getElementById('endDateInput');
+      if (startEl) startDateFilter = startEl.value;
+      if (endEl) endDateFilter = endEl.value;
       loadAdminData();
+      loadOrdersTable();
     }
 
     function clearDateFilter() {
@@ -693,6 +703,7 @@
       if (startEl) startEl.value = '';
       if (endEl) endEl.value = '';
       loadAdminData();
+      loadOrdersTable();
     }
 
     // Review Order Modal
@@ -809,7 +820,7 @@
       }
     }
 
-    // Load Orders Table for Orders View
+    // Load Orders Table for Orders View with Date Filtering Support
     async function loadOrdersTable() {
       try {
         const { data: orders, error } = await supabaseClient
@@ -818,12 +829,21 @@
           .order('created_at', { ascending: false });
 
         if (error) throw error;
-        currentOrders = orders || [];
+        let allOrders = orders || [];
+
+        currentOrders = allOrders.filter(order => {
+          if (!order.created_at) return true;
+          const orderDateStr = order.created_at.split('T')[0];
+          if (startDateFilter && orderDateStr < startDateFilter) return false;
+          if (endDateFilter && orderDateStr > endDateFilter) return false;
+          return true;
+        });
+
         const tbody = document.getElementById('fullOrdersTableBody');
         if (!tbody) return;
 
         if (currentOrders.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-gray-400 font-medium">No orders found in the database.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-gray-400 font-medium">No orders found for the selected calendar range.</td></tr>`;
           return;
         }
 
@@ -848,12 +868,18 @@
       }
     }
 
-    // Initialize session and default view
-    supabaseClient.auth.onAuthStateChange((event, session) => {
+    // Initialize session and default view once on load without resetting user navigation
+    supabaseClient.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
         window.location.href = 'login.html';
       } else {
         switchView('overview');
+      }
+    });
+
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        window.location.href = 'login.html';
       }
     });
   </script>
