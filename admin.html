@@ -192,7 +192,6 @@
     let startDateFilter = '';
     let endDateFilter = '';
     let windowActiveConfirm = null;
-    let initialLoadDone = false;
 
     // Instant Logout
     async function handleLogout() {
@@ -488,24 +487,29 @@
       `;
     }
 
-    // Staff Management HTML Template
+    // Staff Management HTML Template with Create Staff Feature
     function renderStaffManagementHTML() {
       return `
         <div class="space-y-6">
           <div class="flex justify-between items-center">
             <div>
               <h3 class="text-2xl font-bold text-gray-900">Manage Staff & Permissions</h3>
-              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Assign roles and manage access privileges for registered users.</p>
+              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Create staff accounts, set passwords, and assign roles.</p>
             </div>
-            <button onclick="loadStaffTable()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
-              Refresh Staff List
-            </button>
+            <div class="flex items-center gap-3">
+              <button onclick="openCreateStaffModal()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer flex items-center gap-1.5">
+                <span>➕</span> Create New Staff Account
+              </button>
+              <button onclick="loadStaffTable()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-2 rounded-lg transition cursor-pointer">
+                Refresh Staff List
+              </button>
+            </div>
           </div>
 
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-5 border-b border-gray-200 flex justify-between items-center">
-              <h4 class="text-base font-bold text-gray-800">Registered Users & Staff Profiles</h4>
-              <span class="text-xs text-gray-400">Click 'Edit Role' to promote or modify permissions</span>
+              <h4 class="text-base font-bold text-gray-800">Active Staff & User Profiles</h4>
+              <span class="text-xs text-gray-400">Manage permissions or create new logins</span>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse text-sm">
@@ -602,6 +606,82 @@
         () => {
           alert(`Successfully executed action for ${actionName}.`);
           closeModal();
+        }
+      );
+    }
+
+    // Create New Staff Account Modal & Execution (Keeps owner logged in)
+    function openCreateStaffModal() {
+      openModal(
+        'Create New Staff Account',
+        `<div class="space-y-3 text-xs">
+           <div>
+             <label class="block font-bold text-gray-700 mb-1">Full Name</label>
+             <input type="text" id="newStaffName" placeholder="e.g. John Banda" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+           </div>
+           <div>
+             <label class="block font-bold text-gray-700 mb-1">Email Address</label>
+             <input type="email" id="newStaffEmail" placeholder="staff@yumilomarket.store" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+           </div>
+           <div>
+             <label class="block font-bold text-gray-700 mb-1">Password</label>
+             <input type="password" id="newStaffPassword" placeholder="Minimum 6 characters" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+           </div>
+           <div>
+             <label class="block font-bold text-gray-700 mb-1">Assign Role</label>
+             <select id="newStaffRole" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+               <option value="manager">Manager (Supervise, reassign, approve claims)</option>
+               <option value="worker">Worker (Support, order tasks, receipt checks)</option>
+               <option value="admin">Admin (Full operational access)</option>
+             </select>
+           </div>
+         </div>`,
+        async () => {
+          const name = document.getElementById('newStaffName').value.trim();
+          const email = document.getElementById('newStaffEmail').value.trim();
+          const password = document.getElementById('newStaffPassword').value;
+          const role = document.getElementById('newStaffRole').value;
+
+          if (!name || !email || !password) {
+            alert('Please fill out all required fields.');
+            return;
+          }
+
+          try {
+            // Create a secondary non-persisting client so owner stays logged in
+            const tempClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+              auth: { persistSession: false }
+            });
+
+            const { data, error } = await tempClient.auth.signUp({
+              email: email,
+              password: password,
+              options: {
+                data: { full_name: name }
+              }
+            });
+
+            if (error) throw error;
+
+            if (data.user) {
+              // Insert profile record
+              const { error: profileError } = await supabaseClient
+                .from('profiles')
+                .upsert({
+                  id: data.user.id,
+                  full_name: name,
+                  role: role
+                });
+
+              if (profileError) throw profileError;
+
+              alert(`Staff account for ${name} (${email}) created successfully!`);
+              closeModal();
+              loadStaffTable();
+            }
+          } catch (err) {
+            alert('Error creating staff account: ' + (err.message || err));
+          }
         }
       );
     }
