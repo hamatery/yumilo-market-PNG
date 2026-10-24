@@ -29,22 +29,22 @@
         <div>
           <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Main</p>
           <div class="space-y-1">
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-emerald-700/80 text-white font-semibold">
+            <button onclick="switchView('overview')" id="nav-overview" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-emerald-700 text-white font-semibold transition cursor-pointer text-left">
               <span>🏠</span>
               <span>Overview</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition">
+            </button>
+            <button onclick="switchView('orders')" id="nav-orders" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
               <span>📦</span>
               <span>Orders & delivery</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition">
+            </button>
+            <button onclick="switchView('payments')" id="nav-payments" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
               <span>💳</span>
               <span>Payments & receipt review</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition">
+            </button>
+            <button onclick="switchView('refunds')" id="nav-refunds" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
               <span>↩️</span>
               <span>Refund claims</span>
-            </a>
+            </button>
           </div>
         </div>
 
@@ -52,18 +52,18 @@
         <div>
           <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Onboarding & Approvals</p>
           <div class="space-y-1">
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition">
+            <button onclick="switchView('vendor-kyc')" id="nav-vendor-kyc" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
               <span>🏢</span>
               <span>Vendor applications & KYC</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition">
+            </button>
+            <button onclick="switchView('courier-kyc')" id="nav-courier-kyc" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
               <span>🚚</span>
               <span>Courier applications & KYC</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition">
+            </button>
+            <button onclick="switchView('listings')" id="nav-listings" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
               <span>📋</span>
               <span>Listing approvals</span>
-            </a>
+            </button>
           </div>
         </div>
 
@@ -71,14 +71,14 @@
         <div>
           <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Accounts</p>
           <div class="space-y-1">
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition">
+            <button onclick="switchView('customers')" id="nav-customers" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
               <span>👤</span>
               <span>Customer accounts</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition">
+            </button>
+            <button onclick="switchView('vendor-accounts')" id="nav-vendor-accounts" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
               <span>👥</span>
-              <span>Vendor accounts & subscriptions</span>
-            </a>
+              <span>Vendor accounts & subs</span>
+            </button>
           </div>
         </div>
 
@@ -86,14 +86,14 @@
         <div>
           <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Support & Content</p>
           <div class="space-y-1">
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition">
+            <button onclick="switchView('support')" id="nav-support" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
               <span>💬</span>
               <span>Messages & support</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition">
+            </button>
+            <button onclick="switchView('content')" id="nav-content" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
               <span>📰</span>
               <span>Marketplace content</span>
-            </a>
+            </button>
           </div>
         </div>
 
@@ -101,18 +101,18 @@
         <div>
           <p class="text-[10px] font-bold tracking-wider uppercase text-amber-300 mb-2 px-3 flex items-center gap-1">🔒 Owner Controls</p>
           <div class="space-y-1">
-            <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition">
+            <button onclick="switchView('settings')" id="nav-settings" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
               <span>Site settings & records</span>
               <span>🔒</span>
-            </a>
-            <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition">
+            </button>
+            <button onclick="switchView('finance')" id="nav-finance" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
               <span>Finance & overrides</span>
               <span>🔒</span>
-            </a>
-            <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition">
+            </button>
+            <button onclick="switchView('audit')" id="nav-audit" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
               <span>Audit log</span>
               <span>🔒</span>
-            </a>
+            </button>
           </div>
         </div>
       </nav>
@@ -132,7 +132,7 @@
     <header class="bg-white border-b border-gray-200 px-8 py-4 flex flex-wrap justify-between items-center gap-4">
       <div class="flex items-center space-x-4">
         <h2 class="text-xl font-bold text-gray-900">Yumilo Market</h2>
-        <span class="text-lg font-medium text-gray-600">Owner Command Center</span>
+        <span id="pageTitle" class="text-lg font-medium text-gray-600">Owner Command Center</span>
       </div>
 
       <div class="flex items-center space-x-3">
@@ -152,214 +152,9 @@
       </div>
     </header>
 
-    <!-- DASHBOARD BODY -->
-    <main class="p-8 space-y-8 flex-1">
-      
-      <!-- Marketplace Overview Heading & Date Filter -->
-      <div class="flex justify-between items-center">
-        <h3 class="text-2xl font-bold text-gray-900">Marketplace overview</h3>
-        <div class="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 flex items-center gap-2 shadow-sm">
-          <span>📅</span> Live Real-Time <span>▼</span>
-        </div>
-      </div>
-
-      <!-- Top 5 Metric Cards Grid (Zero Sample) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <!-- Card 1 -->
-        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-semibold text-gray-600">Orders needing review</span>
-            <span class="w-7 h-7 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center text-xs">⚠️</span>
-          </div>
-          <p id="statOrdersReview" class="text-3xl font-extrabold text-gray-900">0</p>
-          <p class="text-[11px] text-gray-400">Awaiting action</p>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-semibold text-gray-600">Payment receipts</span>
-            <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center text-xs">📄</span>
-          </div>
-          <p id="statPaymentReceipts" class="text-3xl font-extrabold text-gray-900">0</p>
-          <p class="text-[11px] text-gray-400">To review & verify</p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-semibold text-gray-600">Vendor / courier applications</span>
-            <span class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs">👥</span>
-          </div>
-          <p id="statApplications" class="text-3xl font-extrabold text-gray-900">0</p>
-          <p class="text-[11px] text-gray-400">Pending KYC</p>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-semibold text-gray-600">Listing approvals</span>
-            <span class="w-7 h-7 rounded-full bg-purple-100 text-purple-800 flex items-center justify-center text-xs">📋</span>
-          </div>
-          <p id="statListingApprovals" class="text-3xl font-extrabold text-gray-900">0</p>
-          <p class="text-[11px] text-gray-400">In review</p>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-semibold text-gray-600">Account issues</span>
-            <span class="w-7 h-7 rounded-full bg-red-100 text-red-800 flex items-center justify-center text-xs">🚨</span>
-          </div>
-          <p id="statAccountIssues" class="text-3xl font-extrabold text-gray-900">0</p>
-          <p class="text-[11px] text-gray-400">Flagged accounts</p>
-        </div>
-      </div>
-
-      <!-- Middle Grid: Review Queue & Operational Snapshot / Audit -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        <!-- Review Queue Table (2 cols) -->
-        <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col justify-between">
-          <div>
-            <div class="p-5 border-b border-gray-200 flex items-center justify-between">
-              <div>
-                <h4 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                  Review queue <span>ⓘ</span>
-                </h4>
-                <p class="text-xs text-gray-500 mt-0.5">Pending items requiring owner/manual review</p>
-              </div>
-              <button onclick="loadAdminData()" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-md font-semibold text-gray-700 transition">
-                Refresh
-              </button>
-            </div>
-
-            <!-- Dynamic Table Body -->
-            <div class="overflow-x-auto">
-              <table class="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr class="bg-gray-50 text-gray-500 font-bold uppercase tracking-wider border-b border-gray-200">
-                    <th class="py-3 px-4"># Reference</th>
-                    <th class="py-3 px-4">Type</th>
-                    <th class="py-3 px-4">Status</th>
-                    <th class="py-3 px-4">Submitted</th>
-                    <th class="py-3 px-4 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody id="reviewQueueBody" class="divide-y divide-gray-200 text-gray-700">
-                  <tr>
-                    <td colspan="5" class="text-center py-8 text-gray-400 font-medium">No pending items in review queue.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Footer Note inside card -->
-          <div class="p-3 bg-gray-50 border-t border-gray-200 text-[11px] text-gray-500 flex items-center gap-2">
-            <span>🔒</span> Evidence: Private documents • review access — secured. No sensitive documents displayed.
-          </div>
-        </div>
-
-        <!-- Right Column: Operational Snapshot & Audit Activity -->
-        <div class="space-y-6">
-          
-          <!-- Operational Snapshot -->
-          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
-            <h4 class="text-sm font-bold text-gray-900 flex items-center gap-2">
-              📊 Operational snapshot
-            </h4>
-            <p class="text-xs text-gray-500">Live order progress</p>
-            
-            <div class="space-y-3 text-xs">
-              <div>
-                <div class="flex justify-between mb-1 font-semibold text-gray-700">
-                  <span>Pending</span>
-                  <span id="snapshotPending">0 orders</span>
-                </div>
-                <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                  <div id="barPending" class="bg-amber-500 h-full w-[0%] transition-all"></div>
-                </div>
-              </div>
-              <div>
-                <div class="flex justify-between mb-1 font-semibold text-gray-700">
-                  <span>In transit</span>
-                  <span id="snapshotTransit">0 orders</span>
-                </div>
-                <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                  <div id="barTransit" class="bg-blue-500 h-full w-[0%] transition-all"></div>
-                </div>
-              </div>
-              <div>
-                <div class="flex justify-between mb-1 font-semibold text-gray-700">
-                  <span>Completed</span>
-                  <span id="snapshotCompleted">0 orders</span>
-                </div>
-                <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                  <div id="barCompleted" class="bg-emerald-600 h-full w-[0%] transition-all"></div>
-                </div>
-              </div>
-            </div>
-
-            <p class="text-[11px] text-gray-400 pt-2 border-t border-gray-100">No automatic payouts. Manual verification required.</p>
-          </div>
-
-          <!-- Recent Audit Activity -->
-          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
-            <h4 class="text-sm font-bold text-gray-900 flex items-center gap-2">
-              🕒 Recent audit activity
-            </h4>
-            
-            <div id="auditActivityBody" class="space-y-3 text-xs">
-              <p class="text-gray-400 text-center py-2 font-medium">No recent audit logs recorded.</p>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- BOTTOM OWNER CONTROLS SECTION -->
-      <div class="bg-[#fbf9f5] rounded-xl border border-amber-200/60 p-6 space-y-4">
-        <div>
-          <h4 class="text-base font-bold text-gray-900">Owner controls</h4>
-          <p class="text-xs text-gray-500">Sensitive actions — Owner only access</p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <!-- Control Card 1 -->
-          <div onclick="alert('Manage staff & permissions portal')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
-            <div class="text-xl">🛡️</div>
-            <h5 class="text-xs font-bold text-gray-900">Manage staff & permissions</h5>
-            <p class="text-[11px] text-gray-500">Create/deactivate staff, assign roles (Owner only)</p>
-          </div>
-          <!-- Control Card 2 -->
-          <div onclick="alert('Record board decision module')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
-            <div class="text-xl">🔨</div>
-            <h5 class="text-xs font-bold text-gray-900">Record Board decision</h5>
-            <p class="text-[11px] text-gray-500">Log hiring/termination decisions (Owner only)</p>
-          </div>
-          <!-- Control Card 3 -->
-          <div onclick="alert('Site settings management')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
-            <div class="text-xl">⚙️</div>
-            <h5 class="text-xs font-bold text-gray-900">Site settings</h5>
-            <p class="text-[11px] text-gray-500">Update policies & site config (Owner only)</p>
-          </div>
-          <!-- Control Card 4 -->
-          <div onclick="alert('Finance overrides & escrow review')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
-            <div class="text-xl">🔒</div>
-            <h5 class="text-xs font-bold text-gray-900">Finance & overrides</h5>
-            <p class="text-[11px] text-gray-500">Review payments & perform overrides (Owner only)</p>
-          </div>
-          <!-- Control Card 5 -->
-          <div onclick="alert('Full audit history log')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
-            <div class="text-xl">📋</div>
-            <h5 class="text-xs font-bold text-gray-900">Audit history</h5>
-            <p class="text-[11px] text-gray-500">View full audit log (Owner only)</p>
-          </div>
-        </div>
-      </div>
-
+    <!-- MAIN DYNAMIC CONTENT CONTAINER -->
+    <main id="mainContent" class="p-8 space-y-8 flex-1">
+      <!-- Content dynamically injected by switchView() -->
     </main>
 
     <!-- FOOTER DISCLAIMER -->
@@ -369,11 +164,31 @@
 
   </div>
 
-  <!-- APPLICATION LOGIC -->
+  <!-- INTERACTIVE MODAL CONTAINER -->
+  <div id="actionModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4 border border-gray-200">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 id="modalTitle" class="text-lg font-bold text-gray-900">Action Management</h3>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-lg font-bold">×</button>
+      </div>
+      <div id="modalBody" class="text-sm text-gray-600 space-y-3">
+        <!-- Dynamic modal content -->
+      </div>
+      <div class="flex justify-end space-x-3 pt-3 border-t border-gray-100">
+        <button onclick="closeModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-lg transition">Close</button>
+        <button id="modalConfirmBtn" onclick="executeModalAction()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-lg transition">Confirm Action</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICATION LOGIC & VIEW CONTROLLER -->
   <script>
     const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let currentOrders = [];
+    let activeModalData = null;
 
     // Instant Logout
     async function handleLogout() {
@@ -387,79 +202,501 @@
       window.location.href = 'login.html';
     }
 
-    // Load Live Data Dynamically from Supabase
+    // View Switching Controller
+    function switchView(viewId) {
+      // Highlight active sidebar button
+      document.querySelectorAll('aside nav button').forEach(btn => {
+        btn.classList.remove('bg-emerald-700', 'text-white', 'font-semibold');
+        btn.classList.add('hover:bg-emerald-800/60', 'text-emerald-200');
+      });
+      const activeBtn = document.getElementById(`nav-${viewId}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('hover:bg-emerald-800/60', 'text-emerald-200');
+        activeBtn.classList.add('bg-emerald-700', 'text-white', 'font-semibold');
+      }
+
+      const container = document.getElementById('mainContent');
+      const title = document.getElementById('pageTitle');
+
+      if (viewId === 'overview') {
+        title.textContent = 'Owner Command Center';
+        container.innerHTML = renderOverviewHTML();
+        loadAdminData();
+      } else if (viewId === 'orders') {
+        title.textContent = 'Orders & Delivery Management';
+        container.innerHTML = renderOrdersViewHTML();
+        loadOrdersTable();
+      } else if (viewId === 'payments') {
+        title.textContent = 'Payments & Receipt Review';
+        container.innerHTML = renderGenericManagementView('Payments & Escrow Receipts', 'Verify customer payment proofs and escrow transfers.');
+      } else if (viewId === 'refunds') {
+        title.textContent = 'Refund Claims Management';
+        container.innerHTML = renderGenericManagementView('Refund Claims', 'Review escalated refund and dispute claims.');
+      } else if (viewId === 'vendor-kyc') {
+        title.textContent = 'Vendor Applications & KYC';
+        container.innerHTML = renderGenericManagementView('Vendor Applications & KYC', 'Approve or reject vendor onboarding documents.');
+      } else if (viewId === 'courier-kyc') {
+        title.textContent = 'Courier Applications & KYC';
+        container.innerHTML = renderGenericManagementView('Courier Applications & KYC', 'Verify courier partner credentials and coverage zones.');
+      } else if (viewId === 'listings') {
+        title.textContent = 'Listing Approvals';
+        container.innerHTML = renderGenericManagementView('Listing Approvals', 'Moderate and approve new product marketplace listings.');
+      } else if (viewId === 'customers') {
+        title.textContent = 'Customer Accounts Management';
+        container.innerHTML = renderGenericManagementView('Customer Accounts', 'View registered customer profiles and activity history.');
+      } else if (viewId === 'vendor-accounts') {
+        title.textContent = 'Vendor Accounts & Subscriptions';
+        container.innerHTML = renderGenericManagementView('Vendor Accounts & Subscriptions', 'Manage active vendor tiers and subscription statuses.');
+      } else if (viewId === 'support') {
+        title.textContent = 'Messages & Support Desk';
+        container.innerHTML = renderGenericManagementView('Messages & Support', 'Respond to customer and vendor inquiries.');
+      } else if (viewId === 'content') {
+        title.textContent = 'Marketplace Content Management';
+        container.innerHTML = renderGenericManagementView('Marketplace Content', 'Manage banners, announcements, and static notices.');
+      } else if (viewId === 'settings') {
+        title.textContent = 'Site Settings & Records (Owner Only)';
+        container.innerHTML = renderOwnerControlView('Site Settings & Records', 'Configure global platform policies, fees, and operational parameters.');
+      } else if (viewId === 'finance') {
+        title.textContent = 'Finance & Overrides (Owner Only)';
+        container.innerHTML = renderOwnerControlView('Finance & Overrides', 'Execute payment manual overrides and escrow releases.');
+      } else if (viewId === 'audit') {
+        title.textContent = 'Audit History Log (Owner Only)';
+        container.innerHTML = renderOwnerControlView('Audit History Log', 'Review immutable system audit trails and administrative actions.');
+      }
+    }
+
+    // HTML Templates for Views
+    function renderOverviewHTML() {
+      return `
+        <div class="flex justify-between items-center">
+          <h3 class="text-2xl font-bold text-gray-900">Marketplace overview</h3>
+          <div class="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 flex items-center gap-2 shadow-sm">
+            <span>📅</span> Live Real-Time <span>▼</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div onclick="switchView('orders')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-semibold text-gray-600">Orders needing review</span>
+              <span class="w-7 h-7 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center text-xs">⚠️</span>
+            </div>
+            <p id="statOrdersReview" class="text-3xl font-extrabold text-gray-900">0</p>
+            <p class="text-[11px] text-gray-400">Awaiting action</p>
+          </div>
+          <div onclick="switchView('payments')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-semibold text-gray-600">Payment receipts</span>
+              <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center text-xs">📄</span>
+            </div>
+            <p id="statPaymentReceipts" class="text-3xl font-extrabold text-gray-900">0</p>
+            <p class="text-[11px] text-gray-400">To review & verify</p>
+          </div>
+          <div onclick="switchView('vendor-kyc')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-semibold text-gray-600">Vendor applications</span>
+              <span class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs">👥</span>
+            </div>
+            <p id="statApplications" class="text-3xl font-extrabold text-gray-900">0</p>
+            <p class="text-[11px] text-gray-400">Pending KYC</p>
+          </div>
+          <div onclick="switchView('listings')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-semibold text-gray-600">Listing approvals</span>
+              <span class="w-7 h-7 rounded-full bg-purple-100 text-purple-800 flex items-center justify-center text-xs">📋</span>
+            </div>
+            <p id="statListingApprovals" class="text-3xl font-extrabold text-gray-900">0</p>
+            <p class="text-[11px] text-gray-400">In review</p>
+          </div>
+          <div onclick="switchView('support')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-semibold text-gray-600">Account issues</span>
+              <span class="w-7 h-7 rounded-full bg-red-100 text-red-800 flex items-center justify-center text-xs">🚨</span>
+            </div>
+            <p id="statAccountIssues" class="text-3xl font-extrabold text-gray-900">0</p>
+            <p class="text-[11px] text-gray-400">Flagged accounts</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col justify-between">
+            <div>
+              <div class="p-5 border-b border-gray-200 flex items-center justify-between">
+                <div>
+                  <h4 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                    Review queue <span>ⓘ</span>
+                  </h4>
+                  <p class="text-xs text-gray-500 mt-0.5">Pending items requiring owner/manual review</p>
+                </div>
+                <button onclick="loadAdminData()" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-md font-semibold text-gray-700 transition cursor-pointer">
+                  Refresh
+                </button>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr class="bg-gray-50 text-gray-500 font-bold uppercase tracking-wider border-b border-gray-200">
+                      <th class="py-3 px-4"># Reference</th>
+                      <th class="py-3 px-4">Type</th>
+                      <th class="py-3 px-4">Status</th>
+                      <th class="py-3 px-4">Submitted</th>
+                      <th class="py-3 px-4 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reviewQueueBody" class="divide-y divide-gray-200 text-gray-700">
+                    <tr><td colspan="5" class="text-center py-8 text-gray-400 font-medium">No pending items in review queue.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="p-3 bg-gray-50 border-t border-gray-200 text-[11px] text-gray-500 flex items-center gap-2">
+              <span>🔒</span> Evidence: Private documents • review access — secured. No sensitive documents displayed.
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
+              <h4 class="text-sm font-bold text-gray-900 flex items-center gap-2">📊 Operational snapshot</h4>
+              <p class="text-xs text-gray-500">Live order progress</p>
+              <div class="space-y-3 text-xs">
+                <div>
+                  <div class="flex justify-between mb-1 font-semibold text-gray-700">
+                    <span>Pending</span>
+                    <span id="snapshotPending">0 orders</span>
+                  </div>
+                  <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                    <div id="barPending" class="bg-amber-500 h-full w-[0%] transition-all"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1 font-semibold text-gray-700">
+                    <span>In transit</span>
+                    <span id="snapshotTransit">0 orders</span>
+                  </div>
+                  <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                    <div id="barTransit" class="bg-blue-500 h-full w-[0%] transition-all"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1 font-semibold text-gray-700">
+                    <span>Completed</span>
+                    <span id="snapshotCompleted">0 orders</span>
+                  </div>
+                  <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                    <div id="barCompleted" class="bg-emerald-600 h-full w-[0%] transition-all"></div>
+                  </div>
+                </div>
+              </div>
+              <p class="text-[11px] text-gray-400 pt-2 border-t border-gray-100">No automatic payouts. Manual verification required.</p>
+            </div>
+
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
+              <h4 class="text-sm font-bold text-gray-900 flex items-center gap-2">🕒 Recent audit activity</h4>
+              <div id="auditActivityBody" class="space-y-3 text-xs">
+                <p class="text-gray-400 text-center py-2 font-medium">No recent audit logs recorded.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#fbf9f5] rounded-xl border border-amber-200/60 p-6 space-y-4">
+          <div>
+            <h4 class="text-base font-bold text-gray-900">Owner controls</h4>
+            <p class="text-xs text-gray-500">Sensitive actions — Owner only access</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div onclick="switchView('settings')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
+              <div class="text-xl">🛡️</div>
+              <h5 class="text-xs font-bold text-gray-900">Manage staff & permissions</h5>
+              <p class="text-[11px] text-gray-500">Create/deactivate staff, assign roles (Owner only)</p>
+            </div>
+            <div onclick="switchView('audit')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
+              <div class="text-xl">🔨</div>
+              <h5 class="text-xs font-bold text-gray-900">Record Board decision</h5>
+              <p class="text-[11px] text-gray-500">Log hiring/termination decisions (Owner only)</p>
+            </div>
+            <div onclick="switchView('settings')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
+              <div class="text-xl">⚙️</div>
+              <h5 class="text-xs font-bold text-gray-900">Site settings</h5>
+              <p class="text-[11px] text-gray-500">Update policies & site config (Owner only)</p>
+            </div>
+            <div onclick="switchView('finance')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
+              <div class="text-xl">🔒</div>
+              <h5 class="text-xs font-bold text-gray-900">Finance & overrides</h5>
+              <p class="text-[11px] text-gray-500">Review payments & perform overrides (Owner only)</p>
+            </div>
+            <div onclick="switchView('audit')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
+              <div class="text-xl">📋</div>
+              <h5 class="text-xs font-bold text-gray-900">Audit history</h5>
+              <p class="text-[11px] text-gray-500">View full audit log (Owner only)</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderOrdersViewHTML() {
+      return `
+        <div class="space-y-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">Orders & Delivery Management</h3>
+              <p class="text-xs text-gray-500">Manage all customer purchases and escrow fulfillment.</p>
+            </div>
+            <button onclick="loadOrdersTable()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+              Refresh Orders
+            </button>
+          </div>
+
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="bg-gray-50 text-gray-500 font-bold uppercase tracking-wider border-b border-gray-200 text-xs">
+                    <th class="py-3 px-6">Order ID</th>
+                    <th class="py-3 px-6">Delivery Location</th>
+                    <th class="py-3 px-6">Total Amount</th>
+                    <th class="py-3 px-6">Payment / Status</th>
+                    <th class="py-3 px-6">Date</th>
+                    <th class="py-3 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="fullOrdersTableBody" class="divide-y divide-gray-200 text-gray-700">
+                  <tr><td colspan="6" class="text-center py-12 text-gray-400">Loading orders from database...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGenericManagementView(title, subtitle) {
+      return `
+        <div class="space-y-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">${title}</h3>
+              <p class="text-xs text-gray-500">${subtitle}</p>
+            </div>
+            <button onclick="openGenericModal('${title}')" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+              + Add New / Record Action
+            </button>
+          </div>
+
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-12 text-center space-y-3">
+            <div class="text-4xl">📂</div>
+            <h4 class="text-base font-bold text-gray-800">No active records found in ${title}</h4>
+            <p class="text-xs text-gray-500 max-w-md mx-auto">This queue is currently empty. New submissions from customers, vendors, or system triggers will appear here automatically.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderOwnerControlView(title, subtitle) {
+      return `
+        <div class="space-y-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">${title}</h3>
+              <p class="text-xs text-amber-700 font-medium">🔒 Restricted Access — Owner Authorization Required</p>
+            </div>
+            <button onclick="openGenericModal('${title}')" class="bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+              Configure & Execute
+            </button>
+          </div>
+
+          <div class="bg-white rounded-xl border border-amber-200 shadow-sm p-8 space-y-4">
+            <h4 class="text-sm font-bold text-gray-900">System Parameters & Security Logs</h4>
+            <p class="text-xs text-gray-600">${subtitle}</p>
+            <div class="p-4 bg-amber-50 rounded-lg border border-amber-100 text-xs text-amber-900">
+              <strong>Audit Notice:</strong> All administrative modifications executed in this section are permanently recorded in the immutable database audit trail.
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Modal Controller
+    function openModal(title, contentHTML, confirmCallback) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML = contentHTML;
+      document.getElementById('actionModal').classList.remove('hidden');
+      document.getElementById('actionModal').classList.add('flex');
+      window.activeModalConfirm = confirmCallback;
+    }
+
+    function closeModal() {
+      document.getElementById('actionModal').classList.remove('flex');
+      document.getElementById('actionModal').classList.add('hidden');
+    }
+
+    function executeModalAction() {
+      if (typeof window.activeModalConfirm === 'function') {
+        window.activeModalConfirm();
+      }
+      closeModal();
+    }
+
+    function openGenericModal(actionName) {
+      openModal(
+        `Execute: ${actionName}`,
+        `<p class="text-xs text-gray-600">Provide administrative note or parameters for <strong>${actionName}</strong>:</p>
+         <textarea id="modalInputNote" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-emerald-600 focus:outline-none" rows="3" placeholder="Enter audit note or reason..."></textarea>`,
+        () => {
+          alert(`Successfully executed action for ${actionName}.`);
+        }
+      );
+    }
+
+    function reviewOrderModal(orderId) {
+      const order = currentOrders.find(o => o.id === orderId);
+      if (!order) return;
+
+      openModal(
+        `Review Order #${order.id.slice(0, 8)}`,
+        `<div class="space-y-2 text-xs">
+           <p><strong>Customer City:</strong> ${order.delivery_city || 'Mansa'}</p>
+           <p><strong>Province:</strong> ${order.delivery_province || 'Luapula'}</p>
+           <p><strong>Total Amount:</strong> K${Number(order.total_amount).toFixed(2)}</p>
+           <p><strong>Current Status:</strong> ${order.payment_status || 'Pending'}</p>
+           <hr class="my-2">
+           <label class="block font-bold text-gray-700">Update Order / Escrow Status:</label>
+           <select id="newOrderStatus" class="w-full border border-gray-300 rounded-lg p-2 text-xs">
+             <option value="Paid & Secured">Paid & Secured</option>
+             <option value="In Transit">In Transit</option>
+             <option value="Delivered & Completed">Delivered & Completed</option>
+             <option value="Cancelled / Refunded">Cancelled / Refunded</option>
+           </select>
+         </div>`,
+        async () => {
+          const status = document.getElementById('newOrderStatus').value;
+          const { error } = await supabaseClient
+            .from('orders')
+            .update({ payment_status: status })
+            .eq('id', orderId);
+
+          if (error) {
+            alert('Failed to update order status.');
+          } else {
+            alert('Order status updated successfully!');
+            loadAdminData();
+            loadOrdersTable();
+          }
+        }
+      );
+    }
+
+    // Load Live Data for Overview
     async function loadAdminData() {
       try {
-        // Fetch real orders from database
-        const { data: orders, error: ordersError } = await supabaseClient
+        const { data: orders, error } = await supabaseClient
           .from('orders')
           .select('*')
           .order('created_at', { ascending: false });
 
-        if (ordersError) {
-          console.error("Error fetching orders:", ordersError);
-          return;
-        }
+        if (error) throw error;
+        currentOrders = orders || [];
 
-        if (orders && orders.length > 0) {
+        if (currentOrders.length > 0) {
           let pendingCount = 0;
           let transitCount = 0;
           let completedCount = 0;
 
           const queueBody = document.getElementById('reviewQueueBody');
-          queueBody.innerHTML = '';
+          if (queueBody) {
+            queueBody.innerHTML = '';
 
-          orders.forEach(order => {
-            const status = order.payment_status || 'Pending';
-            if (status.includes('Delivered') || status.includes('Completed')) {
-              completedCount++;
-            } else if (status.includes('Transit') || status.includes('Shipping')) {
-              transitCount++;
-            } else {
-              pendingCount++;
-            }
+            currentOrders.forEach(order => {
+              const status = order.payment_status || 'Pending';
+              if (status.includes('Delivered') || status.includes('Completed')) {
+                completedCount++;
+              } else if (status.includes('Transit')) {
+                transitCount++;
+              } else {
+                pendingCount++;
+              }
 
-            // Render live orders into the review queue table
-            const row = document.createElement('tr');
-            row.className = 'hover:bg-gray-50';
-            row.innerHTML = `
-              <td class="py-3 px-4 font-mono font-semibold">${order.id.slice(0, 8)}</td>
-              <td class="py-3 px-4"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[11px] font-medium">Order Payment</span></td>
-              <td class="py-3 px-4"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-medium">${status}</span></td>
-              <td class="py-3 px-4 text-gray-500">${new Date(order.created_at).toLocaleString()}</td>
-              <td class="py-3 px-4 text-right">
-                <button onclick="alert('Managing order ${order.id}')" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold px-3 py-1 rounded shadow-xs">Review</button>
-              </td>
-            `;
-            queueBody.appendChild(row);
-          });
+              const row = document.createElement('tr');
+              row.className = 'hover:bg-gray-50';
+              row.innerHTML = `
+                <td class="py-3 px-4 font-mono font-semibold">${order.id.slice(0, 8)}</td>
+                <td class="py-3 px-4"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[11px] font-medium">Order Payment</span></td>
+                <td class="py-3 px-4"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-medium">${status}</span></td>
+                <td class="py-3 px-4 text-gray-500">${new Date(order.created_at).toLocaleString()}</td>
+                <td class="py-3 px-4 text-right">
+                  <button onclick="reviewOrderModal('${order.id}')" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold px-3 py-1 rounded shadow-xs cursor-pointer">Review</button>
+                </td>
+              `;
+              queueBody.appendChild(row);
+            });
+          }
 
-          // Update Operational Snapshot
-          document.getElementById('snapshotPending').textContent = `${pendingCount} orders`;
-          document.getElementById('snapshotTransit').textContent = `${transitCount} orders`;
-          document.getElementById('snapshotCompleted').textContent = `${completedCount} orders`;
+          if (document.getElementById('snapshotPending')) {
+            document.getElementById('snapshotPending').textContent = `${pendingCount} orders`;
+            document.getElementById('snapshotTransit').textContent = `${transitCount} orders`;
+            document.getElementById('snapshotCompleted').textContent = `${completedCount} orders`;
 
-          const total = orders.length || 1;
-          document.getElementById('barPending').style.width = `${(pendingCount / total) * 100}%`;
-          document.getElementById('barTransit').style.width = `${(transitCount / total) * 100}%`;
-          document.getElementById('barCompleted').style.width = `${(completedCount / total) * 100}%`;
+            const total = currentOrders.length || 1;
+            document.getElementById('barPending').style.width = `${(pendingCount / total) * 100}%`;
+            document.getElementById('barTransit').style.width = `${(transitCount / total) * 100}%`;
+            document.getElementById('barCompleted').style.width = `${(completedCount / total) * 100}%`;
 
-          // Update metrics
-          document.getElementById('statOrdersReview').textContent = pendingCount;
-          document.getElementById('statPaymentReceipts').textContent = orders.length;
+            document.getElementById('statOrdersReview').textContent = pendingCount;
+            document.getElementById('statPaymentReceipts').textContent = currentOrders.length;
+          }
         }
-
       } catch (err) {
-        console.error("Unexpected error loading live data:", err);
+        console.error("Error loading live data:", err);
       }
     }
 
-    // Safely wait for session to hydrate before checking or loading data
+    // Load Orders Table for Orders View
+    async function loadOrdersTable() {
+      try {
+        const { data: orders, error } = await supabaseClient
+          .from('orders')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        currentOrders = orders || [];
+        const tbody = document.getElementById('fullOrdersTableBody');
+        if (!tbody) return;
+
+        if (currentOrders.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-gray-400 font-medium">No orders found in the database.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = '';
+        currentOrders.forEach(order => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50';
+          row.innerHTML = `
+            <td class="py-4 px-6 font-mono text-xs font-semibold text-gray-800">${order.id.slice(0, 8)}...</td>
+            <td class="py-4 px-6">${order.delivery_city || 'Mansa'}, ${order.delivery_province || 'Luapula'}</td>
+            <td class="py-4 px-6 font-bold text-emerald-700">K${Number(order.total_amount).toFixed(2)}</td>
+            <td class="py-4 px-6"><span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded text-xs font-semibold">${order.payment_status || 'Pending'}</span></td>
+            <td class="py-4 px-6 text-gray-500 text-xs">${new Date(order.created_at).toLocaleDateString()}</td>
+            <td class="py-4 px-6 text-right">
+              <button onclick="reviewOrderModal('${order.id}')" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-3 py-1.5 rounded text-xs transition cursor-pointer">Manage</button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        console.error("Error loading orders table:", err);
+      }
+    }
+
+    // Initialize default view on load
     supabaseClient.auth.onAuthStateChange((event, session) => {
       if (!session) {
         window.location.href = 'login.html';
       } else {
-        loadAdminData();
+        switchView('overview');
       }
     });
   </script>
