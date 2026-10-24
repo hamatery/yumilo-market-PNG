@@ -105,6 +105,10 @@
               <span>Manage staff & permissions</span>
               <span>🔒</span>
             </button>
+            <button onclick="switchView('settings')" id="nav-settings" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
+              <span>Site settings & records</span>
+              <span>🔒</span>
+            </button>
             <button onclick="switchView('finance')" id="nav-finance" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
               <span>Finance & overrides</span>
               <span>🔒</span>
@@ -121,7 +125,7 @@
     <!-- Sidebar Footer Environment -->
     <div class="p-4 border-t border-emerald-900/50 text-[11px] text-emerald-300 space-y-1">
       <p class="font-semibold text-white">Environment:</p>
-      <p>PRODUCTION • v2.1.0 • Live Audit Log Active</p>
+      <p>PRODUCTION • v2.1.0 • Live Config Active</p>
     </div>
   </aside>
 
@@ -276,6 +280,10 @@
         title.textContent = 'Manage Staff & Permissions (Owner Only)';
         container.innerHTML = renderStaffManagementHTML();
         loadStaffTable();
+      } else if (viewId === 'settings') {
+        title.textContent = 'Site Settings & Records (Owner Only)';
+        container.innerHTML = renderSiteSettingsHTML();
+        loadSiteSettings();
       } else if (viewId === 'finance') {
         title.textContent = 'Finance & Overrides (Owner Only)';
         container.innerHTML = renderOwnerControlView('Finance & Overrides', 'Execute payment manual overrides and escrow releases.');
@@ -438,15 +446,15 @@
               <h5 class="text-xs font-bold text-gray-900">Manage staff & permissions</h5>
               <p class="text-[11px] text-gray-500">Create/deactivate staff, assign roles (Owner only)</p>
             </div>
-            <div onclick="switchView('audit')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
-              <div class="text-xl">🔨</div>
-              <h5 class="text-xs font-bold text-gray-900">Record Board decision</h5>
-              <p class="text-[11px] text-gray-500">Log hiring/termination decisions (Owner only)</p>
-            </div>
             <div onclick="switchView('settings')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
               <div class="text-xl">⚙️</div>
               <h5 class="text-xs font-bold text-gray-900">Site settings</h5>
               <p class="text-[11px] text-gray-500">Update policies & site config (Owner only)</p>
+            </div>
+            <div onclick="switchView('audit')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
+              <div class="text-xl">🔨</div>
+              <h5 class="text-xs font-bold text-gray-900">Record Board decision</h5>
+              <p class="text-[11px] text-gray-500">Log hiring/termination decisions (Owner only)</p>
             </div>
             <div onclick="switchView('finance')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
               <div class="text-xl">🔒</div>
@@ -545,6 +553,53 @@
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Fully Functional Site Settings View HTML Template
+    function renderSiteSettingsHTML() {
+      return `
+        <div class="space-y-6 max-w-3xl mx-auto">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">Site Settings & Records</h3>
+              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Configure platform parameters, currencies, and operational limits.</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-8 space-y-6">
+            <form id="siteSettingsForm" onsubmit="saveSiteSettings(event)" class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Store Name</label>
+                <input type="text" id="settingStoreName" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Marketplace Currency</label>
+                  <input type="text" id="settingCurrency" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Platform Fee Percent (%)</label>
+                  <input type="number" step="0.1" id="settingFee" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Support Email Address</label>
+                <input type="email" id="settingEmail" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+              </div>
+              <div class="flex items-center space-x-3 pt-2">
+                <input type="checkbox" id="settingMaintenance" class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
+                <label class="text-xs font-bold text-gray-700 uppercase">Enable Maintenance Mode</label>
+              </div>
+
+              <div class="pt-4 border-t border-gray-100 flex justify-end">
+                <button type="submit" id="saveSettingsBtn" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-2.5 rounded-lg text-xs transition cursor-pointer">
+                  Save Site Settings
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       `;
@@ -662,6 +717,67 @@
           closeModal();
         }
       );
+    }
+
+    // Load Site Settings into Form
+    async function loadSiteSettings() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('site_settings')
+          .select('*')
+          .eq('id', 1)
+          .single();
+
+        if (error) throw error;
+
+        if (data) {
+          document.getElementById('settingStoreName').value = data.store_name || 'Yumilo Market';
+          document.getElementById('settingCurrency').value = data.currency || 'ZMW (K)';
+          document.getElementById('settingFee').value = data.platform_fee_percent || 5.0;
+          document.getElementById('settingEmail').value = data.support_email || 'support@yumilomarket.store';
+          document.getElementById('settingMaintenance').checked = !!data.maintenance_mode;
+        }
+      } catch (err) {
+        console.error("Error loading site settings:", err);
+      }
+    }
+
+    // Save Site Settings to Database
+    async function saveSiteSettings(e) {
+      e.preventDefault();
+      const storeName = document.getElementById('settingStoreName').value.trim();
+      const currency = document.getElementById('settingCurrency').value.trim();
+      const fee = parseFloat(document.getElementById('settingFee').value);
+      const email = document.getElementById('settingEmail').value.trim();
+      const maintenance = document.getElementById('settingMaintenance').checked;
+
+      const btn = document.getElementById('saveSettingsBtn');
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+
+      try {
+        const { error } = await supabaseClient
+          .from('site_settings')
+          .upsert({
+            id: 1,
+            store_name: storeName,
+            currency: currency,
+            platform_fee_percent: fee,
+            support_email: email,
+            maintenance_mode: maintenance,
+            updated_at: new Date().toISOString()
+          });
+
+        if (error) throw error;
+
+        await logAuditAction('Site Settings Updated', `Updated store name to '${storeName}', fee to ${fee}%`);
+        alert('Site settings updated and saved successfully!');
+      } catch (err) {
+        alert('Failed to save settings: ' + (err.message || err));
+      } finally {
+        btn.textContent = 'Save Site Settings';
+        btn.disabled = false;
+      }
     }
 
     // Create New Staff Account Modal & Execution
