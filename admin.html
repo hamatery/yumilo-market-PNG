@@ -10,12 +10,12 @@
 </head>
 <body class="min-h-screen flex text-gray-800">
 
-  <!-- SIDEBAR NAVIGATION -->
+  <!-- SIDEBAR -->
   <aside class="w-72 bg-[#064e3b] text-emerald-100 flex flex-col justify-between hidden lg:flex shrink-0 h-screen sticky top-0 overflow-y-auto">
     <div>
       <div class="p-6 border-b border-emerald-900/50 sticky top-0 bg-[#064e3b] z-10">
         <h1 class="text-xl font-bold tracking-tight text-white">Yumilo Market</h1>
-        <p class="text-xs text-emerald-300 mt-0.5">Nationwide Owner Command Center</p>
+        <p class="text-xs text-emerald-300 mt-0.5">Nationwide Command Center</p>
       </div>
 
       <nav class="p-4 space-y-6 text-sm font-medium">
@@ -68,7 +68,7 @@
 
     <div class="p-4 border-t border-emerald-900/50 text-[11px] text-emerald-300 space-y-1 bg-[#064e3b]">
       <p class="font-semibold text-white">Environment:</p>
-      <p>PRODUCTION • Nationwide Zambia • v2.3.0</p>
+      <p>PRODUCTION • Nationwide Zambia • v2.3.1</p>
     </div>
   </aside>
 
@@ -91,7 +91,7 @@
     </header>
 
     <main id="mainContent" class="p-8 space-y-8 flex-1">
-      <!-- Injected dynamically -->
+      <div class="text-center py-12 text-gray-500">Loading Command Center...</div>
     </main>
 
     <footer class="bg-white border-t border-gray-200 px-8 py-6 text-[11px] text-gray-500 leading-relaxed">
@@ -153,7 +153,7 @@
       const title = document.getElementById('pageTitle');
 
       if (viewId === 'overview') {
-        title.textContent = 'Nationwide Marketplace Overview';
+        title.textContent = 'Nationwide Operations Overview';
         container.innerHTML = renderOverviewHTML();
         loadAdminData();
         loadAuditLogsOverview();
@@ -323,7 +323,6 @@
       `;
     }
 
-    // Ultimate Site Settings View with Nationwide Defaults & Live Policy URLs
     function renderSiteSettingsHTML() {
       return `
         <div class="space-y-6 max-w-4xl mx-auto">
@@ -336,8 +335,6 @@
 
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-8 space-y-6">
             <form id="siteSettingsForm" onsubmit="saveSiteSettings(event)" class="space-y-6">
-              
-              <!-- General Info & Homepage Ticker -->
               <div class="space-y-4">
                 <h4 class="text-sm font-bold text-gray-900 border-b pb-2">🏢 General Store Profile & Announcement</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -356,7 +353,6 @@
                 </div>
               </div>
 
-              <!-- Financials & Vendor Payouts -->
               <div class="space-y-4">
                 <h4 class="text-sm font-bold text-gray-900 border-b pb-2">💳 Financials, Taxes & Vendor Payouts</h4>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -383,7 +379,6 @@
                 </div>
               </div>
 
-              <!-- Nationwide Delivery Zones & Order Rules -->
               <div class="space-y-4">
                 <h4 class="text-sm font-bold text-gray-900 border-b pb-2">📦 Nationwide Delivery Zones & Order Rules</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -402,7 +397,6 @@
                 </div>
               </div>
 
-              <!-- Vendor Offline WhatsApp & SMS Alerts -->
               <div class="space-y-4 bg-emerald-50/60 p-5 rounded-xl border border-emerald-200">
                 <h4 class="text-sm font-bold text-emerald-900 border-b border-emerald-200 pb-2">📲 Vendor Offline Order Alerts (WhatsApp & SMS)</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -420,12 +414,8 @@
                     </select>
                   </div>
                 </div>
-                <p class="text-[11px] text-emerald-700 leading-relaxed">
-                  <strong>Automatic Trigger:</strong> If a vendor is offline or fails to acknowledge a new order within 15 minutes, the system automatically dispatches an instant WhatsApp message and SMS containing the order details, customer phone number, and delivery province.
-                </p>
               </div>
 
-              <!-- Legal & Compliance URLs (Linked to our new files) -->
               <div class="space-y-4">
                 <h4 class="text-sm font-bold text-gray-900 border-b pb-2">⚖️ Legal Compliance & Policy URLs</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -444,7 +434,6 @@
                 </div>
               </div>
 
-              <!-- System Operating States -->
               <div class="space-y-4 pt-2">
                 <h4 class="text-sm font-bold text-gray-900 border-b pb-2">⚙️ System Operating States</h4>
                 <div class="space-y-3">
@@ -472,7 +461,7 @@
       return `
         <div class="space-y-6">
           <div class="flex justify-between items-center">
-            <div><h3 class="text-2xl font-bold text-gray-900">Immutable Audit History Log</h3><p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Complete recorded history of all administrative actions.</p></div>
+            <div><h3 class="text-2xl font-bold text-gray-900">Immutable Audit History Log</h3><p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Complete recorded history.</p></div>
             <button onclick="loadFullAuditTable()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer">Refresh Audit Trail</button>
           </div>
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -496,7 +485,7 @@
           </div>
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-12 text-center space-y-3">
             <div class="text-4xl">📂</div><h4 class="text-base font-bold text-gray-800">No active records in ${title}</h4>
-            <p class="text-xs text-gray-500 max-w-md mx-auto">This queue is clean. Incoming submissions from across Zambia will appear here in real-time.</p>
+            <p class="text-xs text-gray-500 max-w-md mx-auto">This queue is clean. Incoming submissions from across Zambia will appear here.</p>
           </div>
         </div>
       `;
@@ -506,13 +495,12 @@
       return `
         <div class="space-y-6">
           <div class="flex justify-between items-center">
-            <div><h3 class="text-2xl font-bold text-gray-900">${title}</h3><p class="text-xs text-amber-700 font-medium">🔒 Restricted Access — Owner Authorization Required</p></div>
+            <div><h3 class="text-2xl font-bold text-gray-900">${title}</h3><p class="text-xs text-amber-700 font-medium">🔒 Restricted Access</p></div>
             <button onclick="openGenericModal('${title}')" class="bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer">Configure & Execute</button>
           </div>
           <div class="bg-white rounded-xl border border-amber-200 shadow-sm p-8 space-y-4">
             <h4 class="text-sm font-bold text-gray-900">System Parameters & Security Logs</h4>
             <p class="text-xs text-gray-600">${subtitle}</p>
-            <div class="p-4 bg-amber-50 rounded-lg border border-amber-100 text-xs text-amber-900"><strong>Audit Notice:</strong> All administrative modifications are permanently recorded.</div>
           </div>
         </div>
       `;
@@ -538,28 +526,26 @@
     async function loadSiteSettings() {
       try {
         const { data, error } = await supabaseClient.from('site_settings').select('*').eq('id', 1).single();
-        if (error) return;
-        if (data) {
-          document.getElementById('settingStoreName').value = data.store_name || 'Yumilo Market';
-          document.getElementById('settingCurrency').value = data.currency || 'ZMW (K)';
-          document.getElementById('settingFee').value = data.platform_fee_percent ?? 5.0;
-          document.getElementById('settingTax').value = data.tax_rate_percent ?? 0.0;
-          document.getElementById('settingMobileMoney').value = data.merchant_mobile_money || '';
-          document.getElementById('settingDeliveryFee').value = data.delivery_fee ?? 100;
-          document.getElementById('settingMinOrder').value = data.min_order_amount ?? 100;
-          document.getElementById('settingDeliveryZones').value = data.delivery_zones || 'Lusaka & Copperbelt Hub: K100, Other Provinces: K180, Local Pickup: Free';
-          document.getElementById('settingGateway').value = data.notification_gateway || "Africa's Talking / Twilio API";
-          document.getElementById('settingVendorAlertMethod').value = data.vendor_alert_method || 'WhatsApp & SMS';
-          document.getElementById('settingMinPayout').value = data.min_vendor_payout ?? 500;
-          document.getElementById('settingTermsUrl').value = data.terms_url || 'https://www.yumilomarket.store/terms.html';
-          document.getElementById('settingPrivacyUrl').value = data.privacy_url || 'https://www.yumilomarket.store/privacy.html';
-          document.getElementById('settingRefundUrl').value = data.refund_url || 'https://www.yumilomarket.store/refund.html';
-          document.getElementById('settingTicker').value = data.announcement_ticker || '🔥 Welcome to Yumilo Market - Nationwide Delivery Across Zambia!';
-          document.getElementById('settingStoreOpen').checked = data.store_open !== false;
-          document.getElementById('settingEmail').value = data.support_email || 'support@yumilomarket.store';
-          document.getElementById('settingMaintenance').checked = !!data.maintenance_mode;
-        }
-      } catch (err) {}
+        if (error || !data) return;
+        document.getElementById('settingStoreName').value = data.store_name || 'Yumilo Market';
+        document.getElementById('settingCurrency').value = data.currency || 'ZMW (K)';
+        document.getElementById('settingFee').value = data.platform_fee_percent ?? 5.0;
+        document.getElementById('settingTax').value = data.tax_rate_percent ?? 0.0;
+        document.getElementById('settingMobileMoney').value = data.merchant_mobile_money || '';
+        document.getElementById('settingDeliveryFee').value = data.delivery_fee ?? 100;
+        document.getElementById('settingMinOrder').value = data.min_order_amount ?? 100;
+        document.getElementById('settingDeliveryZones').value = data.delivery_zones || '';
+        document.getElementById('settingGateway').value = data.notification_gateway || '';
+        document.getElementById('settingVendorAlertMethod').value = data.vendor_alert_method || 'WhatsApp & SMS';
+        document.getElementById('settingMinPayout').value = data.min_vendor_payout ?? 500;
+        document.getElementById('settingTermsUrl').value = data.terms_url || '';
+        document.getElementById('settingPrivacyUrl').value = data.privacy_url || '';
+        document.getElementById('settingRefundUrl').value = data.refund_url || '';
+        document.getElementById('settingTicker').value = data.announcement_ticker || '';
+        document.getElementById('settingStoreOpen').checked = data.store_open !== false;
+        document.getElementById('settingEmail').value = data.support_email || 'support@yumilomarket.store';
+        document.getElementById('settingMaintenance').checked = !!data.maintenance_mode;
+      } catch (err) { console.error(err); }
     }
 
     async function saveSiteSettings(e) {
@@ -623,7 +609,7 @@
             if (data.user) {
               await supabaseClient.from('profiles').upsert({ id: data.user.id, full_name: name, role: role });
               await logAuditAction('Staff Created', `Created staff for ${name} (${role})`);
-              alert(`Staff account created successfully!`);
+              alert('Staff account created successfully!');
               closeModal(); loadStaffTable();
             }
           } catch (err) { alert('Error: ' + err.message); }
@@ -694,4 +680,78 @@
         data.forEach(log => {
           const row = document.createElement('tr');
           row.className = 'hover:bg-gray-50';
-          row.innerHTML = `<td class="py-4 px-6 font-semibold text-emerald-800 text-xs">${log.action_type}</td><td class="py-4 px-6 text-gray-800 text-xs">${log.description}</td><td class="py-4 px-6
+          row.innerHTML = `<td class="py-4 px-6 font-semibold text-emerald-800 text-xs">${log.action_type}</td><td class="py-4 px-6 text-gray-800 text-xs">${log.description}</td><td class="py-4 px-6 text-gray-600 text-xs">${log.actor||'System'}</td><td class="py-4 px-6 text-gray-500 text-xs">${new Date(log.created_at).toLocaleString()}</td>`;
+          tbody.appendChild(row);
+        });
+      } catch (err) {}
+    }
+
+    function updateDateFilter() {
+      startDateFilter = document.getElementById('startDateInput')?.value || '';
+      endDateFilter = document.getElementById('endDateInput')?.value || '';
+      loadAdminData(); loadOrdersTable();
+    }
+
+    function clearDateFilter() {
+      startDateFilter = ''; endDateFilter = '';
+      if(document.getElementById('startDateInput')) document.getElementById('startDateInput').value = '';
+      if(document.getElementById('endDateInput')) document.getElementById('endDateInput').value = '';
+      loadAdminData(); loadOrdersTable();
+    }
+
+    function reviewOrderModal(orderId) {
+      const order = currentOrders.find(o => o.id === orderId);
+      if (!order) return;
+      openModal(
+        `Review Order #${order.id.slice(0, 8)}`,
+        `<div class="space-y-2 text-xs">
+           <p><strong>Location:</strong> ${order.delivery_city \vert{}\vert{} 'Zambia'},${order.delivery_province || 'National'}</p>
+           <p><strong>Total:</strong> K${Number(order.total_amount).toFixed(2)}</p>
+           <label class="block font-bold text-gray-700 mt-2">Update Status:</label>
+           <select id="newOrderStatus" class="w-full border p-2 text-xs">
+             <option value="Paid & Secured">Paid & Secured</option>
+             <option value="In Transit">In Transit</option>
+             <option value="Delivered & Completed">Delivered & Completed</option>
+             <option value="Cancelled / Refunded">Cancelled / Refunded</option>
+           </select>
+         </div>`,
+        async () => {
+          const status = document.getElementById('newOrderStatus').value;
+          const { error } = await supabaseClient.from('orders').update({ payment_status: status }).eq('id', orderId);
+          if (error) alert('Failed to update.');
+          else {
+            await logAuditAction('Order Updated', `Updated order #${orderId.slice(0, 8)} to${status}`);
+            alert('Order updated!'); closeModal(); loadAdminData(); loadOrdersTable();
+          }
+        }
+      );
+    }
+
+    async function loadAdminData() {
+      try {
+        const { data, error } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        currentOrders = (data || []).filter(o => {
+          if (!o.created_at) return true;
+          const d = o.created_at.split('T')[0];
+          if (startDateFilter && d < startDateFilter) return false;
+          if (endDateFilter && d > endDateFilter) return false;
+          return true;
+        });
+
+        let pCount = 0, tCount = 0, cCount = 0;
+        const queue = document.getElementById('reviewQueueBody');
+        if (queue) {
+          if (currentOrders.length === 0) {
+            queue.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400">No pending orders.</td></tr>`;
+          } else {
+            queue.innerHTML = '';
+            currentOrders.forEach(o => {
+              const status = o.payment_status || 'Pending';
+              if (status.includes('Completed') || status.includes('Delivered')) cCount++;
+              else if (status.includes('Transit')) tCount++;
+              else pCount++;
+
+              const row = document.createElement('tr');
+              row.className = 'hover:bg-gray-50';
+              row.innerHTML = `<td class="py-3 px-4 font-mono font-semibold">${o.id.slice(0,8)}</td><td class="py-3 px-4"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[11px]">Nationwide Order</span></td><td class="py-3 px-4"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px]">${status}</span></td><td class="py-3
