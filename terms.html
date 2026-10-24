@@ -5,37 +5,108 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Terms of Service - Yumilo Market</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>body { background-color: #fcfbf9; }</style>
+  <style>
+    body { background-color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+    svg { width: 20px !important; height: 20px !important; min-width: 20px !important; min-height: 20px !important; }
+  </style>
 </head>
-<body class="min-h-screen text-gray-800 flex flex-col justify-between">
-  <header class="bg-[#064e3b] text-white py-6 px-8 shadow-md">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">Yumilo Market</h1>
-      <a href="index.html" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded font-semibold transition">Back to Store</a>
+<body class="text-gray-800 antialiased flex flex-col min-h-screen justify-between">
+
+  <!-- TOP HEADER -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 py-3.5 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <a href="index.html" class="flex items-center space-x-2">
+          <img src="logo.png" alt="Yumilo Market" class="h-9 w-auto object-contain" onerror="this.src='https://via.placeholder.com/40?text=YM'">
+          <span class="font-black text-base tracking-wider text-[#064e3b]">YUMILOMARKET</span>
+        </a>
+      </div>
+      <a href="index.html" class="text-xs font-bold text-emerald-700 hover:underline">← Back to Marketplace</a>
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-8 py-12 flex-1 space-y-6 bg-white my-8 rounded-xl border border-gray-200 shadow-sm">
-    <h2 class="text-3xl font-extrabold text-gray-900 border-b pb-4">Terms of Service</h2>
-    <p class="text-xs text-gray-500">Last updated: October 2026</p>
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-4xl mx-auto px-6 py-12 bg-white my-10 rounded-3xl shadow-sm border border-gray-200 space-y-8">
     
-    <div class="space-y-4 text-sm text-gray-700 leading-relaxed">
-      <h3 class="font-bold text-gray-900 text-base">1. Acceptance of Terms</h3>
-      <p>Welcome to Yumilo Market. By accessing or using our nationwide multi-vendor marketplace operating across Zambia, you agree to comply with and be bound by these Terms of Service.</p>
-
-      <h3 class="font-bold text-gray-900 text-base">2. Nationwide Operations & Escrow</h3>
-      <p>Yumilo Market connects verified buyers, vendors, and couriers across Zambia. All customer payments are processed via verified mobile money or bank transfers and held securely under manual verification review before order dispatch.</p>
-
-      <h3 class="font-bold text-gray-900 text-base">3. Vendor & Buyer Responsibilities</h3>
-      <p>Vendors are responsible for accurate product listings, quality control, and timely fulfillment. Buyers must provide valid delivery details and inspect goods upon arrival.</p>
-
-      <h3 class="font-bold text-gray-900 text-base">4. Limitation of Liability</h3>
-      <p>Yumilo Market acts as an intermediary marketplace platform. While we enforce strict KYC and verification standards, we do not guarantee direct money transfers or automatic payouts outside our manual review workflow.</p>
+    <div class="border-b border-gray-100 pb-6">
+      <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full">Legal Framework</span>
+      <h1 class="text-3xl font-black text-gray-900 mt-3">Terms of Service</h1>
+      <p class="text-xs text-gray-500 mt-1">Last updated: October 2026 | Effective across all 10 Provinces of Zambia</p>
     </div>
+
+    <!-- Section 1 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">1. Acceptance of Terms</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        Welcome to Yumilo Market ("Yumilo", "we", "our", or "us"). By accessing or using our website at <a href="https://www.yumilomarket.store" class="text-emerald-700 font-semibold underline">www.yumilomarket.store</a>, mobile applications, or engaging in transactions through our platform, you agree to comply with and be bound by these Terms of Service. If you do not agree to these terms, please do not use our marketplace.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">2. Platform Role & Escrow Intermediary</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        Yumilo Market operates as a verified universal e-commerce marketplace connecting independent vendors and service providers with buyers across Zambia. 
+      </p>
+      <ul class="list-disc pl-5 text-xs text-gray-600 space-y-1">
+        <li><strong>Escrow Protection:</strong> All buyer payments made via mobile money (MTN Mobile Money, Airtel Money) are held securely in Yumilo's escrow accounts.</li>
+        <li><strong>Fund Release:</strong> Funds are only released to the vendor after the buyer confirms successful delivery or after the inspection window elapses without a formal dispute.</li>
+        <li><strong>Independent Sellers:</strong> Unless explicitly stated as "Yumilo Direct", products are sold by independent third-party vendors who are solely responsible for product quality, warranty, and compliance.</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">3. User Accounts, Vendor KYC & Security</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        To buy or sell on Yumilo Market, users must register with valid contact information. 
+      </p>
+      <ul class="list-disc pl-5 text-xs text-gray-600 space-y-1">
+        <li><strong>Buyers:</strong> Must provide accurate delivery addresses across any of Zambia's 10 provinces (Lusaka, Copperbelt, Central, Luapula, Northern, Muchinga, Eastern, Southern, Western, North-Western) and valid mobile numbers.</li>
+        <li><strong>Vendors & Couriers:</strong> Must undergo Know Your Customer (KYC) verification, submit valid identification, and adhere to platform performance standards. Failure to fulfill orders leads to immediate account suspension and escrow forfeiture.</li>
+      </ul>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">4. Nationwide Delivery & Fulfillment</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        Delivery timelines vary depending on provincial hubs and local courier networks. Yumilo Market partners with verified logistics providers to ensure secure transit. Buyers are required to inspect packages upon arrival and report discrepancies within 24 hours.
+      </p>
+    </section>
+
+    <!-- Section 5 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">5. Prohibited Items & Conduct</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        Users are strictly prohibited from listing, selling, or attempting to purchase illegal goods, counterfeit products, regulated chemicals, expired consumables, or items violating Zambian law. Any fraudulent activity or bypassing of the escrow system will result in permanent bans and reporting to law enforcement authorities.
+      </p>
+    </section>
+
+    <!-- Section 6 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">6. Governing Law & Dispute Resolution</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        These Terms shall be governed by and construed in accordance with the laws of the Republic of Zambia. Any disputes arising from transactions on Yumilo Market shall first be resolved through our internal mediation and escrow dispute resolution team.
+      </p>
+    </section>
+
+    <div class="border-t border-gray-100 pt-6">
+      <p class="text-xs text-gray-500">For legal inquiries or support, contact our Zambia Operations Hub at <a href="mailto:support@yumilomarket.store" class="text-emerald-700 font-semibold underline">support@yumilomarket.store</a>.</p>
+    </div>
+
   </main>
 
-  <footer class="bg-gray-100 border-t py-6 text-center text-xs text-gray-500">
-    <p>&copy; 2026 Yumilo Market. All rights reserved across Zambia.</p>
+  <!-- PROFESSIONAL FOOTER -->
+  <footer class="bg-[#064e3b] text-emerald-100 border-t border-emerald-900 mt-auto py-10 px-6">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center text-xs space-y-4 sm:space-y-0">
+      <div class="flex items-center space-x-2">
+        <img src="logo.png" alt="Logo" class="h-7 w-auto object-contain" onerror="this.src='https://via.placeholder.com/30?text=YM'">
+        <span class="font-bold text-white text-sm">YUMILOMARKET</span>
+      </div>
+      <p class="text-[10px] text-emerald-300">&copy; 2026 Yumilo Market. All rights reserved. Zambia's Secure Universal Commerce Platform.</p>
+    </div>
   </footer>
+
 </body>
 </html>
