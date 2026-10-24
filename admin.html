@@ -68,7 +68,7 @@
 
     <div class="p-4 border-t border-emerald-900/50 text-[11px] text-emerald-300 space-y-1 bg-[#064e3b]">
       <p class="font-semibold text-white">Environment:</p>
-      <p>PRODUCTION • Nationwide Zambia • v2.3.1</p>
+      <p>PRODUCTION • Nationwide Zambia • v2.3.2</p>
     </div>
   </aside>
 
@@ -91,7 +91,7 @@
     </header>
 
     <main id="mainContent" class="p-8 space-y-8 flex-1">
-      <div class="text-center py-12 text-gray-500">Loading Command Center...</div>
+      <!-- Default initial view loaded immediately -->
     </main>
 
     <footer class="bg-white border-t border-gray-200 px-8 py-6 text-[11px] text-gray-500 leading-relaxed">
@@ -402,11 +402,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label class="block text-xs font-bold text-emerald-900 uppercase mb-1">SMS / WhatsApp Gateway Provider</label>
-                    <input type="text" id="settingGateway" value="Africa's Talking / Twilio API" class="w-full px-3 py-2 border border-emerald-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="text" id="settingGateway" value="Africa's Talking / Twilio API" class="w-full px-3 py-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                   <div>
                     <label class="block text-xs font-bold text-emerald-900 uppercase mb-1">Vendor Alert Notification Channel</label>
-                    <select id="settingVendorAlertMethod" class="w-full px-3 py-2 border border-emerald-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <select id="settingVendorAlertMethod" class="w-full px-3 py-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                       <option value="WhatsApp & SMS">WhatsApp & SMS (Recommended)</option>
                       <option value="WhatsApp Only">WhatsApp Only</option>
                       <option value="SMS Only">SMS Only</option>
@@ -622,136 +622,4 @@
         `Edit Permissions: ${currentName || 'User'}`,
         `<div class="space-y-3 text-xs">
            <p><strong>ID:</strong> ${userId}</p>
-           <div><label class="block font-bold mb-1">Role</label><select id="editStaffRoleSelect" class="w-full border p-2.5 rounded-lg"><option value="super_admin" ${currentRole==='super_admin'?'selected':''}>Super Admin</option><option value="manager" ${currentRole==='manager'?'selected':''}>Manager</option><option value="worker" ${currentRole==='worker'?'selected':''}>Worker</option><option value="customer" ${currentRole==='customer'?'selected':''}>Customer</option></select></div>
-         </div>`,
-        async () => {
-          const newRole = document.getElementById('editStaffRoleSelect').value;
-          try {
-            const { error } = await supabaseClient.from('profiles').update({ role: newRole }).eq('id', userId);
-            if (error) throw error;
-            await logAuditAction('Role Updated', `Updated role for ${currentName} to${newRole}`);
-            alert('Permissions updated!'); closeModal(); loadStaffTable();
-          } catch (err) { alert('Error: ' + err.message); }
-        }
-      );
-    }
-
-    async function loadStaffTable() {
-      try {
-        const { data, error } = await supabaseClient.from('profiles').select('*').order('full_name', { ascending: true });
-        if (error) throw error;
-        staffMembers = data || [];
-        const tbody = document.getElementById('staffTableBody');
-        if (!tbody) return;
-        if (staffMembers.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-gray-400">No profiles found.</td></tr>`; return; }
-        tbody.innerHTML = '';
-        staffMembers.forEach(s => {
-          const row = document.createElement('tr');
-          row.className = 'hover:bg-gray-50';
-          row.innerHTML = `<td class="py-4 px-6 font-medium">${s.full_name||'Unnamed'}</td><td class="py-4 px-6 font-mono text-xs">${s.id.slice(0,12)}...</td><td class="py-4 px-6"><span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded text-xs font-semibold uppercase">${s.role||'customer'}</span></td><td class="py-4 px-6 text-xs text-gray-500">${s.updated_at?new Date(s.updated_at).toLocaleDateString():'N/A'}</td><td class="py-4 px-6 text-right"><button onclick="editStaffRoleModal('${s.id}', '${s.full_name\vert{}\vert{}''}', '${s.role||'customer'}')" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-3 py-1.5 rounded text-xs">Edit</button></td>`;
-          tbody.appendChild(row);
-        });
-      } catch (err) {}
-    }
-
-    async function loadAuditLogsOverview() {
-      try {
-        const { data, error } = await supabaseClient.from('audit_logs').select('*').order('created_at', { ascending: false }).limit(5);
-        const container = document.getElementById('auditActivityBody');
-        if (!container) return;
-        if (error || !data || data.length === 0) { container.innerHTML = `<p class="text-gray-400 text-center py-2">No recent audit logs.</p>`; return; }
-        container.innerHTML = '';
-        data.forEach(log => {
-          const div = document.createElement('div');
-          div.className = 'flex justify-between items-center';
-          div.innerHTML = `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px]">${log.action_type}</span><span class="text-gray-700 truncate max-w-[140px]" title="${log.description}">${log.description}</span><span class="text-gray-400 text-[10px]">${new Date(log.created_at).toLocaleDateString()}</span>`;
-          container.appendChild(div);
-        });
-      } catch (err) {}
-    }
-
-    async function loadFullAuditTable() {
-      try {
-        const { data, error } = await supabaseClient.from('audit_logs').select('*').order('created_at', { ascending: false });
-        const tbody = document.getElementById('fullAuditTableBody');
-        if (!tbody) return;
-        if (error || !data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="4" class="text-center py-12 text-gray-400">No records.</td></tr>`; return; }
-        tbody.innerHTML = '';
-        data.forEach(log => {
-          const row = document.createElement('tr');
-          row.className = 'hover:bg-gray-50';
-          row.innerHTML = `<td class="py-4 px-6 font-semibold text-emerald-800 text-xs">${log.action_type}</td><td class="py-4 px-6 text-gray-800 text-xs">${log.description}</td><td class="py-4 px-6 text-gray-600 text-xs">${log.actor||'System'}</td><td class="py-4 px-6 text-gray-500 text-xs">${new Date(log.created_at).toLocaleString()}</td>`;
-          tbody.appendChild(row);
-        });
-      } catch (err) {}
-    }
-
-    function updateDateFilter() {
-      startDateFilter = document.getElementById('startDateInput')?.value || '';
-      endDateFilter = document.getElementById('endDateInput')?.value || '';
-      loadAdminData(); loadOrdersTable();
-    }
-
-    function clearDateFilter() {
-      startDateFilter = ''; endDateFilter = '';
-      if(document.getElementById('startDateInput')) document.getElementById('startDateInput').value = '';
-      if(document.getElementById('endDateInput')) document.getElementById('endDateInput').value = '';
-      loadAdminData(); loadOrdersTable();
-    }
-
-    function reviewOrderModal(orderId) {
-      const order = currentOrders.find(o => o.id === orderId);
-      if (!order) return;
-      openModal(
-        `Review Order #${order.id.slice(0, 8)}`,
-        `<div class="space-y-2 text-xs">
-           <p><strong>Location:</strong> ${order.delivery_city \vert{}\vert{} 'Zambia'},${order.delivery_province || 'National'}</p>
-           <p><strong>Total:</strong> K${Number(order.total_amount).toFixed(2)}</p>
-           <label class="block font-bold text-gray-700 mt-2">Update Status:</label>
-           <select id="newOrderStatus" class="w-full border p-2 text-xs">
-             <option value="Paid & Secured">Paid & Secured</option>
-             <option value="In Transit">In Transit</option>
-             <option value="Delivered & Completed">Delivered & Completed</option>
-             <option value="Cancelled / Refunded">Cancelled / Refunded</option>
-           </select>
-         </div>`,
-        async () => {
-          const status = document.getElementById('newOrderStatus').value;
-          const { error } = await supabaseClient.from('orders').update({ payment_status: status }).eq('id', orderId);
-          if (error) alert('Failed to update.');
-          else {
-            await logAuditAction('Order Updated', `Updated order #${orderId.slice(0, 8)} to${status}`);
-            alert('Order updated!'); closeModal(); loadAdminData(); loadOrdersTable();
-          }
-        }
-      );
-    }
-
-    async function loadAdminData() {
-      try {
-        const { data, error } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false });
-        if (error) throw error;
-        currentOrders = (data || []).filter(o => {
-          if (!o.created_at) return true;
-          const d = o.created_at.split('T')[0];
-          if (startDateFilter && d < startDateFilter) return false;
-          if (endDateFilter && d > endDateFilter) return false;
-          return true;
-        });
-
-        let pCount = 0, tCount = 0, cCount = 0;
-        const queue = document.getElementById('reviewQueueBody');
-        if (queue) {
-          if (currentOrders.length === 0) {
-            queue.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400">No pending orders.</td></tr>`;
-          } else {
-            queue.innerHTML = '';
-            currentOrders.forEach(o => {
-              const status = o.payment_status || 'Pending';
-              if (status.includes('Completed') || status.includes('Delivered')) cCount++;
-              else if (status.includes('Transit')) tCount++;
-              else pCount++;
-
-              const row = document.createElement('tr');
-              row.className = 'hover:bg-gray-50';
-              row.innerHTML = `<td class="py-3 px-4 font-mono font-semibold">${o.id.slice(0,8)}</td><td class="py-3 px-4"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[11px]">Nationwide Order</span></td><td class="py-3 px-4"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px]">${status}</span></td><td class="py-3
+           <div><label class="block font-bold mb-1">Role</label><select id="editStaffRoleSelect" class="w-full border p-2.5 rounded-lg"><option value="super_admin"
