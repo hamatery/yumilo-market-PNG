@@ -4,180 +4,109 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yumilo Market - Owner Command Center</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Supabase JS Client v2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    body { background-color: #fcfbf9; }
-  </style>
+  <style>body { background-color: #fcfbf9; }</style>
 </head>
 <body class="min-h-screen flex text-gray-800">
 
-  <!-- SIDEBAR NAVIGATION (Scrollable Fixed) -->
+  <!-- SIDEBAR NAVIGATION -->
   <aside class="w-72 bg-[#064e3b] text-emerald-100 flex flex-col justify-between hidden lg:flex shrink-0 h-screen sticky top-0 overflow-y-auto">
     <div>
-      <!-- Brand Header -->
       <div class="p-6 border-b border-emerald-900/50 sticky top-0 bg-[#064e3b] z-10">
         <h1 class="text-xl font-bold tracking-tight text-white">Yumilo Market</h1>
-        <p class="text-xs text-emerald-300 mt-0.5">Owner Command Center</p>
+        <p class="text-xs text-emerald-300 mt-0.5">Nationwide Owner Command Center</p>
       </div>
 
-      <!-- Nav Sections -->
       <nav class="p-4 space-y-6 text-sm font-medium">
-        <!-- Main Menu -->
         <div>
           <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Main</p>
           <div class="space-y-1">
-            <button onclick="switchView('overview')" id="nav-overview" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-emerald-700 text-white font-semibold transition cursor-pointer text-left">
-              <span>🏠</span>
-              <span>Overview</span>
-            </button>
-            <button onclick="switchView('orders')" id="nav-orders" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
-              <span>📦</span>
-              <span>Orders & delivery</span>
-            </button>
-            <button onclick="switchView('payments')" id="nav-payments" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
-              <span>💳</span>
-              <span>Payments & receipt review</span>
-            </button>
-            <button onclick="switchView('refunds')" id="nav-refunds" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
-              <span>↩️</span>
-              <span>Refund claims</span>
-            </button>
+            <button onclick="switchView('overview')" id="nav-overview" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-emerald-700 text-white font-semibold transition cursor-pointer text-left"><span>🏠</span><span>Overview</span></button>
+            <button onclick="switchView('orders')" id="nav-orders" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>📦</span><span>Orders & delivery</span></button>
+            <button onclick="switchView('payments')" id="nav-payments" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>💳</span><span>Payments & receipt review</span></button>
+            <button onclick="switchView('refunds')" id="nav-refunds" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>↩️</span><span>Refund claims</span></button>
           </div>
         </div>
 
-        <!-- Onboarding & Approvals -->
         <div>
           <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Onboarding & Approvals</p>
           <div class="space-y-1">
-            <button onclick="switchView('vendor-kyc')" id="nav-vendor-kyc" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
-              <span>🏢</span>
-              <span>Vendor applications & KYC</span>
-            </button>
-            <button onclick="switchView('courier-kyc')" id="nav-courier-kyc" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
-              <span>🚚</span>
-              <span>Courier applications & KYC</span>
-            </button>
-            <button onclick="switchView('listings')" id="nav-listings" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
-              <span>📋</span>
-              <span>Listing approvals</span>
-            </button>
+            <button onclick="switchView('vendor-kyc')" id="nav-vendor-kyc" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>🏢</span><span>Vendor applications & KYC</span></button>
+            <button onclick="switchView('courier-kyc')" id="nav-courier-kyc" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>🚚</span><span>Courier applications & KYC</span></button>
+            <button onclick="switchView('listings')" id="nav-listings" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>📋</span><span>Listing approvals</span></button>
           </div>
         </div>
 
-        <!-- Accounts -->
         <div>
           <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Accounts</p>
           <div class="space-y-1">
-            <button onclick="switchView('customers')" id="nav-customers" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
-              <span>👤</span>
-              <span>Customer accounts</span>
-            </button>
-            <button onclick="switchView('vendor-accounts')" id="nav-vendor-accounts" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
-              <span>👥</span>
-              <span>Vendor accounts & subs</span>
-            </button>
+            <button onclick="switchView('customers')" id="nav-customers" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>👤</span><span>Customer accounts</span></button>
+            <button onclick="switchView('vendor-accounts')" id="nav-vendor-accounts" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>👥</span><span>Vendor accounts & subs</span></button>
           </div>
         </div>
 
-        <!-- Support & Content -->
         <div>
           <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Support & Content</p>
           <div class="space-y-1">
-            <button onclick="switchView('support')" id="nav-support" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
-              <span>💬</span>
-              <span>Messages & support</span>
-            </button>
-            <button onclick="switchView('content')" id="nav-content" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left">
-              <span>📰</span>
-              <span>Marketplace content</span>
-            </button>
+            <button onclick="switchView('support')" id="nav-support" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>💬</span><span>Messages & support</span></button>
+            <button onclick="switchView('content')" id="nav-content" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>📰</span><span>Marketplace content</span></button>
           </div>
         </div>
 
-        <!-- Owner Controls -->
         <div>
           <p class="text-[10px] font-bold tracking-wider uppercase text-amber-300 mb-2 px-3 flex items-center gap-1">🔒 Owner Controls</p>
           <div class="space-y-1">
-            <button onclick="switchView('staff')" id="nav-staff" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
-              <span>Manage staff & permissions</span>
-              <span>🔒</span>
-            </button>
-            <button onclick="switchView('settings')" id="nav-settings" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
-              <span>Site settings & records</span>
-              <span>🔒</span>
-            </button>
-            <button onclick="switchView('finance')" id="nav-finance" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
-              <span>Finance & overrides</span>
-              <span>🔒</span>
-            </button>
-            <button onclick="switchView('audit')" id="nav-audit" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
-              <span>Audit log</span>
-              <span>🔒</span>
-            </button>
+            <button onclick="switchView('staff')" id="nav-staff" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left"><span>Manage staff & permissions</span><span>🔒</span></button>
+            <button onclick="switchView('settings')" id="nav-settings" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left"><span>Site settings & records</span><span>🔒</span></button>
+            <button onclick="switchView('finance')" id="nav-finance" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left"><span>Finance & overrides</span><span>🔒</span></button>
+            <button onclick="switchView('audit')" id="nav-audit" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left"><span>Audit log</span><span>🔒</span></button>
           </div>
         </div>
       </nav>
     </div>
 
-    <!-- Sidebar Footer Environment -->
     <div class="p-4 border-t border-emerald-900/50 text-[11px] text-emerald-300 space-y-1 bg-[#064e3b]">
       <p class="font-semibold text-white">Environment:</p>
-      <p>PRODUCTION • v2.2.0 • Ultimate Suite</p>
+      <p>PRODUCTION • Nationwide Zambia • v2.3.0</p>
     </div>
   </aside>
 
-  <!-- MAIN CONTENT WRAPPER -->
+  <!-- MAIN WRAPPER -->
   <div class="flex-1 flex flex-col min-w-0">
-    
-    <!-- TOP HEADER -->
     <header class="bg-white border-b border-gray-200 px-8 py-4 flex flex-wrap justify-between items-center gap-4">
       <div class="flex items-center space-x-4">
         <h2 class="text-xl font-bold text-gray-900">Yumilo Market</h2>
         <span id="pageTitle" class="text-lg font-medium text-gray-600">Owner Command Center</span>
       </div>
-
       <div class="flex items-center space-x-3">
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-900 text-white gap-1.5">
-          <span>🛡️</span> OWNER • FULL ACCESS
-        </span>
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 gap-1.5">
-          <span>🟢</span> LIVE PRODUCTION
-        </span>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-900 text-white gap-1.5"><span>🛡️</span> OWNER • FULL ACCESS</span>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 gap-1.5"><span>🟢</span> NATIONWIDE ZAMBIA</span>
         <div class="flex items-center space-x-2 pl-4 border-l border-gray-200">
           <span id="userName" class="text-sm font-medium text-gray-700">Yumilo Admin</span>
           <div class="w-8 h-8 rounded-full bg-emerald-800 text-white font-bold flex items-center justify-center text-xs">YA</div>
-          <button onclick="handleLogout()" class="ml-2 bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1.5 rounded font-medium transition cursor-pointer">
-            Logout
-          </button>
+          <button onclick="handleLogout()" class="ml-2 bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1.5 rounded font-medium transition cursor-pointer">Logout</button>
         </div>
       </div>
     </header>
 
-    <!-- MAIN DYNAMIC CONTENT CONTAINER -->
     <main id="mainContent" class="p-8 space-y-8 flex-1">
       <!-- Injected dynamically -->
     </main>
 
-    <!-- FOOTER DISCLAIMER -->
     <footer class="bg-white border-t border-gray-200 px-8 py-6 text-[11px] text-gray-500 leading-relaxed">
-      <p><strong class="text-gray-700">Permission boundaries:</strong> Only the Owner can create or deactivate staff and assign roles, change site settings, record board hiring or termination-related decisions, and perform finance controls and payment overrides. Managers may supervise or reassign workers, review escalations, and approve eligible claims with audit notes. Workers handle support, order tasks, and manual receipt checks. Vendor and courier approval and listing review are workflows. No direct money transfer, no automatic payouts, no escrow or refund guarantee.</p>
+      <p><strong class="text-gray-700">Permission boundaries:</strong> Only the Owner can create or deactivate staff, assign roles, change site settings, record board decisions, and perform finance controls and payment overrides. Nationwide operations across Zambia.</p>
     </footer>
-
   </div>
 
-  <!-- INTERACTIVE MODAL CONTAINER -->
+  <!-- MODAL -->
   <div id="actionModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
     <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4 border border-gray-200">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
         <h3 id="modalTitle" class="text-lg font-bold text-gray-900">Action Management</h3>
         <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-lg font-bold cursor-pointer">×</button>
       </div>
-      <div id="modalBody" class="text-sm text-gray-600 space-y-3">
-        <!-- Dynamic modal content -->
-      </div>
+      <div id="modalBody" class="text-sm text-gray-600 space-y-3"></div>
       <div class="flex justify-end space-x-3 pt-3 border-t border-gray-100">
         <button onclick="closeModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-lg transition cursor-pointer">Close</button>
         <button id="modalConfirmBtn" onclick="executeModalAction()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-lg transition cursor-pointer">Confirm Action</button>
@@ -185,7 +114,6 @@
     </div>
   </div>
 
-  <!-- APPLICATION LOGIC & VIEW CONTROLLER -->
   <script>
     const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
@@ -198,34 +126,18 @@
     let windowActiveConfirm = null;
     let currentUserEmail = 'henrymwansa16@gmail.com';
 
-    // Instant Logout
     async function handleLogout() {
-      try {
-        await supabaseClient.auth.signOut();
-      } catch (err) {
-        console.error("Logout error:", err);
-      }
-      localStorage.clear();
-      sessionStorage.clear();
+      try { await supabaseClient.auth.signOut(); } catch (err) {}
+      localStorage.clear(); sessionStorage.clear();
       window.location.href = 'login.html';
     }
 
-    // Automated Audit Logger Helper
     async function logAuditAction(actionType, description) {
       try {
-        await supabaseClient.from('audit_logs').insert([
-          {
-            action_type: actionType,
-            description: description,
-            actor: currentUserEmail
-          }
-        ]);
-      } catch (err) {
-        console.error("Failed to write audit log:", err);
-      }
+        await supabaseClient.from('audit_logs').insert([{ action_type: actionType, description: description, actor: currentUserEmail }]);
+      } catch (err) {}
     }
 
-    // View Switching Controller
     function switchView(viewId) {
       document.querySelectorAll('aside nav button').forEach(btn => {
         btn.classList.remove('bg-emerald-700', 'text-white', 'font-semibold');
@@ -241,12 +153,12 @@
       const title = document.getElementById('pageTitle');
 
       if (viewId === 'overview') {
-        title.textContent = 'Owner Command Center';
+        title.textContent = 'Nationwide Marketplace Overview';
         container.innerHTML = renderOverviewHTML();
         loadAdminData();
         loadAuditLogsOverview();
       } else if (viewId === 'orders') {
-        title.textContent = 'Orders & Delivery Management';
+        title.textContent = 'Orders & Nationwide Delivery Management';
         container.innerHTML = renderOrdersViewHTML();
         loadOrdersTable();
       } else if (viewId === 'payments') {
@@ -294,177 +206,73 @@
       }
     }
 
-    // HTML Templates for Views
     function renderOverviewHTML() {
       return `
         <div class="flex flex-wrap justify-between items-center gap-4">
-          <h3 class="text-2xl font-bold text-gray-900">Marketplace overview</h3>
-          
-          <!-- Calendar Date Range Filter -->
+          <h3 class="text-2xl font-bold text-gray-900">Nationwide operations overview</h3>
           <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-3 py-1.5 shadow-sm text-xs font-medium text-gray-700">
             <span>📅 Calendar:</span>
-            <input type="date" id="startDateInput" value="${startDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+            <input type="date" id="startDateInput" value="${startDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1">
             <span>to</span>
-            <input type="date" id="endDateInput" value="${endDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+            <input type="date" id="endDateInput" value="${endDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1">
             <button onclick="clearDateFilter()" class="text-red-600 hover:underline font-semibold ml-1 cursor-pointer">Reset</button>
           </div>
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <div onclick="switchView('orders')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-semibold text-gray-600">Orders needing review</span>
-              <span class="w-7 h-7 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center text-xs">⚠️</span>
-            </div>
+            <div class="flex justify-between items-start"><span class="text-xs font-semibold text-gray-600">Orders review</span><span class="w-7 h-7 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center text-xs">⚠️</span></div>
             <p id="statOrdersReview" class="text-3xl font-extrabold text-gray-900">0</p>
             <p class="text-[11px] text-gray-400">Awaiting action</p>
           </div>
           <div onclick="switchView('payments')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-semibold text-gray-600">Payment receipts</span>
-              <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center text-xs">📄</span>
-            </div>
+            <div class="flex justify-between items-start"><span class="text-xs font-semibold text-gray-600">Payment receipts</span><span class="w-7 h-7 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center text-xs">📄</span></div>
             <p id="statPaymentReceipts" class="text-3xl font-extrabold text-gray-900">0</p>
             <p class="text-[11px] text-gray-400">To review & verify</p>
           </div>
           <div onclick="switchView('vendor-kyc')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-semibold text-gray-600">Vendor applications</span>
-              <span class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs">👥</span>
-            </div>
+            <div class="flex justify-between items-start"><span class="text-xs font-semibold text-gray-600">Vendor apps</span><span class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs">👥</span></div>
             <p id="statApplications" class="text-3xl font-extrabold text-gray-900">0</p>
             <p class="text-[11px] text-gray-400">Pending KYC</p>
           </div>
           <div onclick="switchView('listings')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-semibold text-gray-600">Listing approvals</span>
-              <span class="w-7 h-7 rounded-full bg-purple-100 text-purple-800 flex items-center justify-center text-xs">📋</span>
-            </div>
+            <div class="flex justify-between items-start"><span class="text-xs font-semibold text-gray-600">Listing approvals</span><span class="w-7 h-7 rounded-full bg-purple-100 text-purple-800 flex items-center justify-center text-xs">📋</span></div>
             <p id="statListingApprovals" class="text-3xl font-extrabold text-gray-900">0</p>
             <p class="text-[11px] text-gray-400">In review</p>
           </div>
           <div onclick="switchView('support')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-semibold text-gray-600">Account issues</span>
-              <span class="w-7 h-7 rounded-full bg-red-100 text-red-800 flex items-center justify-center text-xs">🚨</span>
-            </div>
+            <div class="flex justify-between items-start"><span class="text-xs font-semibold text-gray-600">Account issues</span><span class="w-7 h-7 rounded-full bg-red-100 text-red-800 flex items-center justify-center text-xs">🚨</span></div>
             <p id="statAccountIssues" class="text-3xl font-extrabold text-gray-900">0</p>
             <p class="text-[11px] text-gray-400">Flagged accounts</p>
           </div>
         </div>
-
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col justify-between">
             <div>
               <div class="p-5 border-b border-gray-200 flex items-center justify-between">
-                <div>
-                  <h4 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                    Review queue <span>ⓘ</span>
-                  </h4>
-                  <p class="text-xs text-gray-500 mt-0.5">Pending items requiring owner/manual review</p>
-                </div>
-                <button onclick="loadAdminData()" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-md font-semibold text-gray-700 transition cursor-pointer">
-                  Refresh
-                </button>
+                <div><h4 class="text-base font-bold text-gray-900">Review queue</h4><p class="text-xs text-gray-500">Pending items requiring review across Zambia</p></div>
+                <button onclick="loadAdminData()" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-md font-semibold text-gray-700 cursor-pointer">Refresh</button>
               </div>
-
               <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr class="bg-gray-50 text-gray-500 font-bold uppercase tracking-wider border-b border-gray-200">
-                      <th class="py-3 px-4"># Reference</th>
-                      <th class="py-3 px-4">Type</th>
-                      <th class="py-3 px-4">Status</th>
-                      <th class="py-3 px-4">Submitted</th>
-                      <th class="py-3 px-4 text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody id="reviewQueueBody" class="divide-y divide-gray-200 text-gray-700">
-                    <tr><td colspan="5" class="text-center py-8 text-gray-400 font-medium">No pending items for selected calendar range.</td></tr>
-                  </tbody>
+                  <thead><tr class="bg-gray-50 text-gray-500 font-bold uppercase border-b"><th class="py-3 px-4"># Reference</th><th class="py-3 px-4">Type</th><th class="py-3 px-4">Status</th><th class="py-3 px-4">Submitted</th><th class="py-3 px-4 text-right">Action</th></tr></thead>
+                  <tbody id="reviewQueueBody" class="divide-y divide-gray-200 text-gray-700"><tr><td colspan="5" class="text-center py-8 text-gray-400">No pending items.</td></tr></tbody>
                 </table>
               </div>
             </div>
-            <div class="p-3 bg-gray-50 border-t border-gray-200 text-[11px] text-gray-500 flex items-center gap-2">
-              <span>🔒</span> Evidence: Private documents • review access — secured. No sensitive documents displayed.
-            </div>
+            <div class="p-3 bg-gray-50 border-t text-[11px] text-gray-500">🔒 Secure nationwide records — Confidential data.</div>
           </div>
-
           <div class="space-y-6">
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
-              <h4 class="text-sm font-bold text-gray-900 flex items-center gap-2">📊 Operational snapshot</h4>
-              <p class="text-xs text-gray-500">Live order progress</p>
+              <h4 class="text-sm font-bold text-gray-900">📊 Operational snapshot</h4>
               <div class="space-y-3 text-xs">
-                <div>
-                  <div class="flex justify-between mb-1 font-semibold text-gray-700">
-                    <span>Pending</span>
-                    <span id="snapshotPending">0 orders</span>
-                  </div>
-                  <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                    <div id="barPending" class="bg-amber-500 h-full w-[0%] transition-all"></div>
-                  </div>
-                </div>
-                <div>
-                  <div class="flex justify-between mb-1 font-semibold text-gray-700">
-                    <span>In transit</span>
-                    <span id="snapshotTransit">0 orders</span>
-                  </div>
-                  <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                    <div id="barTransit" class="bg-blue-500 h-full w-[0%] transition-all"></div>
-                  </div>
-                </div>
-                <div>
-                  <div class="flex justify-between mb-1 font-semibold text-gray-700">
-                    <span>Completed</span>
-                    <span id="snapshotCompleted">0 orders</span>
-                  </div>
-                  <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                    <div id="barCompleted" class="bg-emerald-600 h-full w-[0%] transition-all"></div>
-                  </div>
-                </div>
+                <div><div class="flex justify-between mb-1 font-semibold text-gray-700"><span>Pending</span><span id="snapshotPending">0 orders</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div id="barPending" class="bg-amber-500 h-full w-[0%]"></div></div></div>
+                <div><div class="flex justify-between mb-1 font-semibold text-gray-700"><span>In transit</span><span id="snapshotTransit">0 orders</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div id="barTransit" class="bg-blue-500 h-full w-[0%]"></div></div></div>
+                <div><div class="flex justify-between mb-1 font-semibold text-gray-700"><span>Completed</span><span id="snapshotCompleted">0 orders</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div id="barCompleted" class="bg-emerald-600 h-full w-[0%]"></div></div></div>
               </div>
-              <p class="text-[11px] text-gray-400 pt-2 border-t border-gray-100">No automatic payouts. Manual verification required.</p>
             </div>
-
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
-              <h4 class="text-sm font-bold text-gray-900 flex items-center gap-2">🕒 Recent audit activity</h4>
-              <div id="auditActivityBody" class="space-y-3 text-xs">
-                <p class="text-gray-400 text-center py-2 font-medium">Loading audit trail...</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-[#fbf9f5] rounded-xl border border-amber-200/60 p-6 space-y-4">
-          <div>
-            <h4 class="text-base font-bold text-gray-900">Owner controls</h4>
-            <p class="text-xs text-gray-500">Sensitive actions — Owner only access</p>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            <div onclick="switchView('staff')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
-              <div class="text-xl">🛡️</div>
-              <h5 class="text-xs font-bold text-gray-900">Manage staff & permissions</h5>
-              <p class="text-[11px] text-gray-500">Create/deactivate staff, assign roles (Owner only)</p>
-            </div>
-            <div onclick="switchView('settings')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
-              <div class="text-xl">⚙️</div>
-              <h5 class="text-xs font-bold text-gray-900">Site settings</h5>
-              <p class="text-[11px] text-gray-500">Update policies & site config (Owner only)</p>
-            </div>
-            <div onclick="switchView('audit')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
-              <div class="text-xl">🔨</div>
-              <h5 class="text-xs font-bold text-gray-900">Record Board decision</h5>
-              <p class="text-[11px] text-gray-500">Log hiring/termination decisions (Owner only)</p>
-            </div>
-            <div onclick="switchView('finance')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
-              <div class="text-xl">🔒</div>
-              <h5 class="text-xs font-bold text-gray-900">Finance & overrides</h5>
-              <p class="text-[11px] text-gray-500">Review payments & perform overrides (Owner only)</p>
-            </div>
-            <div onclick="switchView('audit')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
-              <div class="text-xl">📋</div>
-              <h5 class="text-xs font-bold text-gray-900">Audit history</h5>
-              <p class="text-[11px] text-gray-500">View full audit log (Owner only)</p>
+              <h4 class="text-sm font-bold text-gray-900">🕒 Recent audit activity</h4>
+              <div id="auditActivityBody" class="space-y-3 text-xs"><p class="text-gray-400 text-center py-2">Loading...</p></div>
             </div>
           </div>
         </div>
@@ -475,37 +283,20 @@
       return `
         <div class="space-y-6">
           <div class="flex flex-wrap justify-between items-center gap-4">
-            <div>
-              <h3 class="text-2xl font-bold text-gray-900">Orders & Delivery Management</h3>
-              <p class="text-xs text-gray-500">Manage all customer purchases and escrow fulfillment.</p>
-            </div>
-            
-            <!-- Calendar Date Range Filter for Orders -->
+            <div><h3 class="text-2xl font-bold text-gray-900">Orders & Nationwide Delivery</h3><p class="text-xs text-gray-500">Manage customer purchases and escrow fulfillment across all provinces.</p></div>
             <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-3 py-1.5 shadow-sm text-xs font-medium text-gray-700">
               <span>📅 Calendar:</span>
-              <input type="date" id="startDateInput" value="${startDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+              <input type="date" id="startDateInput" value="${startDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1">
               <span>to</span>
-              <input type="date" id="endDateInput" value="${endDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+              <input type="date" id="endDateInput" value="${endDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1">
               <button onclick="clearDateFilter()" class="text-red-600 hover:underline font-semibold ml-1 cursor-pointer">Reset</button>
             </div>
           </div>
-
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse text-sm">
-                <thead>
-                  <tr class="bg-gray-50 text-gray-500 font-bold uppercase tracking-wider border-b border-gray-200 text-xs">
-                    <th class="py-3 px-6">Order ID</th>
-                    <th class="py-3 px-6">Delivery Location</th>
-                    <th class="py-3 px-6">Total Amount</th>
-                    <th class="py-3 px-6">Payment / Status</th>
-                    <th class="py-3 px-6">Date</th>
-                    <th class="py-3 px-6 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="fullOrdersTableBody" class="divide-y divide-gray-200 text-gray-700">
-                  <tr><td colspan="6" class="text-center py-12 text-gray-400">Loading orders from database...</td></tr>
-                </tbody>
+                <thead><tr class="bg-gray-50 text-gray-500 font-bold uppercase border-b text-xs"><th class="py-3 px-6">Order ID</th><th class="py-3 px-6">Province / City</th><th class="py-3 px-6">Total Amount</th><th class="py-3 px-6">Status</th><th class="py-3 px-6">Date</th><th class="py-3 px-6 text-right">Actions</th></tr></thead>
+                <tbody id="fullOrdersTableBody" class="divide-y divide-gray-200 text-gray-700"><tr><td colspan="6" class="text-center py-12 text-gray-400">Loading orders...</td></tr></tbody>
               </table>
             </div>
           </div>
@@ -513,44 +304,18 @@
       `;
     }
 
-    // Staff Management HTML Template
     function renderStaffManagementHTML() {
       return `
         <div class="space-y-6">
           <div class="flex justify-between items-center">
-            <div>
-              <h3 class="text-2xl font-bold text-gray-900">Manage Staff & Permissions</h3>
-              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Create staff accounts, set passwords, and assign roles.</p>
-            </div>
-            <div class="flex items-center gap-3">
-              <button onclick="openCreateStaffModal()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer flex items-center gap-1.5">
-                <span>➕</span> Create New Staff Account
-              </button>
-              <button onclick="loadStaffTable()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-2 rounded-lg transition cursor-pointer">
-                Refresh Staff List
-              </button>
-            </div>
+            <div><h3 class="text-2xl font-bold text-gray-900">Manage Staff & Permissions</h3><p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Create staff accounts and assign roles.</p></div>
+            <button onclick="openCreateStaffModal()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer">➕ Create Staff Account</button>
           </div>
-
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-            <div class="p-5 border-b border-gray-200 flex justify-between items-center">
-              <h4 class="text-base font-bold text-gray-800">Active Staff & User Profiles</h4>
-              <span class="text-xs text-gray-400">Manage permissions or create new logins</span>
-            </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse text-sm">
-                <thead>
-                  <tr class="bg-gray-50 text-gray-500 font-bold uppercase tracking-wider border-b border-gray-200 text-xs">
-                    <th class="py-3 px-6">Name</th>
-                    <th class="py-3 px-6">User ID</th>
-                    <th class="py-3 px-6">Assigned Role</th>
-                    <th class="py-3 px-6">Last Updated</th>
-                    <th class="py-3 px-6 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="staffTableBody" class="divide-y divide-gray-200 text-gray-700">
-                  <tr><td colspan="5" class="text-center py-12 text-gray-400">Loading staff records...</td></tr>
-                </tbody>
+                <thead><tr class="bg-gray-50 text-gray-500 font-bold uppercase border-b text-xs"><th class="py-3 px-6">Name</th><th class="py-3 px-6">User ID</th><th class="py-3 px-6">Role</th><th class="py-3 px-6">Updated</th><th class="py-3 px-6 text-right">Actions</th></tr></thead>
+                <tbody id="staffTableBody" class="divide-y divide-gray-200 text-gray-700"><tr><td colspan="5" class="text-center py-12 text-gray-400">Loading staff...</td></tr></tbody>
               </table>
             </div>
           </div>
@@ -558,14 +323,14 @@
       `;
     }
 
-    // Ultimate Comprehensive Site Settings View HTML Template
+    // Ultimate Site Settings View with Nationwide Defaults & Live Policy URLs
     function renderSiteSettingsHTML() {
       return `
         <div class="space-y-6 max-w-4xl mx-auto">
           <div class="flex justify-between items-center">
             <div>
               <h3 class="text-2xl font-bold text-gray-900">Site Settings & Records</h3>
-              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Ultimate platform config: Delivery zones, vendor offline alerts, payout thresholds, and legal policies.</p>
+              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Nationwide config: Zambia delivery zones, vendor alerts, payout rules, and policy URLs.</p>
             </div>
           </div>
 
@@ -578,16 +343,16 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Store Name</label>
-                    <input type="text" id="settingStoreName" value="Yumilo Market" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="text" id="settingStoreName" value="Yumilo Market" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Support Email Address</label>
-                    <input type="email" id="settingEmail" value="support@yumilomarket.store" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="email" id="settingEmail" value="support@yumilomarket.store" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                 </div>
                 <div>
                   <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Live Homepage Announcement Ticker (Marquee Banner)</label>
-                  <input type="text" id="settingTicker" placeholder="e.g. 🔥 Special Broiler Feed & Chick Combo Promo in Mansa!" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  <input type="text" id="settingTicker" value="🔥 Welcome to Yumilo Market - Nationwide Delivery Across Zambia!" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                 </div>
               </div>
 
@@ -597,43 +362,43 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Currency Symbol</label>
-                    <input type="text" id="settingCurrency" value="ZMW (K)" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="text" id="settingCurrency" value="ZMW (K)" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Platform Fee (%)</label>
-                    <input type="number" step="0.1" id="settingFee" value="5.0" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="number" step="0.1" id="settingFee" value="5.0" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tax / VAT Rate (%)</label>
-                    <input type="number" step="0.1" id="settingTax" value="0.0" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="number" step="0.1" id="settingTax" value="0.0" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Min Vendor Payout (K)</label>
-                    <input type="number" step="1" id="settingMinPayout" value="500" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="number" step="1" id="settingMinPayout" value="500" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                 </div>
                 <div>
                   <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Merchant Mobile Money / Payout Number (MTN/Airtel)</label>
-                  <input type="text" id="settingMobileMoney" placeholder="e.g. 097... / 096..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  <input type="text" id="settingMobileMoney" placeholder="e.g. 097... / 096..." class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                 </div>
               </div>
 
-              <!-- Delivery Zones & Order Rules -->
+              <!-- Nationwide Delivery Zones & Order Rules -->
               <div class="space-y-4">
-                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">📦 Regional Delivery Zones & Order Rules</h4>
+                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">📦 Nationwide Delivery Zones & Order Rules</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Default Local Delivery Fee (K)</label>
-                    <input type="number" step="1" id="settingDeliveryFee" value="50" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Default Base Delivery Fee (K)</label>
+                    <input type="number" step="1" id="settingDeliveryFee" value="100" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Minimum Order Amount (K)</label>
-                    <input type="number" step="1" id="settingMinOrder" value="100" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="number" step="1" id="settingMinOrder" value="100" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                 </div>
                 <div>
-                  <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Delivery Zones & Pricing Rules</label>
-                  <input type="text" id="settingDeliveryZones" placeholder="e.g. Mansa Central: K50, Peri-Urban: K80, Rural: K150" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Provincial Delivery Zones & Pricing</label>
+                  <input type="text" id="settingDeliveryZones" value="Lusaka & Copperbelt Hub: K100, Other Provinces: K180, Local Pickup: Free" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                 </div>
               </div>
 
@@ -643,7 +408,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label class="block text-xs font-bold text-emerald-900 uppercase mb-1">SMS / WhatsApp Gateway Provider</label>
-                    <input type="text" id="settingGateway" placeholder="e.g. Africa's Talking / Twilio API" class="w-full px-3 py-2 border border-emerald-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="text" id="settingGateway" value="Africa's Talking / Twilio API" class="w-full px-3 py-2 border border-emerald-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                   <div>
                     <label class="block text-xs font-bold text-emerald-900 uppercase mb-1">Vendor Alert Notification Channel</label>
@@ -656,25 +421,25 @@
                   </div>
                 </div>
                 <p class="text-[11px] text-emerald-700 leading-relaxed">
-                  <strong>Automatic Trigger:</strong> If a vendor is offline or fails to acknowledge a new order within 15 minutes, the system automatically dispatches an instant WhatsApp message and SMS containing the order details, customer phone number, and delivery address.
+                  <strong>Automatic Trigger:</strong> If a vendor is offline or fails to acknowledge a new order within 15 minutes, the system automatically dispatches an instant WhatsApp message and SMS containing the order details, customer phone number, and delivery province.
                 </p>
               </div>
 
-              <!-- Legal & Compliance URLs -->
+              <!-- Legal & Compliance URLs (Linked to our new files) -->
               <div class="space-y-4">
                 <h4 class="text-sm font-bold text-gray-900 border-b pb-2">⚖️ Legal Compliance & Policy URLs</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Terms of Service URL</label>
-                    <input type="text" id="settingTermsUrl" placeholder="https://..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="text" id="settingTermsUrl" value="https://www.yumilomarket.store/terms.html" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Privacy Policy URL</label>
-                    <input type="text" id="settingPrivacyUrl" placeholder="https://..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="text" id="settingPrivacyUrl" value="https://www.yumilomarket.store/privacy.html" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Refund Policy URL</label>
-                    <input type="text" id="settingRefundUrl" placeholder="https://..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    <input type="text" id="settingRefundUrl" value="https://www.yumilomarket.store/refund.html" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                 </div>
               </div>
@@ -685,7 +450,7 @@
                 <div class="space-y-3">
                   <div class="flex items-center space-x-3">
                     <input type="checkbox" id="settingStoreOpen" class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500" checked>
-                    <label class="text-xs font-bold text-gray-700 uppercase">Store Open for Live Customer Orders</label>
+                    <label class="text-xs font-bold text-gray-700 uppercase">Store Open for Live Nationwide Orders</label>
                   </div>
                   <div class="flex items-center space-x-3">
                     <input type="checkbox" id="settingMaintenance" class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
@@ -695,9 +460,7 @@
               </div>
 
               <div class="pt-6 border-t border-gray-100 flex justify-end">
-                <button type="submit" id="saveSettingsBtn" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-2.5 rounded-lg text-xs transition cursor-pointer">
-                  Save All Site Settings
-                </button>
+                <button type="submit" id="saveSettingsBtn" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-2.5 rounded-lg text-xs transition cursor-pointer">Save All Site Settings</button>
               </div>
             </form>
           </div>
@@ -705,34 +468,18 @@
       `;
     }
 
-    // Full Audit Log View HTML Template
     function renderAuditLogViewHTML() {
       return `
         <div class="space-y-6">
           <div class="flex justify-between items-center">
-            <div>
-              <h3 class="text-2xl font-bold text-gray-900">Immutable Audit History Log</h3>
-              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Complete recorded history of all administrative actions.</p>
-            </div>
-            <button onclick="loadFullAuditTable()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
-              Refresh Audit Trail
-            </button>
+            <div><h3 class="text-2xl font-bold text-gray-900">Immutable Audit History Log</h3><p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Complete recorded history of all administrative actions.</p></div>
+            <button onclick="loadFullAuditTable()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer">Refresh Audit Trail</button>
           </div>
-
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse text-sm">
-                <thead>
-                  <tr class="bg-gray-50 text-gray-500 font-bold uppercase tracking-wider border-b border-gray-200 text-xs">
-                    <th class="py-3 px-6">Action Type</th>
-                    <th class="py-3 px-6">Description</th>
-                    <th class="py-3 px-6">Actor</th>
-                    <th class="py-3 px-6">Timestamp</th>
-                  </tr>
-                </thead>
-                <tbody id="fullAuditTableBody" class="divide-y divide-gray-200 text-gray-700">
-                  <tr><td colspan="4" class="text-center py-12 text-gray-400">Loading audit trail...</td></tr>
-                </tbody>
+                <thead><tr class="bg-gray-50 text-gray-500 font-bold uppercase border-b text-xs"><th class="py-3 px-6">Action Type</th><th class="py-3 px-6">Description</th><th class="py-3 px-6">Actor</th><th class="py-3 px-6">Timestamp</th></tr></thead>
+                <tbody id="fullAuditTableBody" class="divide-y divide-gray-200 text-gray-700"><tr><td colspan="4" class="text-center py-12 text-gray-400">Loading audit trail...</td></tr></tbody>
               </table>
             </div>
           </div>
@@ -744,19 +491,12 @@
       return `
         <div class="space-y-6">
           <div class="flex justify-between items-center">
-            <div>
-              <h3 class="text-2xl font-bold text-gray-900">${title}</h3>
-              <p class="text-xs text-gray-500">${subtitle}</p>
-            </div>
-            <button onclick="openGenericModal('${title}')" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
-              + Record Action / Note
-            </button>
+            <div><h3 class="text-2xl font-bold text-gray-900">${title}</h3><p class="text-xs text-gray-500">${subtitle}</p></div>
+            <button onclick="openGenericModal('${title}')" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer">+ Record Action</button>
           </div>
-
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-12 text-center space-y-3">
-            <div class="text-4xl">📂</div>
-            <h4 class="text-base font-bold text-gray-800">No active records found in ${title}</h4>
-            <p class="text-xs text-gray-500 max-w-md mx-auto">This queue is currently clean. Incoming submissions from users or system triggers will appear here in real-time.</p>
+            <div class="text-4xl">📂</div><h4 class="text-base font-bold text-gray-800">No active records in ${title}</h4>
+            <p class="text-xs text-gray-500 max-w-md mx-auto">This queue is clean. Incoming submissions from across Zambia will appear here in real-time.</p>
           </div>
         </div>
       `;
@@ -766,27 +506,18 @@
       return `
         <div class="space-y-6">
           <div class="flex justify-between items-center">
-            <div>
-              <h3 class="text-2xl font-bold text-gray-900">${title}</h3>
-              <p class="text-xs text-amber-700 font-medium">🔒 Restricted Access — Owner Authorization Required</p>
-            </div>
-            <button onclick="openGenericModal('${title}')" class="bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
-              Configure & Execute
-            </button>
+            <div><h3 class="text-2xl font-bold text-gray-900">${title}</h3><p class="text-xs text-amber-700 font-medium">🔒 Restricted Access — Owner Authorization Required</p></div>
+            <button onclick="openGenericModal('${title}')" class="bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer">Configure & Execute</button>
           </div>
-
           <div class="bg-white rounded-xl border border-amber-200 shadow-sm p-8 space-y-4">
             <h4 class="text-sm font-bold text-gray-900">System Parameters & Security Logs</h4>
             <p class="text-xs text-gray-600">${subtitle}</p>
-            <div class="p-4 bg-amber-50 rounded-lg border border-amber-100 text-xs text-amber-900">
-              <strong>Audit Notice:</strong> All administrative modifications executed in this section are permanently recorded in the immutable database audit trail.
-            </div>
+            <div class="p-4 bg-amber-50 rounded-lg border border-amber-100 text-xs text-amber-900"><strong>Audit Notice:</strong> All administrative modifications are permanently recorded.</div>
           </div>
         </div>
       `;
     }
 
-    // Modal Controller
     function openModal(title, contentHTML, confirmCallback) {
       document.getElementById('modalTitle').textContent = title;
       document.getElementById('modalBody').innerHTML = contentHTML;
@@ -801,562 +532,166 @@
     }
 
     function executeModalAction() {
-      if (typeof windowActiveConfirm === 'function') {
-        windowActiveConfirm();
-      }
+      if (typeof windowActiveConfirm === 'function') windowActiveConfirm();
     }
 
-    function openGenericModal(actionName) {
-      openModal(
-        `Execute: ${actionName}`,
-        `<p class="text-xs text-gray-600">Provide administrative note or parameters for <strong>${actionName}</strong>:</p>
-         <textarea id="modalInputNote" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-emerald-600 focus:outline-none" rows="3" placeholder="Enter audit note or reason..."></textarea>`,
-        async () => {
-          await logAuditAction('Generic Action', `Executed action for ${actionName}`);
-          alert(`Successfully executed action for ${actionName}. Recorded in audit log.`);
-          closeModal();
-        }
-      );
-    }
-
-    // Load Site Settings into Form with ultimate advanced fields
     async function loadSiteSettings() {
       try {
-        const { data, error } = await supabaseClient
-          .from('site_settings')
-          .select('*')
-          .eq('id', 1)
-          .single();
-
-        if (error) {
-          console.warn("site_settings table might not be created yet. Using defaults.");
-          return;
-        }
-
+        const { data, error } = await supabaseClient.from('site_settings').select('*').eq('id', 1).single();
+        if (error) return;
         if (data) {
-          const nameEl = document.getElementById('settingStoreName');
-          const currEl = document.getElementById('settingCurrency');
-          const feeEl = document.getElementById('settingFee');
-          const taxEl = document.getElementById('settingTax');
-          const momoEl = document.getElementById('settingMobileMoney');
-          const delFeeEl = document.getElementById('settingDeliveryFee');
-          const minOrdEl = document.getElementById('settingMinOrder');
-          const zonesEl = document.getElementById('settingDeliveryZones');
-          const gatewayEl = document.getElementById('settingGateway');
-          const alertMethodEl = document.getElementById('settingVendorAlertMethod');
-          const minPayoutEl = document.getElementById('settingMinPayout');
-          const termsEl = document.getElementById('settingTermsUrl');
-          const privacyEl = document.getElementById('settingPrivacyUrl');
-          const refundEl = document.getElementById('settingRefundUrl');
-          const tickerEl = document.getElementById('settingTicker');
-          const openEl = document.getElementById('settingStoreOpen');
-          const emailEl = document.getElementById('settingEmail');
-          const maintEl = document.getElementById('settingMaintenance');
-
-          if (nameEl) nameEl.value = data.store_name || 'Yumilo Market';
-          if (currEl) currEl.value = data.currency || 'ZMW (K)';
-          if (feeEl) feeEl.value = data.platform_fee_percent ?? 5.0;
-          if (taxEl) taxEl.value = data.tax_rate_percent ?? 0.0;
-          if (momoEl) momoEl.value = data.merchant_mobile_money || '';
-          if (delFeeEl) delFeeEl.value = data.delivery_fee ?? 50;
-          if (minOrdEl) minOrdEl.value = data.min_order_amount ?? 100;
-          if (zonesEl) zonesEl.value = data.delivery_zones || '';
-          if (gatewayEl) gatewayEl.value = data.notification_gateway || '';
-          if (alertMethodEl) alertMethodEl.value = data.vendor_alert_method || 'WhatsApp & SMS';
-          if (minPayoutEl) minPayoutEl.value = data.min_vendor_payout ?? 500;
-          if (termsEl) termsEl.value = data.terms_url || '';
-          if (privacyEl) privacyEl.value = data.privacy_url || '';
-          if (refundEl) refundEl.value = data.refund_url || '';
-          if (tickerEl) tickerEl.value = data.announcement_ticker || '';
-          if (openEl) openEl.checked = data.store_open !== false;
-          if (emailEl) emailEl.value = data.support_email || 'support@yumilomarket.store';
-          if (maintEl) maintEl.checked = !!data.maintenance_mode;
+          document.getElementById('settingStoreName').value = data.store_name || 'Yumilo Market';
+          document.getElementById('settingCurrency').value = data.currency || 'ZMW (K)';
+          document.getElementById('settingFee').value = data.platform_fee_percent ?? 5.0;
+          document.getElementById('settingTax').value = data.tax_rate_percent ?? 0.0;
+          document.getElementById('settingMobileMoney').value = data.merchant_mobile_money || '';
+          document.getElementById('settingDeliveryFee').value = data.delivery_fee ?? 100;
+          document.getElementById('settingMinOrder').value = data.min_order_amount ?? 100;
+          document.getElementById('settingDeliveryZones').value = data.delivery_zones || 'Lusaka & Copperbelt Hub: K100, Other Provinces: K180, Local Pickup: Free';
+          document.getElementById('settingGateway').value = data.notification_gateway || "Africa's Talking / Twilio API";
+          document.getElementById('settingVendorAlertMethod').value = data.vendor_alert_method || 'WhatsApp & SMS';
+          document.getElementById('settingMinPayout').value = data.min_vendor_payout ?? 500;
+          document.getElementById('settingTermsUrl').value = data.terms_url || 'https://www.yumilomarket.store/terms.html';
+          document.getElementById('settingPrivacyUrl').value = data.privacy_url || 'https://www.yumilomarket.store/privacy.html';
+          document.getElementById('settingRefundUrl').value = data.refund_url || 'https://www.yumilomarket.store/refund.html';
+          document.getElementById('settingTicker').value = data.announcement_ticker || '🔥 Welcome to Yumilo Market - Nationwide Delivery Across Zambia!';
+          document.getElementById('settingStoreOpen').checked = data.store_open !== false;
+          document.getElementById('settingEmail').value = data.support_email || 'support@yumilomarket.store';
+          document.getElementById('settingMaintenance').checked = !!data.maintenance_mode;
         }
-      } catch (err) {
-        console.error("Error loading site settings:", err);
-      }
+      } catch (err) {}
     }
 
-    // Save Ultimate Site Settings to Database
     async function saveSiteSettings(e) {
       e.preventDefault();
-      const storeName = document.getElementById('settingStoreName').value.trim();
-      const currency = document.getElementById('settingCurrency').value.trim();
-      const fee = parseFloat(document.getElementById('settingFee').value);
-      const tax = parseFloat(document.getElementById('settingTax').value);
-      const momo = document.getElementById('settingMobileMoney').value.trim();
-      const deliveryFee = parseFloat(document.getElementById('settingDeliveryFee').value);
-      const minOrder = parseFloat(document.getElementById('settingMinOrder').value);
-      const deliveryZones = document.getElementById('settingDeliveryZones').value.trim();
-      const gateway = document.getElementById('settingGateway').value.trim();
-      const vendorAlertMethod = document.getElementById('settingVendorAlertMethod').value;
-      const minPayout = parseFloat(document.getElementById('settingMinPayout').value);
-      const termsUrl = document.getElementById('settingTermsUrl').value.trim();
-      const privacyUrl = document.getElementById('settingPrivacyUrl').value.trim();
-      const refundUrl = document.getElementById('settingRefundUrl').value.trim();
-      const ticker = document.getElementById('settingTicker').value.trim();
-      const storeOpen = document.getElementById('settingStoreOpen').checked;
-      const email = document.getElementById('settingEmail').value.trim();
-      const maintenance = document.getElementById('settingMaintenance').checked;
-
       const btn = document.getElementById('saveSettingsBtn');
-      if (btn) {
-        btn.textContent = 'Saving...';
-        btn.disabled = true;
-      }
+      if (btn) { btn.textContent = 'Saving...'; btn.disabled = true; }
 
       try {
-        const { error } = await supabaseClient
-          .from('site_settings')
-          .upsert({
-            id: 1,
-            store_name: storeName,
-            currency: currency,
-            platform_fee_percent: fee,
-            tax_rate_percent: tax,
-            merchant_mobile_money: momo,
-            delivery_fee: deliveryFee,
-            min_order_amount: minOrder,
-            delivery_zones: deliveryZones,
-            notification_gateway: gateway,
-            vendor_alert_method: vendorAlertMethod,
-            min_vendor_payout: minPayout,
-            terms_url: termsUrl,
-            privacy_url: privacyUrl,
-            refund_url: refundUrl,
-            announcement_ticker: ticker,
-            store_open: storeOpen,
-            support_email: email,
-            maintenance_mode: maintenance,
-            updated_at: new Date().toISOString()
-          });
+        const { error } = await supabaseClient.from('site_settings').upsert({
+          id: 1,
+          store_name: document.getElementById('settingStoreName').value.trim(),
+          currency: document.getElementById('settingCurrency').value.trim(),
+          platform_fee_percent: parseFloat(document.getElementById('settingFee').value),
+          tax_rate_percent: parseFloat(document.getElementById('settingTax').value),
+          merchant_mobile_money: document.getElementById('settingMobileMoney').value.trim(),
+          delivery_fee: parseFloat(document.getElementById('settingDeliveryFee').value),
+          min_order_amount: parseFloat(document.getElementById('settingMinOrder').value),
+          delivery_zones: document.getElementById('settingDeliveryZones').value.trim(),
+          notification_gateway: document.getElementById('settingGateway').value.trim(),
+          vendor_alert_method: document.getElementById('settingVendorAlertMethod').value,
+          min_vendor_payout: parseFloat(document.getElementById('settingMinPayout').value),
+          terms_url: document.getElementById('settingTermsUrl').value.trim(),
+          privacy_url: document.getElementById('settingPrivacyUrl').value.trim(),
+          refund_url: document.getElementById('settingRefundUrl').value.trim(),
+          announcement_ticker: document.getElementById('settingTicker').value.trim(),
+          store_open: document.getElementById('settingStoreOpen').checked,
+          support_email: document.getElementById('settingEmail').value.trim(),
+          maintenance_mode: document.getElementById('settingMaintenance').checked,
+          updated_at: new Date().toISOString()
+        });
 
         if (error) throw error;
-
-        await logAuditAction('Site Settings Updated', `Updated ultimate settings: delivery zones, vendor offline alerts, payout rules, and legal links.`);
-        alert('All ultimate site settings updated and saved successfully!');
+        await logAuditAction('Site Settings Updated', `Updated nationwide platform configurations.`);
+        alert('All nationwide site settings updated and saved successfully!');
       } catch (err) {
         alert('Failed to save settings: ' + (err.message || err));
       } finally {
-        if (btn) {
-          btn.textContent = 'Save All Site Settings';
-          btn.disabled = false;
-        }
+        if (btn) { btn.textContent = 'Save All Site Settings'; btn.disabled = false; }
       }
     }
 
-    // Create New Staff Account Modal & Execution
     function openCreateStaffModal() {
       openModal(
         'Create New Staff Account',
         `<div class="space-y-3 text-xs">
-           <div>
-             <label class="block font-bold text-gray-700 mb-1">Full Name</label>
-             <input type="text" id="newStaffName" placeholder="e.g. John Banda" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
-           </div>
-           <div>
-             <label class="block font-bold text-gray-700 mb-1">Email Address</label>
-             <input type="email" id="newStaffEmail" placeholder="staff@yumilomarket.store" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
-           </div>
-           <div>
-             <label class="block font-bold text-gray-700 mb-1">Password</label>
-             <input type="password" id="newStaffPassword" placeholder="Minimum 6 characters" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
-           </div>
-           <div>
-             <label class="block font-bold text-gray-700 mb-1">Assign Role</label>
-             <select id="newStaffRole" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
-               <option value="manager">Manager (Supervise, reassign, approve claims)</option>
-               <option value="worker">Worker (Support, order tasks, receipt checks)</option>
-               <option value="admin">Admin (Full operational access)</option>
-             </select>
-           </div>
+           <div><label class="block font-bold mb-1">Full Name</label><input type="text" id="newStaffName" placeholder="e.g. John Banda" class="w-full border p-2.5 rounded-lg"></div>
+           <div><label class="block font-bold mb-1">Email</label><input type="email" id="newStaffEmail" placeholder="staff@yumilomarket.store" class="w-full border p-2.5 rounded-lg"></div>
+           <div><label class="block font-bold mb-1">Password</label><input type="password" id="newStaffPassword" placeholder="Min 6 characters" class="w-full border p-2.5 rounded-lg"></div>
+           <div><label class="block font-bold mb-1">Role</label><select id="newStaffRole" class="w-full border p-2.5 rounded-lg"><option value="manager">Manager</option><option value="worker">Worker</option><option value="admin">Admin</option></select></div>
          </div>`,
         async () => {
           const name = document.getElementById('newStaffName').value.trim();
           const email = document.getElementById('newStaffEmail').value.trim();
           const password = document.getElementById('newStaffPassword').value;
           const role = document.getElementById('newStaffRole').value;
-
-          if (!name || !email || !password) {
-            alert('Please fill out all required fields.');
-            return;
-          }
-
+          if (!name || !email || !password) { alert('Fill all fields.'); return; }
           try {
-            const tempClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-              auth: { persistSession: false }
-            });
-
-            const { data, error } = await tempClient.auth.signUp({
-              email: email,
-              password: password,
-              options: { data: { full_name: name } }
-            });
-
+            const tempClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: false } });
+            const { data, error } = await tempClient.auth.signUp({ email, password, options: { data: { full_name: name } } });
             if (error) throw error;
-
             if (data.user) {
-              const { error: profileError } = await supabaseClient
-                .from('profiles')
-                .upsert({ id: data.user.id, full_name: name, role: role });
-
-              if (profileError) throw profileError;
-
-              await logAuditAction('Staff Created', `Created staff account for ${name} (${email}) with role: ${role}`);
-
-              alert(`Staff account for ${name} (${email}) created successfully!`);
-              closeModal();
-              loadStaffTable();
+              await supabaseClient.from('profiles').upsert({ id: data.user.id, full_name: name, role: role });
+              await logAuditAction('Staff Created', `Created staff for ${name} (${role})`);
+              alert(`Staff account created successfully!`);
+              closeModal(); loadStaffTable();
             }
-          } catch (err) {
-            alert('Error creating staff account: ' + (err.message || err));
-          }
+          } catch (err) { alert('Error: ' + err.message); }
         }
       );
     }
 
-    // Edit Staff Role Modal & Execution
     function editStaffRoleModal(userId, currentName, currentRole) {
       openModal(
         `Edit Permissions: ${currentName || 'User'}`,
         `<div class="space-y-3 text-xs">
-           <p><strong>User ID:</strong> <span class="font-mono text-gray-500">${userId}</span></p>
-           <div>
-             <label class="block font-bold text-gray-700 mb-1">Select New Role / Permission</label>
-             <select id="editStaffRoleSelect" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
-               <option value="super_admin" ${currentRole === 'super_admin' ? 'selected' : ''}>Super Admin (Full Owner Access)</option>
-               <option value="manager" ${currentRole === 'manager' ? 'selected' : ''}>Manager (Supervise, reassign, approve claims)</option>
-               <option value="worker" ${currentRole === 'worker' ? 'selected' : ''}>Worker (Support, order tasks, receipt checks)</option>
-               <option value="customer" ${currentRole === 'customer' ? 'selected' : ''}>Customer (Standard Buyer)</option>
-             </select>
-           </div>
+           <p><strong>ID:</strong> ${userId}</p>
+           <div><label class="block font-bold mb-1">Role</label><select id="editStaffRoleSelect" class="w-full border p-2.5 rounded-lg"><option value="super_admin" ${currentRole==='super_admin'?'selected':''}>Super Admin</option><option value="manager" ${currentRole==='manager'?'selected':''}>Manager</option><option value="worker" ${currentRole==='worker'?'selected':''}>Worker</option><option value="customer" ${currentRole==='customer'?'selected':''}>Customer</option></select></div>
          </div>`,
         async () => {
           const newRole = document.getElementById('editStaffRoleSelect').value;
-          
           try {
-            const { error } = await supabaseClient
-              .from('profiles')
-              .update({ role: newRole })
-              .eq('id', userId);
-
+            const { error } = await supabaseClient.from('profiles').update({ role: newRole }).eq('id', userId);
             if (error) throw error;
-
-            await logAuditAction('Role Updated', `Updated role for user ${currentName || userId} to ${newRole}`);
-
-            alert('Staff permissions updated successfully!');
-            closeModal();
-            loadStaffTable();
-          } catch (err) {
-            alert('Failed to update role: ' + (err.message || err));
-          }
+            await logAuditAction('Role Updated', `Updated role for ${currentName} to${newRole}`);
+            alert('Permissions updated!'); closeModal(); loadStaffTable();
+          } catch (err) { alert('Error: ' + err.message); }
         }
       );
     }
 
-    // Load Staff Table Data from profiles
     async function loadStaffTable() {
       try {
-        const { data: profiles, error } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .order('full_name', { ascending: true });
-
+        const { data, error } = await supabaseClient.from('profiles').select('*').order('full_name', { ascending: true });
         if (error) throw error;
-        staffMembers = profiles || [];
+        staffMembers = data || [];
         const tbody = document.getElementById('staffTableBody');
         if (!tbody) return;
-
-        if (staffMembers.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-gray-400 font-medium">No user profiles found in database.</td></tr>`;
-          return;
-        }
-
+        if (staffMembers.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-gray-400">No profiles found.</td></tr>`; return; }
         tbody.innerHTML = '';
-        staffMembers.forEach(staff => {
+        staffMembers.forEach(s => {
           const row = document.createElement('tr');
           row.className = 'hover:bg-gray-50';
-          row.innerHTML = `
-            <td class="py-4 px-6 font-medium text-gray-800">${staff.full_name || 'Unnamed User'}</td>
-            <td class="py-4 px-6 text-gray-600 font-mono text-xs">${staff.id.slice(0, 12)}...</td>
-            <td class="py-4 px-6"><span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded text-xs font-semibold uppercase">${staff.role || 'customer'}</span></td>
-            <td class="py-4 px-6 text-gray-500 text-xs">${staff.updated_at ? new Date(staff.updated_at).toLocaleDateString() : 'N/A'}</td>
-            <td class="py-4 px-6 text-right">
-              <button onclick="editStaffRoleModal('${staff.id}', '${staff.full_name || ''}', '${staff.role || 'customer'}')" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-3 py-1.5 rounded text-xs transition cursor-pointer">Edit Role</button>
-            </td>
-          `;
+          row.innerHTML = `<td class="py-4 px-6 font-medium">${s.full_name||'Unnamed'}</td><td class="py-4 px-6 font-mono text-xs">${s.id.slice(0,12)}...</td><td class="py-4 px-6"><span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded text-xs font-semibold uppercase">${s.role||'customer'}</span></td><td class="py-4 px-6 text-xs text-gray-500">${s.updated_at?new Date(s.updated_at).toLocaleDateString():'N/A'}</td><td class="py-4 px-6 text-right"><button onclick="editStaffRoleModal('${s.id}', '${s.full_name\vert{}\vert{}''}', '${s.role||'customer'}')" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-3 py-1.5 rounded text-xs">Edit</button></td>`;
           tbody.appendChild(row);
         });
-      } catch (err) {
-        console.error("Error loading staff table:", err);
-      }
+      } catch (err) {}
     }
 
-    // Load Recent Audit Logs for Overview
     async function loadAuditLogsOverview() {
       try {
-        const { data: logs, error } = await supabaseClient
-          .from('audit_logs')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(5);
-
+        const { data, error } = await supabaseClient.from('audit_logs').select('*').order('created_at', { ascending: false }).limit(5);
         const container = document.getElementById('auditActivityBody');
         if (!container) return;
-
-        if (error || !logs || logs.length === 0) {
-          container.innerHTML = `<p class="text-gray-400 text-center py-2 font-medium">No recent audit logs recorded.</p>`;
-          return;
-        }
-
+        if (error || !data || data.length === 0) { container.innerHTML = `<p class="text-gray-400 text-center py-2">No recent audit logs.</p>`; return; }
         container.innerHTML = '';
-        logs.forEach(log => {
+        data.forEach(log => {
           const div = document.createElement('div');
           div.className = 'flex justify-between items-center';
-          div.innerHTML = `
-            <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-medium text-[10px]">${log.action_type}</span>
-            <span class="text-gray-700 font-medium truncate max-w-[140px]" title="${log.description}">${log.description}</span>
-            <span class="text-gray-400 text-[10px]">${new Date(log.created_at).toLocaleString([], {month: 'numeric', day: 'numeric', hour: '2-digit', minute:'2-digit'})}</span>
-          `;
+          div.innerHTML = `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px]">${log.action_type}</span><span class="text-gray-700 truncate max-w-[140px]" title="${log.description}">${log.description}</span><span class="text-gray-400 text-[10px]">${new Date(log.created_at).toLocaleDateString()}</span>`;
           container.appendChild(div);
         });
-      } catch (err) {
-        console.error("Error loading overview audit logs:", err);
-      }
+      } catch (err) {}
     }
 
-    // Load Full Audit Table
     async function loadFullAuditTable() {
       try {
-        const { data: logs, error } = await supabaseClient
-          .from('audit_logs')
-          .select('*')
-          .order('created_at', { ascending: false });
-
+        const { data, error } = await supabaseClient.from('audit_logs').select('*').order('created_at', { ascending: false });
         const tbody = document.getElementById('fullAuditTableBody');
         if (!tbody) return;
-
-        if (error || !logs || logs.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="4" class="text-center py-12 text-gray-400 font-medium">No audit records found.</td></tr>`;
-          return;
-        }
-
+        if (error || !data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="4" class="text-center py-12 text-gray-400">No records.</td></tr>`; return; }
         tbody.innerHTML = '';
-        logs.forEach(log => {
+        data.forEach(log => {
           const row = document.createElement('tr');
           row.className = 'hover:bg-gray-50';
-          row.innerHTML = `
-            <td class="py-4 px-6 font-semibold text-emerald-800 text-xs">${log.action_type}</td>
-            <td class="py-4 px-6 text-gray-800 text-xs">${log.description}</td>
-            <td class="py-4 px-6 text-gray-600 text-xs">${log.actor || 'System'}</td>
-            <td class="py-4 px-6 text-gray-500 text-xs">${new Date(log.created_at).toLocaleString()}</td>
-          `;
-          tbody.appendChild(row);
-        });
-      } catch (err) {
-        console.error("Error loading full audit table:", err);
-      }
-    }
-
-    // Calendar Date Filter Handlers
-    function updateDateFilter() {
-      const startEl = document.getElementById('startDateInput');
-      const endEl = document.getElementById('endDateInput');
-      if (startEl) startDateFilter = startEl.value;
-      if (endEl) endDateFilter = endEl.value;
-      loadAdminData();
-      loadOrdersTable();
-    }
-
-    function clearDateFilter() {
-      startDateFilter = '';
-      endDateFilter = '';
-      const startEl = document.getElementById('startDateInput');
-      const endEl = document.getElementById('endDateInput');
-      if (startEl) startEl.value = '';
-      if (endEl) endEl.value = '';
-      loadAdminData();
-      loadOrdersTable();
-    }
-
-    // Review Order Modal
-    function reviewOrderModal(orderId) {
-      const order = currentOrders.find(o => o.id === orderId);
-      if (!order) return;
-
-      openModal(
-        `Review Order #${order.id.slice(0, 8)}`,
-        `<div class="space-y-2 text-xs">
-           <p><strong>Customer Location:</strong> ${order.delivery_city || 'Mansa'}, ${order.delivery_province || 'Luapula'}</p>
-           <p><strong>Total Amount:</strong> K${Number(order.total_amount).toFixed(2)}</p>
-           <p><strong>Current Status:</strong> ${order.payment_status || 'Pending'}</p>
-           <hr class="my-2">
-           <label class="block font-bold text-gray-700">Update Order / Escrow Status:</label>
-           <select id="newOrderStatus" class="w-full border border-gray-300 rounded-lg p-2 text-xs">
-             <option value="Paid & Secured">Paid & Secured</option>
-             <option value="In Transit">In Transit</option>
-             <option value="Delivered & Completed">Delivered & Completed</option>
-             <option value="Cancelled / Refunded">Cancelled / Refunded</option>
-           </select>
-         </div>`,
-        async () => {
-          const status = document.getElementById('newOrderStatus').value;
-          const { error } = await supabaseClient
-            .from('orders')
-            .update({ payment_status: status })
-            .eq('id', orderId);
-
-          if (error) {
-            alert('Failed to update order status.');
-          } else {
-            await logAuditAction('Order Status Updated', `Updated order #${orderId.slice(0, 8)} status to: ${status}`);
-            alert('Order status updated successfully and logged!');
-            closeModal();
-            loadAdminData();
-            loadOrdersTable();
-          }
-        }
-      );
-    }
-
-    // Load Live Data for Overview with Calendar Date Filtering
-    async function loadAdminData() {
-      try {
-        const { data: orders, error } = await supabaseClient
-          .from('orders')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-        let allOrders = orders || [];
-
-        currentOrders = allOrders.filter(order => {
-          if (!order.created_at) return true;
-          const orderDateStr = order.created_at.split('T')[0];
-          if (startDateFilter && orderDateStr < startDateFilter) return false;
-          if (endDateFilter && orderDateStr > endDateFilter) return false;
-          return true;
-        });
-
-        let pendingCount = 0;
-        let transitCount = 0;
-        let completedCount = 0;
-
-        const queueBody = document.getElementById('reviewQueueBody');
-        if (queueBody) {
-          if (currentOrders.length === 0) {
-            queueBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400 font-medium">No pending items for selected calendar range.</td></tr>`;
-          } else {
-            queueBody.innerHTML = '';
-            currentOrders.forEach(order => {
-              const status = order.payment_status || 'Pending';
-              if (status.includes('Delivered') || status.includes('Completed')) {
-                completedCount++;
-              } else if (status.includes('Transit')) {
-                transitCount++;
-              } else {
-                pendingCount++;
-              }
-
-              const row = document.createElement('tr');
-              row.className = 'hover:bg-gray-50';
-              row.innerHTML = `
-                <td class="py-3 px-4 font-mono font-semibold">${order.id.slice(0, 8)}</td>
-                <td class="py-3 px-4"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[11px] font-medium">Order Payment</span></td>
-                <td class="py-3 px-4"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-medium">${status}</span></td>
-                <td class="py-3 px-4 text-gray-500">${new Date(order.created_at).toLocaleString()}</td>
-                <td class="py-3 px-4 text-right">
-                  <button onclick="reviewOrderModal('${order.id}')" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold px-3 py-1 rounded shadow-xs cursor-pointer">Review</button>
-                </td>
-              `;
-              queueBody.appendChild(row);
-            });
-          }
-        }
-
-        if (document.getElementById('snapshotPending')) {
-          document.getElementById('snapshotPending').textContent = `${pendingCount} orders`;
-          document.getElementById('snapshotTransit').textContent = `${transitCount} orders`;
-          document.getElementById('snapshotCompleted').textContent = `${completedCount} orders`;
-
-          const total = currentOrders.length || 1;
-          document.getElementById('barPending').style.width = `${(pendingCount / total) * 100}%`;
-          document.getElementById('barTransit').style.width = `${(transitCount / total) * 100}%`;
-          document.getElementById('barCompleted').style.width = `${(completedCount / total) * 100}%`;
-
-          document.getElementById('statOrdersReview').textContent = pendingCount;
-          document.getElementById('statPaymentReceipts').textContent = currentOrders.length;
-        }
-      } catch (err) {
-        console.error("Error loading live data:", err);
-      }
-    }
-
-    // Load Orders Table for Orders View with Date Filtering Support
-    async function loadOrdersTable() {
-      try {
-        const { data: orders, error } = await supabaseClient
-          .from('orders')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-        let allOrders = orders || [];
-
-        currentOrders = allOrders.filter(order => {
-          if (!order.created_at) return true;
-          const orderDateStr = order.created_at.split('T')[0];
-          if (startDateFilter && orderDateStr < startDateFilter) return false;
-          if (endDateFilter && orderDateStr > endDateFilter) return false;
-          return true;
-        });
-
-        const tbody = document.getElementById('fullOrdersTableBody');
-        if (!tbody) return;
-
-        if (currentOrders.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-gray-400 font-medium">No orders found for the selected calendar range.</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = '';
-        currentOrders.forEach(order => {
-          const row = document.createElement('tr');
-          row.className = 'hover:bg-gray-50';
-          row.innerHTML = `
-            <td class="py-4 px-6 font-mono text-xs font-semibold text-gray-800">${order.id.slice(0, 8)}...</td>
-            <td class="py-4 px-6">${order.delivery_city || 'Mansa'}, ${order.delivery_province || 'Luapula'}</td>
-            <td class="py-4 px-6 font-bold text-emerald-700">K${Number(order.total_amount).toFixed(2)}</td>
-            <td class="py-4 px-6"><span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded text-xs font-semibold">${order.payment_status || 'Pending'}</span></td>
-            <td class="py-4 px-6 text-gray-500 text-xs">${new Date(order.created_at).toLocaleDateString()}</td>
-            <td class="py-4 px-6 text-right">
-              <button onclick="reviewOrderModal('${order.id}')" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-3 py-1.5 rounded text-xs transition cursor-pointer">Manage</button>
-            </td>
-          `;
-          tbody.appendChild(row);
-        });
-      } catch (err) {
-        console.error("Error loading orders table:", err);
-      }
-    }
-
-    // Initialize session and default view once on load
-    supabaseClient.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        window.location.href = 'login.html';
-      } else {
-        if (session.user && session.user.email) {
-          currentUserEmail = session.user.email;
-        }
-        switchView('overview');
-      }
-    });
-
-    supabaseClient.auth.onAuthStateChange((event, session) => {
-      if (!session) {
-        window.location.href = 'login.html';
-      }
-    });
-  </script>
-</body>
-</html>
+          row.innerHTML = `<td class="py-4 px-6 font-semibold text-emerald-800 text-xs">${log.action_type}</td><td class="py-4 px-6 text-gray-800 text-xs">${log.description}</td><td class="py-4 px-6
