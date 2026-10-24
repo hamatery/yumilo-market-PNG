@@ -3,152 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yumilo Market - Zambia Quality at Every Step</title>
+  <title>Yumilo Market - Zambia's Verified Trade & Escrow</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body { background-color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: #fcfbf9; font-family: system-ui, -apple-system, sans-serif; }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="pb-28 text-gray-800">
+<body class="pb-28 text-gray-800 min-h-screen flex flex-col justify-between">
 
-  <!-- TOP HEADER -->
-  <header class="bg-[#064e3b] text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50">
-    <div class="flex items-center space-x-3">
-      <img src="logo.png" alt="Yumilo Market Logo" class="h-9 w-auto object-contain" onerror="this.src='https://via.placeholder.com/40?text=YM'">
-    </div>
-    <div class="flex items-center space-x-5">
-      <button onclick="document.getElementById('searchInput').focus()" class="text-white hover:text-emerald-200 transition cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      </button>
-      <a href="account.html" class="text-white hover:text-emerald-200 transition">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-      </a>
-    </div>
-  </header>
+  <div>
+    <!-- TOP HEADER -->
+    <header class="bg-white border-b border-gray-200 px-6 py-3.5 sticky top-0 z-50 shadow-sm flex justify-between items-center">
+      <div class="flex items-center space-x-8">
+        <a href="index.html" class="flex items-center space-x-2">
+          <!-- Transparent Logo -->
+          <img src="logo.png" alt="Yumilo Market" class="h-10 w-auto object-contain" onerror="this.src='https://via.placeholder.com/40?text=YM'">
+          <span class="font-extrabold text-lg tracking-tight text-[#064e3b]">YUMILOMARKET</span>
+        </a>
+        <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold text-gray-600">
+          <a href="index.html" class="text-emerald-700 hover:text-emerald-800 transition">Marketplace</a>
+          <a href="catalog.html" class="hover:text-emerald-700 transition">Categories</a>
+          <a href="terms.html" class="hover:text-emerald-700 transition">Escrow Protection</a>
+          <a href="catalog.html" class="hover:text-emerald-700 transition">Live Catalog</a>
+        </nav>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a href="login.html" class="text-xs font-bold text-gray-700 hover:text-emerald-700 px-3 py-2 transition">Sign In</a>
+        <a href="login.html" class="bg-[#064e3b] hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2 rounded-full shadow transition">Sign Up</a>
+      </div>
+    </header>
 
-  <!-- HERO SECTION -->
-  <section class="bg-[#064e3b] text-white pt-8 pb-20 px-6 relative overflow-hidden">
-    <div class="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-      <div class="space-y-3 text-left max-w-sm">
-        <p class="text-[10px] tracking-widest uppercase font-bold text-emerald-300">ZAMBIA • QUALITY AT EVERY STEP</p>
-        <h1 class="text-4xl font-black tracking-tight leading-tight">Good finds.<br>Right here.</h1>
-        <p class="text-xs text-emerald-100 font-medium">Shop sellers across Zambia.</p>
-        <a href="#popular-section" class="inline-block bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-bold px-6 py-2.5 rounded-full text-xs transition shadow-lg">Explore the market</a>
+    <!-- HERO BANNER -->
+    <section class="bg-[#064e3b] text-white pt-10 pb-20 px-6 relative overflow-hidden">
+      <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+        <div class="space-y-4 text-left max-w-lg">
+          <p class="text-[11px] tracking-widest uppercase font-bold text-emerald-300">ZAMBIA • QUALITY AT EVERY STEP</p>
+          <h1 class="text-4xl md:text-5xl font-black tracking-tight leading-tight">Good finds.<br>Right here.</h1>
+          <p class="text-sm text-emerald-100 font-medium">Shop verified sellers across all 10 provinces with secure mobile money escrow protection.</p>
+          <a href="#catalog-section" class="inline-block bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-bold px-7 py-3 rounded-full text-xs transition shadow-xl">Explore the market</a>
+        </div>
+        <div class="w-full md:w-auto">
+          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80" alt="Zambian Marketplace Spread" class="rounded-3xl shadow-2xl w-full md:w-80 h-48 object-cover border-2 border-emerald-800">
+        </div>
       </div>
-      <div class="w-full md:w-auto">
-        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" alt="Delicious Feast" class="rounded-3xl shadow-2xl w-full md:w-72 h-40 object-cover border-2 border-emerald-800">
-      </div>
-    </div>
 
-    <!-- FLOATING SEARCH BAR -->
-    <div class="absolute -bottom-6 left-6 right-6 max-w-xl mx-auto z-20">
-      <div class="bg-white rounded-2xl shadow-xl px-4 py-3 flex items-center border border-gray-100">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input type="text" id="searchInput" placeholder="Search the marketplace" class="w-full text-xs text-gray-700 bg-transparent focus:outline-none">
+      <!-- FLOATING SEARCH BAR -->
+      <div class="absolute -bottom-6 left-6 right-6 max-w-2xl mx-auto z-20">
+        <div class="bg-white rounded-2xl shadow-2xl p-2.5 flex items-center border border-gray-100">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 ml-3 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="searchInput" placeholder="Search electronics, fashion, groceries, farm goods across Zambia..." class="w-full text-xs text-gray-700 bg-transparent focus:outline-none">
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- CATEGORIES GRID -->
-  <section class="max-w-3xl mx-auto px-6 mt-12">
-    <div class="grid grid-cols-4 sm:grid-cols-7 gap-3 text-center">
-      <div onclick="filterCat('Electronics')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center hover:border-emerald-600 transition cursor-pointer">
-        <span class="text-2xl mb-1">💻</span>
-        <span class="text-[10px] font-semibold text-gray-700">Electronics</span>
+    <!-- CATEGORY FILTER TABS -->
+    <section class="max-w-5xl mx-auto px-6 mt-14">
+      <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-2">
+        <button onclick="filterCategory('All')" class="bg-[#064e3b] text-white text-xs font-semibold px-4 py-2 rounded-full shadow-sm whitespace-nowrap cursor-pointer">All Goods</button>
+        <button onclick="filterCategory('Electronics')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-4 py-2 rounded-full shadow-sm whitespace-nowrap cursor-pointer">Electronics</button>
+        <button onclick="filterCategory('Fashion')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-4 py-2 rounded-full shadow-sm whitespace-nowrap cursor-pointer">Fashion & Wear</button>
+        <button onclick="filterCategory('Groceries')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-4 py-2 rounded-full shadow-sm whitespace-nowrap cursor-pointer">Groceries</button>
+        <button onclick="filterCategory('Agriculture')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-4 py-2 rounded-full shadow-sm whitespace-nowrap cursor-pointer">Agri & Livestock</button>
       </div>
-      <div onclick="filterCat('Fashion')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center hover:border-emerald-600 transition cursor-pointer">
-        <span class="text-2xl mb-1">👕</span>
-        <span class="text-[10px] font-semibold text-gray-700">Fashion</span>
-      </div>
-      <div onclick="filterCat('Home')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center hover:border-emerald-600 transition cursor-pointer">
-        <span class="text-2xl mb-1">🏠</span>
-        <span class="text-[10px] font-semibold text-gray-700">Home</span>
-      </div>
-      <div onclick="filterCat('Beauty')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center hover:border-emerald-600 transition cursor-pointer">
-        <span class="text-2xl mb-1">💄</span>
-        <span class="text-[10px] font-semibold text-gray-700">Beauty</span>
-      </div>
-      <div onclick="filterCat('Agriculture')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center hover:border-emerald-600 transition cursor-pointer">
-        <span class="text-2xl mb-1">🌱</span>
-        <span class="text-[10px] font-semibold text-gray-700">Agriculture</span>
-      </div>
-      <div onclick="filterCat('Tools')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center hover:border-emerald-600 transition cursor-pointer">
-        <span class="text-2xl mb-1">🛠️</span>
-        <span class="text-[10px] font-semibold text-gray-700">Tools</span>
-      </div>
-      <div onclick="filterCat('Restaurants')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center hover:border-emerald-600 transition cursor-pointer">
-        <span class="text-2xl mb-1">🍽️</span>
-        <span class="text-[10px] font-semibold text-gray-700">Restaurants</span>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- POPULAR PICKS -->
-  <section id="popular-section" class="max-w-3xl mx-auto px-6 mt-10">
-    <div class="flex justify-between items-center mb-5">
-      <h3 class="text-base font-bold text-gray-900">Popular picks</h3>
-      <a href="catalog.html" class="text-xs font-semibold text-emerald-700 hover:underline">See all →</a>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <!-- Item 1 -->
-      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-        <img src="https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=400&q=80" alt="Chicken Portions" class="w-full h-36 object-cover rounded-xl mb-3">
+    <!-- CATALOG SECTION -->
+    <section id="catalog-section" class="max-w-5xl mx-auto px-6 mt-8">
+      <div class="flex justify-between items-center mb-6">
         <div>
-          <h4 class="font-bold text-xs text-gray-900">Chicken Portions</h4>
-          <p class="text-emerald-700 font-extrabold text-sm mt-1">K 85/kg</p>
+          <h3 class="text-lg font-bold text-gray-900">Featured Zambian Marketplace Catalog</h3>
+          <p class="text-xs text-gray-500">Escrow-protected goods ready for nationwide delivery</p>
         </div>
-        <div class="mt-3 flex justify-between items-center">
-          <span class="inline-flex items-center text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-1.5"></span>Available</span>
-          <button onclick="addToCart('Chicken Portions', 85)" class="bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] px-3 py-1.5 rounded-lg font-semibold transition cursor-pointer">Add to cart</button>
-        </div>
+        <span class="text-xs font-semibold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">4 Items Live</span>
       </div>
 
-      <!-- Item 2 -->
-      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80" alt="Classic Meal Bowl" class="w-full h-36 object-cover rounded-xl mb-3">
-        <div>
-          <h4 class="font-bold text-xs text-gray-900">Classic Meal Bowl</h4>
-          <p class="text-emerald-700 font-extrabold text-sm mt-1">K 60</p>
+      <!-- PRODUCT GRID -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Item 1 -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80" alt="Smartphone" class="w-full h-40 object-cover rounded-xl mb-3">
+            <span class="absolute top-2 left-2 bg-emerald-800 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow">In Stock</span>
+          </div>
+          <div>
+            <p class="text-[10px] text-gray-400 font-semibold uppercase">Lusaka Tech Hub</p>
+            <h4 class="font-bold text-xs text-gray-900 mt-0.5">X-Series Smart Phone 128GB</h4>
+            <p class="text-emerald-700 font-black text-sm mt-1.5">K3,450.00</p>
+          </div>
+          <button onclick="addToCart('X-Series Smart Phone 128GB', 3450)" class="mt-4 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-bold text-xs py-2 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
         </div>
-        <div class="mt-3 flex justify-between items-center">
-          <span class="inline-flex items-center text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-1.5"></span>Available</span>
-          <button onclick="addToCart('Classic Meal Bowl', 60)" class="bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] px-3 py-1.5 rounded-lg font-semibold transition cursor-pointer">Add to cart</button>
+
+        <!-- Item 2 -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80" alt="Tee" class="w-full h-40 object-cover rounded-xl mb-3">
+            <span class="absolute top-2 left-2 bg-emerald-800 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow">Available</span>
+          </div>
+          <div>
+            <p class="text-[10px] text-gray-400 font-semibold uppercase">Lusaka Apparel Co.</p>
+            <h4 class="font-bold text-xs text-gray-900 mt-0.5">Premium Cotton Casual Tee</h4>
+            <p class="text-emerald-700 font-black text-sm mt-1.5">K180.00</p>
+          </div>
+          <button onclick="addToCart('Premium Cotton Casual Tee', 180)" class="mt-4 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-bold text-xs py-2 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80" alt="Roller Meal" class="w-full h-40 object-cover rounded-xl mb-3">
+            <span class="absolute top-2 left-2 bg-emerald-800 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow">Fresh Daily</span>
+          </div>
+          <div>
+            <p class="text-[10px] text-gray-400 font-semibold uppercase">Kitwe Fresh Market</p>
+            <h4 class="font-bold text-xs text-gray-900 mt-0.5">Super Meal Roller Meal (25kg)</h4>
+            <p class="text-emerald-700 font-black text-sm mt-1.5">K240.00</p>
+          </div>
+          <button onclick="addToCart('Super Meal Roller Meal (25kg)', 240)" class="mt-4 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-bold text-xs py-2 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=400&q=80" alt="Chicken" class="w-full h-40 object-cover rounded-xl mb-3">
+            <span class="absolute top-2 left-2 bg-emerald-800 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow">Farm Direct</span>
+          </div>
+          <div>
+            <p class="text-[10px] text-gray-400 font-semibold uppercase">Mansa Poultry Farms</p>
+            <h4 class="font-bold text-xs text-gray-900 mt-0.5">Whole Broiler Chicken</h4>
+            <p class="text-emerald-700 font-black text-sm mt-1.5">K95.00</p>
+          </div>
+          <button onclick="addToCart('Whole Broiler Chicken', 95)" class="mt-4 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-bold text-xs py-2 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
         </div>
       </div>
+    </section>
+  </div>
 
-      <!-- Item 3 -->
-      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-        <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=400&q=80" alt="Fresh Tomatoes" class="w-full h-36 object-cover rounded-xl mb-3">
-        <div>
-          <h4 class="font-bold text-xs text-gray-900">Fresh Tomatoes</h4>
-          <p class="text-emerald-700 font-extrabold text-sm mt-1">K 25/kg</p>
+  <!-- PROFESSIONAL FOOTER -->
+  <footer class="bg-[#064e3b] text-emerald-100 border-t border-emerald-900 mt-20 py-10 px-6">
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-xs">
+      <div class="space-y-3">
+        <div class="flex items-center space-x-2">
+          <img src="logo.png" alt="Logo" class="h-7 w-auto object-contain" onerror="this.src='https://via.placeholder.com/30?text=YM'">
+          <span class="font-bold text-white text-sm">YUMILOMARKET</span>
         </div>
-        <div class="mt-3 flex justify-between items-center">
-          <span class="inline-flex items-center text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-1.5"></span>Available</span>
-          <button onclick="addToCart('Fresh Tomatoes', 25)" class="bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] px-3 py-1.5 rounded-lg font-semibold transition cursor-pointer">Add to cart</button>
-        </div>
+        <p class="text-[11px] text-emerald-200 leading-relaxed">Zambia's verified universal marketplace. Operating nationwide across all 10 provinces with secure mobile money escrow.</p>
       </div>
-
-      <!-- Item 4 -->
-      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-        <img src="https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=400&q=80" alt="Woven Storage Basket" class="w-full h-36 object-cover rounded-xl mb-3">
-        <div>
-          <h4 class="font-bold text-xs text-gray-900">Woven Storage Basket</h4>
-          <p class="text-emerald-700 font-extrabold text-sm mt-1">K 120</p>
-        </div>
-        <div class="mt-3 flex justify-between items-center">
-          <span class="inline-flex items-center text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-1.5"></span>Available</span>
-          <button onclick="addToCart('Woven Storage Basket', 120)" class="bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] px-3 py-1.5 rounded-lg font-semibold transition cursor-pointer">Add to cart</button>
-        </div>
+      <div>
+        <p class="font-bold text-white uppercase tracking-wider text-[11px] mb-3">Departments</p>
+        <ul class="space-y-1.5 text-[11px] text-emerald-200">
+          <li>Electronics & Gadgets</li>
+          <li>Fashion & Apparel</li>
+          <li>Groceries & Household</li>
+          <li>Agriculture & Livestock</li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-bold text-white uppercase tracking-wider text-[11px] mb-3">Provinces Covered</p>
+        <p class="text-[11px] text-emerald-200 leading-relaxed">Lusaka, Copperbelt, Central, Luapula, Northern, Muchinga, Eastern, Southern, Western, North-Western.</p>
+      </div>
+      <div>
+        <p class="font-bold text-white uppercase tracking-wider text-[11px] mb-3">Support & Contact</p>
+        <p class="text-[11px] text-emerald-200">Zambia Operations Hub</p>
+        <p class="text-[11px] text-emerald-200 mt-1">Support: support@yumilomarket.store</p>
       </div>
     </div>
-  </section>
+    <div class="max-w-5xl mx-auto border-t border-emerald-900/60 mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center text-[10px] text-emerald-300">
+      <p>&copy; 2026 Yumilo Market. All rights reserved.</p>
+      <p>Zambia's Secure Universal Commerce Platform</p>
+    </div>
+  </footer>
 
   <!-- BOTTOM NAVIGATION BAR -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3 px-6 flex justify-around items-center z-50 shadow-lg">
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3 px-6 flex justify-around items-center z-50 shadow-xl">
     <a href="index.html" class="flex flex-col items-center text-emerald-700">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
       <span class="text-[10px] font-semibold mt-1">Home</span>
@@ -177,9 +206,9 @@
 
   <script>
     function addToCart(name, price) {
-      alert(`${name} (K${price}) added to cart!`);
+      alert(`${name} (K${price.toLocaleString()}) added to your secure escrow cart!`);
     }
-    function filterCat(cat) {
+    function filterCategory(cat) {
       alert(`Filtering category: ${cat}`);
     }
   </script>
