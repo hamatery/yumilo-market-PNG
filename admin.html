@@ -125,7 +125,7 @@
     <!-- Sidebar Footer Environment -->
     <div class="p-4 border-t border-emerald-900/50 text-[11px] text-emerald-300 space-y-1 bg-[#064e3b]">
       <p class="font-semibold text-white">Environment:</p>
-      <p>PRODUCTION • v2.1.0 • Comprehensive Suite</p>
+      <p>PRODUCTION • v2.2.0 • Ultimate Suite</p>
     </div>
   </aside>
 
@@ -558,23 +558,23 @@
       `;
     }
 
-    // Comprehensive Site Settings View HTML Template
+    // Ultimate Comprehensive Site Settings View HTML Template
     function renderSiteSettingsHTML() {
       return `
         <div class="space-y-6 max-w-4xl mx-auto">
           <div class="flex justify-between items-center">
             <div>
               <h3 class="text-2xl font-bold text-gray-900">Site Settings & Records</h3>
-              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Configure platform parameters, currencies, delivery fees, taxes, and operational limits.</p>
+              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Ultimate platform config: Delivery zones, vendor offline alerts, payout thresholds, and legal policies.</p>
             </div>
           </div>
 
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-8 space-y-6">
             <form id="siteSettingsForm" onsubmit="saveSiteSettings(event)" class="space-y-6">
               
-              <!-- General Info -->
+              <!-- General Info & Homepage Ticker -->
               <div class="space-y-4">
-                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">🏢 General Store Profile</h4>
+                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">🏢 General Store Profile & Announcement</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Store Name</label>
@@ -585,12 +585,16 @@
                     <input type="email" id="settingEmail" value="support@yumilomarket.store" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                 </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Live Homepage Announcement Ticker (Marquee Banner)</label>
+                  <input type="text" id="settingTicker" placeholder="e.g. 🔥 Special Broiler Feed & Chick Combo Promo in Mansa!" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                </div>
               </div>
 
-              <!-- Financials & Fees -->
+              <!-- Financials & Vendor Payouts -->
               <div class="space-y-4">
-                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">💳 Financials & Currency</h4>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">💳 Financials, Taxes & Vendor Payouts</h4>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Currency Symbol</label>
                     <input type="text" id="settingCurrency" value="ZMW (K)" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
@@ -603,6 +607,10 @@
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tax / VAT Rate (%)</label>
                     <input type="number" step="0.1" id="settingTax" value="0.0" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Min Vendor Payout (K)</label>
+                    <input type="number" step="1" id="settingMinPayout" value="500" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
                 </div>
                 <div>
                   <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Merchant Mobile Money / Payout Number (MTN/Airtel)</label>
@@ -610,9 +618,9 @@
                 </div>
               </div>
 
-              <!-- Delivery & Orders -->
+              <!-- Delivery Zones & Order Rules -->
               <div class="space-y-4">
-                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">📦 Delivery & Order Rules</h4>
+                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">📦 Regional Delivery Zones & Order Rules</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Default Local Delivery Fee (K)</label>
@@ -623,9 +631,55 @@
                     <input type="number" step="1" id="settingMinOrder" value="100" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                   </div>
                 </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Delivery Zones & Pricing Rules</label>
+                  <input type="text" id="settingDeliveryZones" placeholder="e.g. Mansa Central: K50, Peri-Urban: K80, Rural: K150" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                </div>
               </div>
 
-              <!-- System Status Toggles -->
+              <!-- Vendor Offline WhatsApp & SMS Alerts -->
+              <div class="space-y-4 bg-emerald-50/60 p-5 rounded-xl border border-emerald-200">
+                <h4 class="text-sm font-bold text-emerald-900 border-b border-emerald-200 pb-2">📲 Vendor Offline Order Alerts (WhatsApp & SMS)</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-emerald-900 uppercase mb-1">SMS / WhatsApp Gateway Provider</label>
+                    <input type="text" id="settingGateway" placeholder="e.g. Africa's Talking / Twilio API" class="w-full px-3 py-2 border border-emerald-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-emerald-900 uppercase mb-1">Vendor Alert Notification Channel</label>
+                    <select id="settingVendorAlertMethod" class="w-full px-3 py-2 border border-emerald-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                      <option value="WhatsApp & SMS">WhatsApp & SMS (Recommended)</option>
+                      <option value="WhatsApp Only">WhatsApp Only</option>
+                      <option value="SMS Only">SMS Only</option>
+                      <option value="Disabled">Disabled</option>
+                    </select>
+                  </div>
+                </div>
+                <p class="text-[11px] text-emerald-700 leading-relaxed">
+                  <strong>Automatic Trigger:</strong> If a vendor is offline or fails to acknowledge a new order within 15 minutes, the system automatically dispatches an instant WhatsApp message and SMS containing the order details, customer phone number, and delivery address.
+                </p>
+              </div>
+
+              <!-- Legal & Compliance URLs -->
+              <div class="space-y-4">
+                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">⚖️ Legal Compliance & Policy URLs</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Terms of Service URL</label>
+                    <input type="text" id="settingTermsUrl" placeholder="https://..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Privacy Policy URL</label>
+                    <input type="text" id="settingPrivacyUrl" placeholder="https://..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Refund Policy URL</label>
+                    <input type="text" id="settingRefundUrl" placeholder="https://..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                </div>
+              </div>
+
+              <!-- System Operating States -->
               <div class="space-y-4 pt-2">
                 <h4 class="text-sm font-bold text-gray-900 border-b pb-2">⚙️ System Operating States</h4>
                 <div class="space-y-3">
@@ -765,7 +819,7 @@
       );
     }
 
-    // Load Site Settings into Form with comprehensive fields
+    // Load Site Settings into Form with ultimate advanced fields
     async function loadSiteSettings() {
       try {
         const { data, error } = await supabaseClient
@@ -787,6 +841,14 @@
           const momoEl = document.getElementById('settingMobileMoney');
           const delFeeEl = document.getElementById('settingDeliveryFee');
           const minOrdEl = document.getElementById('settingMinOrder');
+          const zonesEl = document.getElementById('settingDeliveryZones');
+          const gatewayEl = document.getElementById('settingGateway');
+          const alertMethodEl = document.getElementById('settingVendorAlertMethod');
+          const minPayoutEl = document.getElementById('settingMinPayout');
+          const termsEl = document.getElementById('settingTermsUrl');
+          const privacyEl = document.getElementById('settingPrivacyUrl');
+          const refundEl = document.getElementById('settingRefundUrl');
+          const tickerEl = document.getElementById('settingTicker');
           const openEl = document.getElementById('settingStoreOpen');
           const emailEl = document.getElementById('settingEmail');
           const maintEl = document.getElementById('settingMaintenance');
@@ -798,6 +860,14 @@
           if (momoEl) momoEl.value = data.merchant_mobile_money || '';
           if (delFeeEl) delFeeEl.value = data.delivery_fee ?? 50;
           if (minOrdEl) minOrdEl.value = data.min_order_amount ?? 100;
+          if (zonesEl) zonesEl.value = data.delivery_zones || '';
+          if (gatewayEl) gatewayEl.value = data.notification_gateway || '';
+          if (alertMethodEl) alertMethodEl.value = data.vendor_alert_method || 'WhatsApp & SMS';
+          if (minPayoutEl) minPayoutEl.value = data.min_vendor_payout ?? 500;
+          if (termsEl) termsEl.value = data.terms_url || '';
+          if (privacyEl) privacyEl.value = data.privacy_url || '';
+          if (refundEl) refundEl.value = data.refund_url || '';
+          if (tickerEl) tickerEl.value = data.announcement_ticker || '';
           if (openEl) openEl.checked = data.store_open !== false;
           if (emailEl) emailEl.value = data.support_email || 'support@yumilomarket.store';
           if (maintEl) maintEl.checked = !!data.maintenance_mode;
@@ -807,7 +877,7 @@
       }
     }
 
-    // Save Comprehensive Site Settings to Database
+    // Save Ultimate Site Settings to Database
     async function saveSiteSettings(e) {
       e.preventDefault();
       const storeName = document.getElementById('settingStoreName').value.trim();
@@ -817,6 +887,14 @@
       const momo = document.getElementById('settingMobileMoney').value.trim();
       const deliveryFee = parseFloat(document.getElementById('settingDeliveryFee').value);
       const minOrder = parseFloat(document.getElementById('settingMinOrder').value);
+      const deliveryZones = document.getElementById('settingDeliveryZones').value.trim();
+      const gateway = document.getElementById('settingGateway').value.trim();
+      const vendorAlertMethod = document.getElementById('settingVendorAlertMethod').value;
+      const minPayout = parseFloat(document.getElementById('settingMinPayout').value);
+      const termsUrl = document.getElementById('settingTermsUrl').value.trim();
+      const privacyUrl = document.getElementById('settingPrivacyUrl').value.trim();
+      const refundUrl = document.getElementById('settingRefundUrl').value.trim();
+      const ticker = document.getElementById('settingTicker').value.trim();
       const storeOpen = document.getElementById('settingStoreOpen').checked;
       const email = document.getElementById('settingEmail').value.trim();
       const maintenance = document.getElementById('settingMaintenance').checked;
@@ -839,6 +917,14 @@
             merchant_mobile_money: momo,
             delivery_fee: deliveryFee,
             min_order_amount: minOrder,
+            delivery_zones: deliveryZones,
+            notification_gateway: gateway,
+            vendor_alert_method: vendorAlertMethod,
+            min_vendor_payout: minPayout,
+            terms_url: termsUrl,
+            privacy_url: privacyUrl,
+            refund_url: refundUrl,
+            announcement_ticker: ticker,
             store_open: storeOpen,
             support_email: email,
             maintenance_mode: maintenance,
@@ -847,8 +933,8 @@
 
         if (error) throw error;
 
-        await logAuditAction('Site Settings Updated', `Updated store name, fees, delivery rules, and operating states.`);
-        alert('All site settings updated and saved successfully!');
+        await logAuditAction('Site Settings Updated', `Updated ultimate settings: delivery zones, vendor offline alerts, payout rules, and legal links.`);
+        alert('All ultimate site settings updated and saved successfully!');
       } catch (err) {
         alert('Failed to save settings: ' + (err.message || err));
       } finally {
