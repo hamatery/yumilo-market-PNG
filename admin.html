@@ -784,7 +784,7 @@
         await logAuditAction('Site Settings Updated', `Updated store name to '${storeName}', fee to ${fee}%`);
         alert('Site settings updated and saved successfully!');
       } catch (err) {
-        alert('Failed to save settings: ' + (err.message || err) + '\n\nNote: Make sure you ran the site_settings SQL table creation query in Supabase!');
+        alert('Failed to save settings: ' + (err.message || err));
       } finally {
         if (btn) {
           btn.textContent = 'Save Site Settings';
