@@ -5,34 +5,99 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy - Yumilo Market</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>body { background-color: #fcfbf9; }</style>
+  <style>
+    body { background-color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+    svg { width: 20px !important; height: 20px !important; min-width: 20px !important; min-height: 20px !important; }
+  </style>
 </head>
-<body class="min-h-screen text-gray-800 flex flex-col justify-between">
-  <header class="bg-[#064e3b] text-white py-6 px-8 shadow-md">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">Yumilo Market</h1>
-      <a href="index.html" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded font-semibold transition">Back to Store</a>
+<body class="text-gray-800 antialiased flex flex-col min-h-screen justify-between">
+
+  <!-- TOP HEADER -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 py-3.5 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <a href="index.html" class="flex items-center space-x-2">
+          <img src="logo.png" alt="Yumilo Market" class="h-9 w-auto object-contain" onerror="this.src='https://via.placeholder.com/40?text=YM'">
+          <span class="font-black text-base tracking-wider text-[#064e3b]">YUMILOMARKET</span>
+        </a>
+      </div>
+      <a href="index.html" class="text-xs font-bold text-emerald-700 hover:underline">← Back to Marketplace</a>
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-8 py-12 flex-1 space-y-6 bg-white my-8 rounded-xl border border-gray-200 shadow-sm">
-    <h2 class="text-3xl font-extrabold text-gray-900 border-b pb-4">Privacy Policy</h2>
-    <p class="text-xs text-gray-500">Last updated: October 2026</p>
+  <!-- MAIN CONTENT -->
+  <main class="max-w-4xl mx-auto px-6 py-12 bg-white my-10 rounded-3xl shadow-sm border border-gray-200 space-y-8">
     
-    <div class="space-y-4 text-sm text-gray-700 leading-relaxed">
-      <h3 class="font-bold text-gray-900 text-base">1. Information We Collect</h3>
-      <p>We collect personal information necessary to facilitate nationwide commerce in Zambia, including your name, delivery address, phone number, and payment verification records.</p>
-
-      <h3 class="font-bold text-gray-900 text-base">2. How We Use Your Information</h3>
-      <p>Your information is used strictly to process orders, coordinate courier delivery across Zambian provinces, communicate order status via WhatsApp/SMS, and maintain secure audit logs.</p>
-
-      <h3 class="font-bold text-gray-900 text-base">3. Data Security</h3>
-      <p>All user accounts, profiles, and transactional data are secured via encrypted databases with Row Level Security (RLS) policies. Private documents and payment receipts are restricted to authorized administrators only.</p>
+    <div class="border-b border-gray-100 pb-6">
+      <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full">Data Protection</span>
+      <h1 class="text-3xl font-black text-gray-900 mt-3">Privacy Policy</h1>
+      <p class="text-xs text-gray-500 mt-1">Last updated: October 2026 | Operating across all 10 Provinces of Zambia</p>
     </div>
+
+    <!-- Section 1 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">1. Introduction</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        Yumilo Market ("we", "our", or "us") respects your privacy and is committed to protecting your personal data. This Privacy Policy outlines how we collect, use, store, and safeguard your information when you visit our website <a href="https://www.yumilomarket.store" class="text-emerald-700 font-semibold underline">www.yumilomarket.store</a> or use our escrow marketplace services.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">2. Information We Collect</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        To provide secure nationwide e-commerce and mobile money escrow services, we collect the following categories of information:
+      </p>
+      <ul class="list-disc pl-5 text-xs text-gray-600 space-y-1">
+        <li><strong>Personal Identifiers:</strong> Full name, phone number, email address, and delivery addresses across any of Zambia's 10 provinces.</li>
+        <li><strong>Vendor & Courier KYC:</strong> Business registration documents, NRC or passport details, and tax identification where applicable for verified sellers.</li>
+        <li><strong>Transaction & Payment Data:</strong> Mobile money transaction reference IDs (MTN Mobile Money, Airtel Money) and order histories. Note: We do not store your direct PINs or private security keys.</li>
+        <li><strong>Technical Data:</strong> IP addresses, browser types, device information, and site interaction logs secured via Supabase database infrastructure.</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">3. How We Use Your Information</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        Your data is strictly utilized to:
+      </p>
+      <ul class="list-disc pl-5 text-xs text-gray-600 space-y-1">
+        <li>Facilitate secure escrow transactions and verify mobile money payments.</li>
+        <li>Coordinate local and inter-provincial deliveries with our courier partner network.</li>
+        <li>Send automated order updates, verification codes, and WhatsApp alerts.</li>
+        <li>Prevent fraud, resolve disputes, and maintain platform integrity.</li>
+      </ul>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">4. Data Security & Storage</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        We implement enterprise-grade security measures, including encrypted protocols (HTTPS/SSL) and secure database partitioning via Supabase, to protect your personal information from unauthorized access, alteration, or disclosure.
+      </p>
+    </section>
+
+    <!-- Section 5 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">5. Contact & Privacy Inquiries</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        If you have questions regarding this Privacy Policy or wish to request data correction or deletion, please contact our Zambia Operations Hub at <a href="mailto:support@yumilomarket.store" class="text-emerald-700 font-semibold underline">support@yumilomarket.store</a>.
+      </p>
+    </section>
+
   </main>
 
-  <footer class="bg-gray-100 border-t py-6 text-center text-xs text-gray-500">
-    <p>&copy; 2026 Yumilo Market. All rights reserved across Zambia.</p>
+  <!-- FOOTER -->
+  <footer class="bg-[#064e3b] text-emerald-100 border-t border-emerald-900 mt-auto py-10 px-6">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center text-xs space-y-4 sm:space-y-0">
+      <div class="flex items-center space-x-2">
+        <img src="logo.png" alt="Logo" class="h-7 w-auto object-contain" onerror="this.src='https://via.placeholder.com/30?text=YM'">
+        <span class="font-bold text-white text-sm">YUMILOMARKET</span>
+      </div>
+      <p class="text-[10px] text-emerald-300">&copy; 2026 Yumilo Market. All rights reserved. Zambia's Secure Universal Commerce Platform.</p>
+    </div>
   </footer>
+
 </body>
 </html>

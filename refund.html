@@ -3,36 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Refund Policy - Yumilo Market</title>
+  <title>Refund & Escrow Policy - Yumilo Market</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>body { background-color: #fcfbf9; }</style>
+  <style>
+    body { background-color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+    svg { width: 20px !important; height: 20px !important; min-width: 20px !important; min-height: 20px !important; }
+  </style>
 </head>
-<body class="min-h-screen text-gray-800 flex flex-col justify-between">
-  <header class="bg-[#064e3b] text-white py-6 px-8 shadow-md">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">Yumilo Market</h1>
-      <a href="index.html" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded font-semibold transition">Back to Store</a>
+<body class="text-gray-800 antialiased flex flex-col min-h-screen justify-between">
+
+  <!-- TOP HEADER -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 py-3.5 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <a href="index.html" class="flex items-center space-x-2">
+          <img src="logo.png" alt="Yumilo Market" class="h-9 w-auto object-contain" onerror="this.src='https://via.placeholder.com/40?text=YM'">
+          <span class="font-black text-base tracking-wider text-[#064e3b]">YUMILOMARKET</span>
+        </a>
+      </div>
+      <a href="index.html" class="text-xs font-bold text-emerald-700 hover:underline">← Back to Marketplace</a>
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-8 py-12 flex-1 space-y-6 bg-white my-8 rounded-xl border border-gray-200 shadow-sm">
-    <h2 class="text-3xl font-extrabold text-gray-900 border-b pb-4">Refund & Dispute Policy</h2>
-    <p class="text-xs text-gray-500">Last updated: October 2026</p>
+  <!-- MAIN CONTENT -->
+  <main class="max-w-4xl mx-auto px-6 py-12 bg-white my-10 rounded-3xl shadow-sm border border-gray-200 space-y-8">
     
-    <div class="space-y-4 text-sm text-gray-700 leading-relaxed">
-      <h3 class="font-bold text-gray-900 text-base">1. Escrow Protection & Claim Window</h3>
-      <p>Because Yumilo Market operates a secure order review and manual verification process, funds remain secured until delivery is confirmed. Refund claims must be submitted within 48 hours of delivery.</p>
-
-      <h3 class="font-bold text-gray-900 text-base">2. Eligible Refund Grounds</h3>
-      <p>Refunds or replacements are evaluated for items arriving damaged, spoiled (in the case of poultry/food products), or significantly not as described in the vendor listing.</p>
-
-      <h3 class="font-bold text-gray-900 text-base">3. Dispute Resolution</h3>
-      <p>Escalated refund claims are reviewed by Yumilo Market managers. Approved refunds are processed manually via mobile money or bank transfer within 3 to 5 business days.</p>
+    <div class="border-b border-gray-100 pb-6">
+      <span class="bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full">Escrow & Returns</span>
+      <h1 class="text-3xl font-black text-gray-900 mt-3">Refund & Escrow Dispute Policy</h1>
+      <p class="text-xs text-gray-500 mt-1">Last updated: October 2026 | Nationwide Protection across Zambia</p>
     </div>
+
+    <!-- Section 1 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">1. The Escrow Hold Period</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        When you purchase items on Yumilo Market using mobile money (MTN Mobile Money, Airtel Money), your payment is not paid directly to the vendor. Instead, funds are securely held in Yumilo Market's escrow holding account until the delivery is successfully completed and verified.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">2. Buyer Inspection & Dispute Window</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        Upon receiving your order delivered via our courier partner network across any of Zambia's 10 provinces, you have a <strong>24-hour inspection window</strong> to inspect the goods. 
+      </p>
+      <ul class="list-disc pl-5 text-xs text-gray-600 space-y-1">
+        <li><strong>Confirmation:</strong> If you confirm receipt and item quality, escrow funds are released to the vendor.</li>
+        <li><strong>Dispute:</strong> If the item is defective, counterfeit, or significantly not as described, you must file a dispute within 24 hours directly through your Yumilo Market dashboard or by contacting support.</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">3. Eligible Refund Scenarios</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        Refunds from escrow are approved under the following conditions:
+      </p>
+      <ul class="list-disc pl-5 text-xs text-gray-600 space-y-1">
+        <li><strong>Non-Delivery:</strong> The vendor or courier fails to deliver the merchandise within the agreed timeframe and tracking shows no transit progress.</li>
+        <li><strong>Item Defect or Damage:</strong> Goods arrive damaged or non-functional, supported by photographic or video evidence submitted within the 24-hour window.</li>
+        <li><strong>Wrong Item:</strong> The delivered product does not match the specifications listed on the marketplace catalog.</li>
+      </ul>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">4. Refund Processing & Mobile Money Reversals</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        Once a dispute is reviewed and approved by Yumilo Market's mediation team, refunds are processed directly back to the buyer's mobile money wallet (MTN or Airtel) within 3 to 5 business days. 
+      </p>
+    </section>
+
+    <!-- Section 5 -->
+    <section class="space-y-3">
+      <h2 class="text-base font-bold text-gray-900">5. Support & Claims Assistance</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        For urgent return requests or dispute mediation, reach out to our support team at <a href="mailto:support@yumilomarket.store" class="text-emerald-700 font-semibold underline">support@yumilomarket.store</a> with your Order ID and transaction reference.
+      </p>
+    </section>
+
   </main>
 
-  <footer class="bg-gray-100 border-t py-6 text-center text-xs text-gray-500">
-    <p>&copy; 2026 Yumilo Market. All rights reserved across Zambia.</p>
+  <!-- FOOTER -->
+  <footer class="bg-[#064e3b] text-emerald-100 border-t border-emerald-900 mt-auto py-10 px-6">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center text-xs space-y-4 sm:space-y-0">
+      <div class="flex items-center space-x-2">
+        <img src="logo.png" alt="Logo" class="h-7 w-auto object-contain" onerror="this.src='https://via.placeholder.com/30?text=YM'">
+        <span class="font-bold text-white text-sm">YUMILOMARKET</span>
+      </div>
+      <p class="text-[10px] text-emerald-300">&copy; 2026 Yumilo Market. All rights reserved. Zambia's Secure Universal Commerce Platform.</p>
+    </div>
   </footer>
+
 </body>
 </html>
