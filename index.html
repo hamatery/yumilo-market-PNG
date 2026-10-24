@@ -1,637 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yumilo Market | Zambia's Verified Universal Marketplace & Escrow</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f7f5ef; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yumilo Market - Quality Goods Across Zambia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { background-color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
-<body class="bg-[#f7f5ef] text-slate-900 pb-36 flex flex-col min-h-screen">
+<body class="pb-24 text-gray-800">
 
-    <!-- Top Header -->
-    <header class="sticky top-0 z-50 bg-[#f7f5ef]/95 backdrop-blur-md px-4 md:px-10 py-3.5 flex items-center justify-between border-b border-stone-200/80 shadow-sm">
-        <div class="flex items-center space-x-2.5 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-            <img src="logo.jpg" alt="Yumilo Market Logo" class="h-10 w-10 object-cover rounded-2xl shadow-sm border border-stone-200" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=120&q=80'">
-            <div>
-                <span class="font-extrabold text-base md:text-lg text-slate-900 tracking-tight block leading-none">YUMILO<span class="text-emerald-800">MARKET</span></span>
-                <span class="text-[10px] text-stone-500 font-medium">Zambia Verified Trade & Escrow</span>
-            </div>
-        </div>
+  <!-- TOP HEADER -->
+  <header class="bg-[#064e3b] text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50">
+    <div class="flex items-center space-x-2">
+      <!-- Logo -->
+      <img src="logo.png" alt="Yumilo Market" class="h-10 w-auto object-contain" onerror="this.src='https://via.placeholder.com/40?text=YM'">
+      <span class="font-bold text-lg tracking-tight text-white hidden sm:inline">Yumilo Market</span>
+    </div>
+    <div class="flex items-center space-x-4">
+      <button onclick="toggleSearch()" class="text-white hover:text-emerald-200 transition cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </button>
+      <a href="account.html" class="text-white hover:text-emerald-200 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      </a>
+    </div>
+  </header>
 
-        <!-- Desktop Nav Links -->
-        <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-stone-700">
-            <a href="#" class="text-emerald-800 font-bold">Marketplace</a>
-            <button onclick="toggleCategoriesMenu()" class="hover:text-emerald-800 transition flex items-center space-x-1 cursor-pointer">
-                <span>Categories</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-            </button>
-            <a href="#escrow" class="hover:text-emerald-800 transition">Escrow Protection</a>
-            <a href="#catalog" class="hover:text-emerald-800 transition">Live Catalog</a>
-        </nav>
-
-        <div id="authHeaderNav" class="flex items-center space-x-3">
-            <button onclick="openAuthModal('signin')" class="bg-white text-stone-800 border border-stone-300 px-4 py-2 rounded-full text-xs font-bold shadow-sm hover:bg-stone-50 transition cursor-pointer">
-                Sign In
-            </button>
-            <button onclick="openAuthModal('signup')" class="bg-[#1b3b2b] text-white px-4 py-2 rounded-full text-xs font-bold shadow-md hover:bg-[#12281d] transition cursor-pointer">
-                Sign Up
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-md md:max-w-6xl mx-auto px-4 md:px-8 pt-4 space-y-6 flex-grow w-full">
-
-        <!-- Search Bar & 1-Click Categories Toggle Button -->
-        <div class="flex items-center gap-2">
-            <button onclick="toggleCategoriesMenu()" class="bg-[#1b3b2b] text-white px-4 py-3.5 rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5 hover:bg-[#12281d] transition shrink-0 cursor-pointer">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                <span class="hidden md:inline">All Categories</span>
-                <span>Menu</span>
-            </button>
-
-            <div class="relative flex-1">
-                <span class="absolute left-4 top-3.5 text-amber-700/80 pointer-events-none">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                </span>
-                <input type="text" placeholder="Search electronics, fashion, groceries, farm goods..." class="w-full pl-12 pr-12 py-3.5 bg-white border border-stone-200 rounded-full text-sm text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-800 shadow-sm transition">
-                <span onclick="showToast('Visual search scanner active')" class="absolute right-4 top-3.5 text-stone-500 cursor-pointer hover:text-emerald-800 transition">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                </span>
-            </div>
-        </div>
-
-        <!-- Filter Category Pills -->
-        <div class="flex space-x-2 overflow-x-auto hide-scrollbar py-1">
-            <button onclick="filterProducts('all')" class="bg-[#1b3b2b] text-white px-5 py-2 rounded-full text-xs font-bold shadow-sm whitespace-nowrap transition cursor-pointer">All Goods</button>
-            <button onclick="filterProducts('electronics')" class="bg-white text-stone-700 border border-stone-200 px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap hover:bg-stone-50 transition cursor-pointer">Electronics</button>
-            <button onclick="filterProducts('fashion')" class="bg-white text-stone-700 border border-stone-200 px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap hover:bg-stone-50 transition cursor-pointer">Fashion & Wear</button>
-            <button onclick="filterProducts('groceries')" class="bg-white text-stone-700 border border-stone-200 px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap hover:bg-stone-50 transition cursor-pointer">Groceries</button>
-            <button onclick="filterProducts('agriculture')" class="bg-white text-stone-700 border border-stone-200 px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap hover:bg-stone-50 transition cursor-pointer">Agri & Livestock</button>
-        </div>
-
-        <!-- Verified Products Catalog -->
-        <section id="catalog" class="space-y-3">
-            <div class="flex items-center justify-between px-1">
-                <div>
-                    <h3 class="text-base font-bold text-slate-900">Featured Zambian Marketplace Catalog</h3>
-                    <p class="text-xs text-stone-500">Escrow-protected goods ready for nationwide delivery</p>
-                </div>
-                <span class="text-xs text-stone-500 font-medium">4 Items Live</span>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <!-- Product 1 -->
-                <div class="product-card bg-white rounded-3xl p-4 shadow-sm border border-stone-200/80 flex flex-col justify-between space-y-3 hover:shadow-md transition" data-category="electronics">
-                    <div class="relative">
-                        <span class="absolute top-2 left-2 z-10 bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-200 shadow-sm">● In Stock</span>
-                        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=500&q=80" alt="Smartphone" class="w-full h-36 md:h-44 object-cover rounded-2xl shadow-sm">
-                    </div>
-                    <div>
-                        <span class="text-[10px] text-stone-400 font-medium">🏪 Lusaka Tech Hub</span>
-                        <h4 class="text-sm font-bold text-slate-800 line-clamp-1 mt-0.5">X-Series Smart Phone 128GB</h4>
-                    </div>
-                    <div class="flex items-center justify-between pt-1">
-                        <span class="text-base font-extrabold text-emerald-800">K3,450.00</span>
-                    </div>
-                    <button onclick="addToCart('X-Series Smart Phone 128GB', 3450)" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-2.5 rounded-xl text-xs md:text-sm transition shadow-sm cursor-pointer">
-                        Add to Cart
-                    </button>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="product-card bg-white rounded-3xl p-4 shadow-sm border border-stone-200/80 flex flex-col justify-between space-y-3 hover:shadow-md transition" data-category="fashion">
-                    <div class="relative">
-                        <span class="absolute top-2 left-2 z-10 bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-200 shadow-sm">● Available</span>
-                        <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=500&q=80" alt="T-Shirt" class="w-full h-36 md:h-44 object-cover rounded-2xl shadow-sm">
-                    </div>
-                    <div>
-                        <span class="text-[10px] text-stone-400 font-medium">🏪 Lusaka Apparel Co.</span>
-                        <h4 class="text-sm font-bold text-slate-800 line-clamp-1 mt-0.5">Premium Cotton Casual Tee</h4>
-                    </div>
-                    <div class="flex items-center justify-between pt-1">
-                        <span class="text-base font-extrabold text-emerald-800">K180.00</span>
-                    </div>
-                    <button onclick="addToCart('Premium Cotton Casual Tee', 180)" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-2.5 rounded-xl text-xs md:text-sm transition shadow-sm cursor-pointer">
-                        Add to Cart
-                    </button>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="product-card bg-white rounded-3xl p-4 shadow-sm border border-stone-200/80 flex flex-col justify-between space-y-3 hover:shadow-md transition" data-category="groceries">
-                    <div class="relative">
-                        <span class="absolute top-2 left-2 z-10 bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-200 shadow-sm">● Fresh Daily</span>
-                        <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=500&q=80" alt="Groceries" class="w-full h-36 md:h-44 object-cover rounded-2xl shadow-sm">
-                    </div>
-                    <div>
-                        <span class="text-[10px] text-stone-400 font-medium">🏪 Kitwe Fresh Market</span>
-                        <h4 class="text-sm font-bold text-slate-800 line-clamp-1 mt-0.5">Super Meal Roller Meal (25kg)</h4>
-                    </div>
-                    <div class="flex items-center justify-between pt-1">
-                        <span class="text-base font-extrabold text-emerald-800">K240.00</span>
-                    </div>
-                    <button onclick="addToCart('Super Meal Roller Meal 25kg', 240)" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-2.5 rounded-xl text-xs md:text-sm transition shadow-sm cursor-pointer">
-                        Add to Cart
-                    </button>
-                </div>
-
-                <!-- Product 4 -->
-                <div class="product-card bg-white rounded-3xl p-4 shadow-sm border border-stone-200/80 flex flex-col justify-between space-y-3 hover:shadow-md transition" data-category="agriculture">
-                    <div class="relative">
-                        <span class="absolute top-2 left-2 z-10 bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-200 shadow-sm">● Farm Direct</span>
-                        <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=500&q=80" alt="Broiler Chicken" class="w-full h-36 md:h-44 object-cover rounded-2xl shadow-sm">
-                    </div>
-                    <div>
-                        <span class="text-[10px] text-stone-400 font-medium">🏪 Mansa Poultry Farms</span>
-                        <h4 class="text-sm font-bold text-slate-800 line-clamp-1 mt-0.5">Whole Broiler Chicken</h4>
-                    </div>
-                    <div class="flex items-center justify-between pt-1">
-                        <span class="text-base font-extrabold text-emerald-800">K95.00</span>
-                    </div>
-                    <button onclick="addToCart('Whole Broiler Chicken', 95)" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-2.5 rounded-xl text-xs md:text-sm transition shadow-sm cursor-pointer">
-                        Add to Cart
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Secure Escrow Trust Card & Real Checkout Button -->
-        <section id="escrow" class="bg-gradient-to-br from-[#1b3b2b] to-[#0f241a] text-white p-6 rounded-3xl shadow-lg border border-emerald-900 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div class="space-y-1.5">
-                <div class="flex items-center space-x-1.5 text-emerald-400 text-xs font-bold uppercase tracking-wider">
-                    <span>Secure Mobile Money Escrow Protection (Zambia Only)</span>
-                </div>
-                <h3 class="text-lg md:text-xl font-bold">Checkout & Order Processing</h3>
-                <p class="text-xs md:text-sm text-stone-300 leading-relaxed max-w-2xl">Funds are securely held in escrow and released only after delivery confirmation across all Zambian provinces.</p>
-            </div>
-            <button onclick="openCheckoutModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-6 py-3.5 rounded-2xl text-xs whitespace-nowrap transition shadow-lg cursor-pointer">Proceed to Checkout (<span id="cartTotalBtn">K0.00</span>)</button>
-        </section>
-
-    </main>
-
-    <!-- Professional Footer -->
-    <footer class="bg-[#0f241a] text-stone-300 mt-12 border-t border-emerald-900/50 pt-12 pb-24 md:pb-12 px-6 md:px-12">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-            <div class="space-y-3">
-                <span class="font-extrabold text-lg text-white">YUMILO<span class="text-emerald-400">MARKET</span></span>
-                <p class="text-xs text-stone-400 leading-relaxed">Zambia's verified universal marketplace. Operating nationwide across all 10 provinces with secure mobile money escrow.</p>
-            </div>
-            <div class="space-y-2">
-                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Departments</h4>
-                <ul class="space-y-1.5 text-xs text-stone-400">
-                    <li><a href="#" onclick="filterProducts('electronics')" class="hover:text-white transition">Electronics & Gadgets</a></li>
-                    <li><a href="#" onclick="filterProducts('fashion')" class="hover:text-white transition">Fashion & Apparel</a></li>
-                    <li><a href="#" onclick="filterProducts('groceries')" class="hover:text-white transition">Groceries & Household</a></li>
-                    <li><a href="#" onclick="filterProducts('agriculture')" class="hover:text-white transition">Agriculture & Livestock</a></li>
-                </ul>
-            </div>
-            <div class="space-y-2">
-                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Provinces Covered</h4>
-                <p class="text-xs text-stone-400">Lusaka, Copperbelt, Central, Luapula, Northern, Muchinga, Eastern, Southern, Western, North-Western.</p>
-            </div>
-            <div class="space-y-2">
-                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Support & Contact</h4>
-                <p class="text-xs text-stone-400">Zambia Operations Hub</p>
-                <p class="text-xs text-stone-400">Support: support@yumilomarket.store</p>
-            </div>
-        </div>
-        <div class="max-w-6xl mx-auto border-t border-emerald-900/60 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-stone-500">
-            <p>&copy; 2026 Yumilo Market. All rights reserved.</p>
-            <p class="mt-2 md:mt-0">Zambia's Secure Universal Commerce Platform</p>
-        </div>
-    </footer>
-
-    <!-- Mobile Bottom Navigation Bar -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-stone-200 py-2.5 px-4 flex justify-between items-center z-40 max-w-md mx-auto shadow-2xl">
-        <a href="#" class="flex flex-col items-center text-emerald-800">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-            <span class="text-[9px] font-bold mt-0.5">Home</span>
-        </a>
-        <button onclick="toggleCategoriesMenu()" class="flex flex-col items-center text-stone-400 hover:text-stone-600 cursor-pointer">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            <span class="text-[9px] font-medium mt-0.5">Categories</span>
-        </button>
-        <button onclick="openCheckoutModal()" class="flex flex-col items-center text-stone-400 hover:text-stone-600 relative cursor-pointer">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-            <span class="cart-badge absolute -top-1 -right-1 bg-amber-500 text-slate-950 text-[8px] font-extrabold w-3.5 h-3.5 rounded-full flex items-center justify-center">0</span>
-            <span class="text-[9px] font-medium mt-0.5">Cart</span>
-        </button>
-        <button onclick="openAuthModal('signin')" class="flex flex-col items-center text-stone-400 hover:text-stone-600 cursor-pointer">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-            <span class="text-[9px] font-medium mt-0.5">Account</span>
-        </button>
-    </nav>
-
-    <!-- 1-Click Categories Slide-Out Drawer Menu -->
-    <div id="categoriesDrawer" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex justify-start">
-        <div class="bg-white w-80 h-full p-6 space-y-6 shadow-2xl overflow-y-auto flex flex-col justify-between">
-            <div class="space-y-6">
-                <div class="flex items-center justify-between border-b pb-4">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-xl">🗂️</span>
-                        <h3 class="text-base font-extrabold text-slate-900">Zambia Categories</h3>
-                    </div>
-                    <button onclick="toggleCategoriesMenu()" class="text-stone-400 hover:text-slate-700 font-bold text-lg cursor-pointer">✕</button>
-                </div>
-                <div class="space-y-2">
-                    <a href="#" onclick="filterProducts('electronics'); toggleCategoriesMenu();" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-stone-100 transition font-semibold text-xs text-stone-800"><span class="text-xl">💻</span><span>Electronics & Gadgets</span></a>
-                    <a href="#" onclick="filterProducts('fashion'); toggleCategoriesMenu();" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-stone-100 transition font-semibold text-xs text-stone-800"><span class="text-xl">👕</span><span>Fashion & Apparel</span></a>
-                    <a href="#" onclick="filterProducts('groceries'); toggleCategoriesMenu();" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-stone-100 transition font-semibold text-xs text-stone-800"><span class="text-xl">🛒</span><span>Groceries & Supermarket</span></a>
-                    <a href="#" onclick="filterProducts('agriculture'); toggleCategoriesMenu();" class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-stone-100 transition font-semibold text-xs text-stone-800"><span class="text-xl">🌾</span><span>Agriculture & Livestock Feed</span></a>
-                </div>
-            </div>
-            <div class="border-t pt-4 text-center"><span class="text-[10px] text-stone-400">Yumilo Market Zambia</span></div>
-        </div>
-        <div class="flex-grow" onclick="toggleCategoriesMenu()"></div>
+  <!-- HERO BANNER SECTION -->
+  <section class="bg-[#064e3b] text-white pt-6 pb-16 px-6 relative overflow-hidden">
+    <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+      <div class="space-y-3 text-left max-w-md">
+        <p class="text-[11px] tracking-widest uppercase font-semibold text-emerald-300">Zambia • Quality at Every Step</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">Good finds.<br>Right here.</h1>
+        <p class="text-xs text-emerald-100">Shop verified sellers across Zambia with secure mobile money escrow.</p>
+        <a href="#products-section" class="inline-block bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-bold px-6 py-2.5 rounded-full text-xs transition shadow-lg">Explore the market</a>
+      </div>
+      <div class="w-full md:w-auto">
+        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" alt="Fresh Food Spread" class="rounded-2xl shadow-xl w-full md:w-80 h-44 object-cover border-2 border-emerald-800">
+      </div>
     </div>
 
-    <!-- AUTH MODAL WITH ZAMBIA PROVINCES, CITIES, PHONE, & REAL EMAIL VERIFICATION -->
-    <div id="authModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-stone-400 hover:text-slate-700 font-bold cursor-pointer">✕</button>
-            
-            <!-- Tabs -->
-            <div class="flex bg-stone-100 p-1 rounded-2xl">
-                <button id="tabSignin" onclick="switchAuthTab('signin')" class="flex-1 py-2 text-xs font-bold rounded-xl transition bg-white shadow-sm text-slate-900 cursor-pointer">Sign In</button>
-                <button id="tabSignup" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-xs font-bold rounded-xl transition text-stone-500 cursor-pointer">Sign Up (Zambia)</button>
-            </div>
+    <!-- FLOATING SEARCH BAR -->
+    <div class="absolute -bottom-6 left-6 right-6 max-w-xl mx-auto z-20">
+      <div class="bg-white rounded-2xl shadow-xl p-2 flex items-center border border-gray-100">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 ml-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Search the marketplace across Zambia..." class="w-full px-3 py-2 text-sm text-gray-700 bg-transparent focus:outline-none">
+      </div>
+    </div>
+  </section>
 
-            <!-- Sign In Form -->
-            <form id="signinForm" onsubmit="handleSignIn(event)" class="space-y-3">
-                <div class="space-y-1">
-                    <label class="text-[11px] font-bold text-stone-600">Email Address (Mandatory)</label>
-                    <input type="email" id="signinEmail" required placeholder="yourname@gmail.com" class="w-full p-3 bg-stone-50 border rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-800">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[11px] font-bold text-stone-600">Password</label>
-                    <input type="password" id="signinPassword" required placeholder="••••••••" class="w-full p-3 bg-stone-50 border rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-800">
-                </div>
-                <button type="submit" class="w-full bg-[#1b3b2b] text-white py-3 rounded-xl text-xs font-bold shadow hover:bg-[#12281d] transition mt-2 cursor-pointer">Sign In</button>
-            </form>
+  <!-- CATEGORIES GRID -->
+  <section class="max-w-4xl mx-auto px-6 mt-12">
+    <div class="grid grid-cols-4 sm:grid-cols-7 gap-3 text-center">
+      <button onclick="filterByCategory('Electronics')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 hover:border-emerald-600 transition flex flex-col items-center group cursor-pointer">
+        <span class="text-2xl mb-1 group-hover:scale-110 transition">💻</span>
+        <span class="text-[11px] font-semibold text-gray-700">Electronics</span>
+      </button>
+      <button onclick="filterByCategory('Fashion')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 hover:border-emerald-600 transition flex flex-col items-center group cursor-pointer">
+        <span class="text-2xl mb-1 group-hover:scale-110 transition">👕</span>
+        <span class="text-[11px] font-semibold text-gray-700">Fashion</span>
+      </button>
+      <button onclick="filterByCategory('Home')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 hover:border-emerald-600 transition flex flex-col items-center group cursor-pointer">
+        <span class="text-2xl mb-1 group-hover:scale-110 transition">🏠</span>
+        <span class="text-[11px] font-semibold text-gray-700">Home</span>
+      </button>
+      <button onclick="filterByCategory('Beauty')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 hover:border-emerald-600 transition flex flex-col items-center group cursor-pointer">
+        <span class="text-2xl mb-1 group-hover:scale-110 transition">💄</span>
+        <span class="text-[11px] font-semibold text-gray-700">Beauty</span>
+      </button>
+      <button onclick="filterByCategory('Agriculture')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 hover:border-emerald-600 transition flex flex-col items-center group cursor-pointer">
+        <span class="text-2xl mb-1 group-hover:scale-110 transition">🌱</span>
+        <span class="text-[11px] font-semibold text-gray-700">Agriculture</span>
+      </button>
+      <button onclick="filterByCategory('Tools')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 hover:border-emerald-600 transition flex flex-col items-center group cursor-pointer">
+        <span class="text-2xl mb-1 group-hover:scale-110 transition">🛠️</span>
+        <span class="text-[11px] font-semibold text-gray-700">Tools</span>
+      </button>
+      <button onclick="filterByCategory('Restaurants')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 hover:border-emerald-600 transition flex flex-col items-center group cursor-pointer">
+        <span class="text-2xl mb-1 group-hover:scale-110 transition">🍽️</span>
+        <span class="text-[11px] font-semibold text-gray-700">Restaurants</span>
+      </button>
+    </div>
+  </section>
 
-            <!-- Sign Up Form (Mandatory Phone, Province, City) -->
-            <form id="signupForm" onsubmit="handleSignUp(event)" class="space-y-3 hidden">
-                <div class="space-y-1">
-                    <label class="text-[11px] font-bold text-stone-600">Full Name</label>
-                    <input type="text" id="signupName" required placeholder="Henry Mwansa" class="w-full p-3 bg-stone-50 border rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-800">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[11px] font-bold text-stone-600">Email Address (Mandatory for Verification Code)</label>
-                    <input type="email" id="signupEmail" required placeholder="henry@yumilomarket.store" class="w-full p-3 bg-stone-50 border rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-800">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[11px] font-bold text-stone-600">Zambian Phone Number (+260 Mandatory)</label>
-                    <input type="tel" id="signupPhone" required placeholder="+260 97XXXXXXX" class="w-full p-3 bg-stone-50 border rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-800">
-                </div>
-                
-                <!-- Province Selection (Zambia Only) -->
-                <div class="space-y-1">
-                    <label class="text-[11px] font-bold text-stone-600">Select Province (Zambia)</label>
-                    <select id="signupProvince" onchange="updateCities()" required class="w-full p-3 bg-stone-50 border rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-800">
-                        <option value="">-- Choose Province --</option>
-                        <option value="Lusaka">Lusaka Province</option>
-                        <option value="Copperbelt">Copperbelt Province</option>
-                        <option value="Central">Central Province</option>
-                        <option value="Luapula">Luapula Province</option>
-                        <option value="Northern">Northern Province</option>
-                        <option value="Muchinga">Muchinga Province</option>
-                        <option value="Eastern">Eastern Province</option>
-                        <option value="Southern">Southern Province</option>
-                        <option value="Western">Western Province</option>
-                        <option value="North-Western">North-Western Province</option>
-                    </select>
-                </div>
+  <!-- POPULAR PICKS SECTION -->
+  <section id="products-section" class="max-w-4xl mx-auto px-6 mt-10">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-lg font-bold text-gray-900">Popular picks</h3>
+      <button onclick="loadAllProducts()" class="text-xs font-semibold text-emerald-700 hover:underline">See all →</button>
+    </div>
 
-                <!-- City / Town Selection -->
-                <div class="space-y-1">
-                    <label class="text-[11px] font-bold text-stone-600">Select City / Town</label>
-                    <select id="signupCity" required class="w-full p-3 bg-stone-50 border rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-800">
-                        <option value="">-- Choose City/Town first --</option>
-                    </select>
-                </div>
-
-                <div class="space-y-1">
-                    <label class="text-[11px] font-bold text-stone-600">Password</label>
-                    <input type="password" id="signupPassword" required placeholder="••••••••" class="w-full p-3 bg-stone-50 border rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-800">
-                </div>
-                <button type="submit" class="w-full bg-[#1b3b2b] text-white py-3 rounded-xl text-xs font-bold shadow hover:bg-[#12281d] transition mt-2 cursor-pointer">Register & Send Email Verification Code</button>
-            </form>
-
-            <!-- Verification Code Input Form (Shown after sign up) -->
-            <form id="verifyForm" onsubmit="handleVerifyEmail(event)" class="space-y-3 hidden">
-                <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-xs text-emerald-900">
-                    📬 We sent a verification code / link to your email. Check your inbox (and spam folder) to confirm your account.
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[11px] font-bold text-stone-600">Enter Verification Code / Token</label>
-                    <input type="text" id="verifyCode" required placeholder="Enter code from email" class="w-full p-3 bg-stone-50 border rounded-xl text-center text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-800">
-                </div>
-                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 py-3 rounded-xl text-xs font-extrabold shadow transition mt-2 cursor-pointer">Confirm Email & Login</button>
-            </form>
-
+    <!-- Product Grid -->
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <!-- Fallback / Initial Mock Cards matching your design -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+        <img src="https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=400&q=80" alt="Chicken Portions" class="w-full h-36 object-cover rounded-xl mb-3">
+        <div>
+          <h4 class="font-bold text-sm text-gray-900">Chicken Portions</h4>
+          <p class="text-emerald-700 font-extrabold text-sm mt-1">K 85/kg</p>
         </div>
-    </div>
-
-    <!-- CHECKOUT MODAL -->
-    <div id="checkoutModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl relative">
-            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-stone-400 hover:text-slate-700 font-bold cursor-pointer">✕</button>
-            <h3 class="text-base font-bold text-slate-900">Secure Escrow Checkout (Zambia)</h3>
-            <div id="cartSummary" class="bg-stone-50 p-3 rounded-xl text-xs space-y-1 max-h-40 overflow-y-auto">
-                <!-- Cart items populated by JS -->
-            </div>
-            <div class="space-y-2">
-                <label class="text-[11px] font-bold text-stone-600">Select Mobile Money Provider</label>
-                <select id="momoProvider" class="w-full p-3 bg-stone-50 border rounded-xl text-xs">
-                    <option value="MTN">MTN Mobile Money Zambia</option>
-                    <option value="Airtel">Airtel Money Zambia</option>
-                    <option value="Zamtel">Zamtel Kwacha</option>
-                </select>
-            </div>
-            <div class="space-y-2">
-                <label class="text-[11px] font-bold text-stone-600">Mobile Money Phone Number</label>
-                <input type="tel" id="momoPhone" placeholder="+260 97XXXXXXX" class="w-full p-3 bg-stone-50 border rounded-xl text-xs">
-            </div>
-            <button onclick="submitOrder()" class="w-full bg-[#1b3b2b] text-white py-3 rounded-xl text-xs font-bold shadow hover:bg-[#12281d] transition cursor-pointer">Pay Securely via Escrow</button>
+        <div class="mt-3 flex justify-between items-center">
+          <span class="inline-flex items-center text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-1.5"></span>Available</span>
+          <button onclick="addToCart('Chicken Portions', 85)" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3 py-1.5 rounded-lg font-semibold transition">Add to cart</button>
         </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80" alt="Classic Meal Bowl" class="w-full h-36 object-cover rounded-xl mb-3">
+        <div>
+          <h4 class="font-bold text-sm text-gray-900">Classic Meal Bowl</h4>
+          <p class="text-emerald-700 font-extrabold text-sm mt-1">K 60</p>
+        </div>
+        <div class="mt-3 flex justify-between items-center">
+          <span class="inline-flex items-center text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-1.5"></span>Available</span>
+          <button onclick="addToCart('Classic Meal Bowl', 60)" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3 py-1.5 rounded-lg font-semibold transition">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+        <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=400&q=80" alt="Fresh Tomatoes" class="w-full h-36 object-cover rounded-xl mb-3">
+        <div>
+          <h4 class="font-bold text-sm text-gray-900">Fresh Tomatoes</h4>
+          <p class="text-emerald-700 font-extrabold text-sm mt-1">K 25/kg</p>
+        </div>
+        <div class="mt-3 flex justify-between items-center">
+          <span class="inline-flex items-center text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-1.5"></span>Available</span>
+          <button onclick="addToCart('Fresh Tomatoes', 25)" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3 py-1.5 rounded-lg font-semibold transition">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+        <img src="https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=400&q=80" alt="Woven Storage Basket" class="w-full h-36 object-cover rounded-xl mb-3">
+        <div>
+          <h4 class="font-bold text-sm text-gray-900">Woven Storage Basket</h4>
+          <p class="text-emerald-700 font-extrabold text-sm mt-1">K 120</p>
+        </div>
+        <div class="mt-3 flex justify-between items-center">
+          <span class="inline-flex items-center text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-1.5"></span>Available</span>
+          <button onclick="addToCart('Woven Storage Basket', 120)" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3 py-1.5 rounded-lg font-semibold transition">Add to cart</button>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-2xl text-xs font-bold z-50 transition-all duration-300 opacity-0 translate-y-[-20px] pointer-events-none">
-        Notification message
-    </div>
+  <!-- BOTTOM NAVIGATION BAR -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3 px-6 flex justify-around items-center z-50 shadow-lg">
+    <a href="index.html" class="flex flex-col items-center text-emerald-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      <span class="text-[10px] font-semibold mt-1">Home</span>
+    </a>
+    <button onclick="alert('Categories')" class="flex flex-col items-center text-gray-400 hover:text-emerald-700 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2. 2 0 01-2-2v-2z"/></svg>
+      <span class="text-[10px] font-medium mt-1">Categories</span>
+    </button>
+    <a href="orders.html" class="flex flex-col items-center text-gray-400 hover:text-emerald-700 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      <span class="text-[10px] font-medium mt-1">My orders</span>
+    </a>
+    <a href="messages.html" class="flex flex-col items-center text-gray-400 hover:text-emerald-700 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+      <span class="text-[10px] font-medium mt-1">Messages</span>
+    </a>
+    <a href="cart.html" class="flex flex-col items-center text-gray-400 hover:text-emerald-700 transition relative">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+      <span class="text-[10px] font-medium mt-1">Cart</span>
+    </a>
+    <a href="account.html" class="flex flex-col items-center text-gray-400 hover:text-emerald-700 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      <span class="text-[10px] font-medium mt-1">Account</span>
+    </a>
+  </nav>
 
-    <!-- SAFE ROBUST SCRIPT -->
-    <script>
-        // Global UI functions guaranteed to be available immediately
-        window.showToast = function(message) {
-            const toast = document.getElementById('toast');
-            if (!toast) return;
-            toast.textContent = message;
-            toast.classList.remove('opacity-0', 'translate-y-[-20px]');
-            toast.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'translate-y-[-20px]');
-            }, 4000);
-        };
+  <script>
+    const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        window.toggleCategoriesMenu = function() {
-            const drawer = document.getElementById('categoriesDrawer');
-            if (drawer) drawer.classList.toggle('hidden');
-        };
+    let cart = [];
 
-        window.openAuthModal = function(mode) {
-            const modal = document.getElementById('authModal');
-            if (modal) modal.classList.remove('hidden');
-            window.switchAuthTab(mode);
-        };
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      alert(`${name} added to cart! (Total items: ${cart.length})`);
+    }
 
-        window.closeAuthModal = function() {
-            const modal = document.getElementById('authModal');
-            if (modal) modal.classList.add('hidden');
-        };
+    function filterByCategory(category) {
+      alert(`Filtering by category: ${category}`);
+    }
 
-        window.switchAuthTab = function(mode) {
-            const tabSignin = document.getElementById('tabSignin');
-            const tabSignup = document.getElementById('tabSignup');
-            const signinForm = document.getElementById('signinForm');
-            const signupForm = document.getElementById('signupForm');
-            const verifyForm = document.getElementById('verifyForm');
+    function filterProducts() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      // Implement filtering logic or search API call here
+    }
 
-            if (!tabSignin || !tabSignup) return;
-
-            if (mode === 'signin') {
-                tabSignin.className = "flex-1 py-2 text-xs font-bold rounded-xl transition bg-white shadow-sm text-slate-900 cursor-pointer";
-                tabSignup.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-stone-500 cursor-pointer";
-                if (signinForm) signinForm.classList.remove('hidden');
-                if (signupForm) signupForm.classList.add('hidden');
-                if (verifyForm) verifyForm.classList.add('hidden');
-            } else {
-                tabSignup.className = "flex-1 py-2 text-xs font-bold rounded-xl transition bg-white shadow-sm text-slate-900 cursor-pointer";
-                tabSignin.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-stone-500 cursor-pointer";
-                if (signupForm) signupForm.classList.remove('hidden');
-                if (signinForm) signinForm.classList.add('hidden');
-                if (verifyForm) verifyForm.classList.add('hidden');
-            }
-        };
-
-        // Zambia Provinces and Cities mapping
-        const zambiaData = {
-            "Lusaka": ["Lusaka City", "Kafue", "Chongwe", "Luangwa"],
-            "Copperbelt": ["Ndola", "Kitwe", "Chingola", "Mufulira", "Luanshya", "Kalulushi", "Chililabombwe"],
-            "Central": ["Kabwe", "Kapiri Mposhi", "Serenje", "Mkushi", "Mumbwa"],
-            "Luapula": ["Mansa", "Kawambwa", "Nchelenge", "Samfya"],
-            "Northern": ["Kasama", "Mbala", "Mporokoso", "Luwingu"],
-            "Muchinga": ["Chinsali", "Mpika", "Isoka", "Nakonde"],
-            "Eastern": ["Chipata", "Petauke", "Katete", "Lundazi"],
-            "Southern": ["Livingstone", "Choma", "Mazabuka", "Monze", "Kalomo"],
-            "Western": ["Mongu", "Senanga", "Kaoma", "Sesheke"],
-            "North-Western": ["Solwezi", "Kasempa", "Zambezi", "Mwinilunga"]
-        };
-
-        window.updateCities = function() {
-            const provinceSelect = document.getElementById('signupProvince');
-            const citySelect = document.getElementById('signupCity');
-            if (!provinceSelect || !citySelect) return;
-            const selectedProvince = provinceSelect.value;
-            
-            citySelect.innerHTML = '<option value="">-- Choose City / Town --</option>';
-            if (selectedProvince && zambiaData[selectedProvince]) {
-                zambiaData[selectedProvince].forEach(city => {
-                    const opt = document.createElement('option');
-                    opt.value = city;
-                    opt.textContent = city;
-                    citySelect.appendChild(opt);
-                });
-            }
-        };
-
-        // Cart state
-        let cart = [];
-        let pendingEmail = '';
-
-        window.addToCart = function(name, price) {
-            cart.push({ name, price });
-            window.updateCartUI();
-            window.showToast(`🛒 Added ${name} (K${price}) to cart!`);
-        };
-
-        window.updateCartUI = function() {
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            const totalBtn = document.getElementById('cartTotalBtn');
-            if (totalBtn) totalBtn.textContent = `K${total.toFixed(2)}`;
-            
-            const badges = document.querySelectorAll('.cart-badge');
-            badges.forEach(b => b.textContent = cart.length);
-
-            let summaryHTML = '';
-            if (cart.length === 0) {
-                summaryHTML = '<p class="text-stone-400 text-center py-2">Your cart is empty</p>';
-            } else {
-                cart.forEach((item) => {
-                    summaryHTML += `<div class="flex justify-between border-b py-1"><span>${item.name}</span><strong>K${item.price}</strong></div>`;
-                });
-                summaryHTML += `<div class="flex justify-between pt-2 font-bold text-sm"><span>Total:</span><span class="text-emerald-800">K${total.toFixed(2)}</span></div>`;
-            }
-            const summaryEl = document.getElementById('cartSummary');
-            if (summaryEl) summaryEl.innerHTML = summaryHTML;
-        };
-
-        window.openCheckoutModal = function() {
-            if (cart.length === 0) {
-                window.showToast('⚠️ Your cart is empty!');
-                return;
-            }
-            const modal = document.getElementById('checkoutModal');
-            if (modal) modal.classList.remove('hidden');
-        };
-
-        window.closeCheckoutModal = function() {
-            const modal = document.getElementById('checkoutModal');
-            if (modal) modal.classList.add('hidden');
-        };
-
-        window.filterProducts = function(category) {
-            const cards = document.querySelectorAll('.product-card');
-            cards.forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-            window.showToast(`Filtered department: ${category.toUpperCase()}`);
-        };
-
-        // Supabase safe initialization
-        let supabaseClient = null;
-        try {
-            if (window.supabase) {
-                supabaseClient = window.supabase.createClient('https://syxibiyrbgwsgghwwgej.supabase.co', 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG');
-            }
-        } catch (e) {
-            console.error('Supabase init note:', e);
-        }
-
-        window.submitOrder = async function() {
-            const phone = document.getElementById('momoPhone').value;
-            const provider = document.getElementById('momoProvider').value;
-            if (!phone) {
-                window.showToast('⚠️ Please enter your Mobile Money phone number.');
-                return;
-            }
-
-            if (!supabaseClient) {
-                window.showToast('✅ Order placed successfully! (Offline mode)');
-                cart = [];
-                window.updateCartUI();
-                window.closeCheckoutModal();
-                return;
-            }
-
-            const { error } = await supabaseClient.from('orders').insert([
-                { items: cart, provider: provider, phone: phone, status: 'Escrow Pending' }
-            ]);
-
-            if (error) {
-                window.showToast('❌ Order error: ' + error.message);
-            } else {
-                window.showToast('✅ Order placed successfully! Escrow mobile money prompt sent.');
-                cart = [];
-                window.updateCartUI();
-                window.closeCheckoutModal();
-            }
-        };
-
-        window.handleSignUp = async function(event) {
-            event.preventDefault();
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const phone = document.getElementById('signupPhone').value;
-            const province = document.getElementById('signupProvince').value;
-            const city = document.getElementById('signupCity').value;
-            const password = document.getElementById('signupPassword').value;
-
-            pendingEmail = email;
-
-            if (!supabaseClient) {
-                window.showToast('📧 Verification code simulated for ' + email);
-                document.getElementById('signupForm').classList.add('hidden');
-                document.getElementById('verifyForm').classList.remove('hidden');
-                return;
-            }
-
-            const { error } = await supabaseClient.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    data: { full_name: name, phone: phone, province: province, city: city, country: 'Zambia' }
-                }
-            });
-
-            if (error) {
-                window.showToast('❌ Sign Up Error: ' + error.message);
-            } else {
-                window.showToast('📧 Verification email sent! Please check your inbox.');
-                document.getElementById('signupForm').classList.add('hidden');
-                document.getElementById('verifyForm').classList.remove('hidden');
-            }
-        };
-
-        window.handleVerifyEmail = async function(event) {
-            event.preventDefault();
-            const code = document.getElementById('verifyCode').value;
-
-            if (!supabaseClient) {
-                window.showToast('🎉 Email verified successfully! You are now logged in.');
-                window.closeAuthModal();
-                return;
-            }
-
-            const { error } = await supabaseClient.auth.verifyOtp({
-                email: pendingEmail,
-                token: code,
-                type: 'signup'
-            });
-
-            if (error) {
-                window.showToast('❌ Invalid verification code: ' + error.message);
-            } else {
-                window.showToast('🎉 Email verified successfully! You are now logged in.');
-                window.closeAuthModal();
-            }
-        };
-
-        window.handleSignIn = async function(event) {
-            event.preventDefault();
-            const email = document.getElementById('signinEmail').value;
-            const password = document.getElementById('signinPassword').value;
-
-            if (!supabaseClient) {
-                window.showToast('✅ Welcome back!');
-                window.closeAuthModal();
-                return;
-            }
-
-            const { error } = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
-
-            if (error) {
-                window.showToast('❌ Sign In Error: ' + error.message);
-            } else {
-                window.showToast('✅ Welcome back!');
-                window.closeAuthModal();
-            }
-        };
-    </script>
+    function loadAllProducts() {
+      alert('Loading all marketplace listings across Zambia.');
+    }
+  </script>
 </body>
 </html>
