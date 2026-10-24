@@ -101,8 +101,8 @@
         <div>
           <p class="text-[10px] font-bold tracking-wider uppercase text-amber-300 mb-2 px-3 flex items-center gap-1">🔒 Owner Controls</p>
           <div class="space-y-1">
-            <button onclick="switchView('settings')" id="nav-settings" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
-              <span>Site settings & records</span>
+            <button onclick="switchView('staff')" id="nav-staff" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
+              <span>Manage staff & permissions</span>
               <span>🔒</span>
             </button>
             <button onclick="switchView('finance')" id="nav-finance" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left">
@@ -154,7 +154,7 @@
 
     <!-- MAIN DYNAMIC CONTENT CONTAINER -->
     <main id="mainContent" class="p-8 space-y-8 flex-1">
-      <!-- Content dynamically injected by switchView() -->
+      <!-- Injected dynamically -->
     </main>
 
     <!-- FOOTER DISCLAIMER -->
@@ -188,7 +188,8 @@
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let currentOrders = [];
-    let activeModalData = null;
+    let staffMembers = [];
+    let windowActiveConfirm = null;
 
     // Instant Logout
     async function handleLogout() {
@@ -204,7 +205,6 @@
 
     // View Switching Controller
     function switchView(viewId) {
-      // Highlight active sidebar button
       document.querySelectorAll('aside nav button').forEach(btn => {
         btn.classList.remove('bg-emerald-700', 'text-white', 'font-semibold');
         btn.classList.add('hover:bg-emerald-800/60', 'text-emerald-200');
@@ -228,7 +228,7 @@
         loadOrdersTable();
       } else if (viewId === 'payments') {
         title.textContent = 'Payments & Receipt Review';
-        container.innerHTML = renderGenericManagementView('Payments & Escrow Receipts', 'Verify customer payment proofs and escrow transfers.');
+        container.innerHTML = renderGenericManagementView('Payments & Receipt Review', 'Verify customer payment proofs and escrow transfers.');
       } else if (viewId === 'refunds') {
         title.textContent = 'Refund Claims Management';
         container.innerHTML = renderGenericManagementView('Refund Claims', 'Review escalated refund and dispute claims.');
@@ -253,9 +253,10 @@
       } else if (viewId === 'content') {
         title.textContent = 'Marketplace Content Management';
         container.innerHTML = renderGenericManagementView('Marketplace Content', 'Manage banners, announcements, and static notices.');
-      } else if (viewId === 'settings') {
-        title.textContent = 'Site Settings & Records (Owner Only)';
-        container.innerHTML = renderOwnerControlView('Site Settings & Records', 'Configure global platform policies, fees, and operational parameters.');
+      } else if (viewId === 'staff') {
+        title.textContent = 'Manage Staff & Permissions (Owner Only)';
+        container.innerHTML = renderStaffManagementHTML();
+        loadStaffTable();
       } else if (viewId === 'finance') {
         title.textContent = 'Finance & Overrides (Owner Only)';
         container.innerHTML = renderOwnerControlView('Finance & Overrides', 'Execute payment manual overrides and escrow releases.');
@@ -406,7 +407,7 @@
             <p class="text-xs text-gray-500">Sensitive actions — Owner only access</p>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            <div onclick="switchView('settings')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
+            <div onclick="switchView('staff')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-emerald-600 transition cursor-pointer">
               <div class="text-xl">🛡️</div>
               <h5 class="text-xs font-bold text-gray-900">Manage staff & permissions</h5>
               <p class="text-[11px] text-gray-500">Create/deactivate staff, assign roles (Owner only)</p>
@@ -472,6 +473,48 @@
       `;
     }
 
+    // Staff Management HTML Template (Fully functional staff creation)
+    function renderStaffManagementHTML() {
+      return `
+        <div class="space-y-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">Manage Staff & Permissions</h3>
+              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Create staff, assign roles, and manage access privileges.</p>
+            </div>
+            <button onclick="openCreateStaffModal()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer flex items-center gap-1.5">
+              <span>➕</span> Create New Staff Account
+            </button>
+          </div>
+
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-gray-200 flex justify-between items-center">
+              <h4 class="text-base font-bold text-gray-800">Active Staff & Administrators</h4>
+              <button onclick="loadStaffTable()" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-md font-semibold text-gray-700 transition cursor-pointer">
+                Refresh Staff List
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="bg-gray-50 text-gray-500 font-bold uppercase tracking-wider border-b border-gray-200 text-xs">
+                    <th class="py-3 px-6">Name</th>
+                    <th class="py-3 px-6">Email / ID</th>
+                    <th class="py-3 px-6">Role / Permission</th>
+                    <th class="py-3 px-6">Created Date</th>
+                    <th class="py-3 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="staffTableBody" class="divide-y divide-gray-200 text-gray-700">
+                  <tr><td colspan="5" class="text-center py-12 text-gray-400">Loading staff records...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     function renderGenericManagementView(title, subtitle) {
       return `
         <div class="space-y-6">
@@ -481,14 +524,14 @@
               <p class="text-xs text-gray-500">${subtitle}</p>
             </div>
             <button onclick="openGenericModal('${title}')" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
-              + Add New / Record Action
+              + Record Action / Note
             </button>
           </div>
 
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-12 text-center space-y-3">
             <div class="text-4xl">📂</div>
             <h4 class="text-base font-bold text-gray-800">No active records found in ${title}</h4>
-            <p class="text-xs text-gray-500 max-w-md mx-auto">This queue is currently empty. New submissions from customers, vendors, or system triggers will appear here automatically.</p>
+            <p class="text-xs text-gray-500 max-w-md mx-auto">This queue is currently clean. Incoming submissions from users or system triggers will appear here in real-time.</p>
           </div>
         </div>
       `;
@@ -524,7 +567,7 @@
       document.getElementById('modalBody').innerHTML = contentHTML;
       document.getElementById('actionModal').classList.remove('hidden');
       document.getElementById('actionModal').classList.add('flex');
-      window.activeModalConfirm = confirmCallback;
+      windowActiveConfirm = confirmCallback;
     }
 
     function closeModal() {
@@ -533,10 +576,9 @@
     }
 
     function executeModalAction() {
-      if (typeof window.activeModalConfirm === 'function') {
-        window.activeModalConfirm();
+      if (typeof windowActiveConfirm === 'function') {
+        windowActiveConfirm();
       }
-      closeModal();
     }
 
     function openGenericModal(actionName) {
@@ -546,8 +588,119 @@
          <textarea id="modalInputNote" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-emerald-600 focus:outline-none" rows="3" placeholder="Enter audit note or reason..."></textarea>`,
         () => {
           alert(`Successfully executed action for ${actionName}.`);
+          closeModal();
         }
       );
+    }
+
+    // Staff Creation Modal & Execution
+    function openCreateStaffModal() {
+      openModal(
+        'Create New Staff Account',
+        `<div class="space-y-3 text-xs">
+           <div>
+             <label class="block font-bold text-gray-700 mb-1">Full Name</label>
+             <input type="text" id="staffName" placeholder="e.g. John Banda" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+           </div>
+           <div>
+             <label class="block font-bold text-gray-700 mb-1">Email Address</label>
+             <input type="email" id="staffEmail" placeholder="staff@yumilomarket.store" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+           </div>
+           <div>
+             <label class="block font-bold text-gray-700 mb-1">Temporary Password</label>
+             <input type="password" id="staffPassword" placeholder="Minimum 6 characters" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+           </div>
+           <div>
+             <label class="block font-bold text-gray-700 mb-1">Assign Role / Permission</label>
+             <select id="staffRole" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+               <option value="manager">Manager (Supervise, reassign, approve claims)</option>
+               <option value="worker">Worker (Support, order tasks, receipt checks)</option>
+               <option value="admin">Admin (Full operational access)</option>
+             </select>
+           </div>
+         </div>`,
+        async () => {
+          const name = document.getElementById('staffName').value.trim();
+          const email = document.getElementById('staffEmail').value.trim();
+          const password = document.getElementById('staffPassword').value;
+          const role = document.getElementById('staffRole').value;
+
+          if (!name || !email || !password) {
+            alert('Please fill out all required fields.');
+            return;
+          }
+
+          try {
+            // Sign up staff user in Supabase Auth
+            const { data, error } = await supabaseClient.auth.signUp({
+              email: email,
+              password: password,
+              options: {
+                data: { full_name: name }
+              }
+            });
+
+            if (error) throw error;
+
+            if (data.user) {
+              // Insert or update profile with role
+              const { error: profileError } = await supabaseClient
+                .from('profiles')
+                .upsert({
+                  id: data.user.id,
+                  full_name: name,
+                  role: role
+                });
+
+              if (profileError) throw profileError;
+
+              alert(`Staff account for ${name} created successfully!`);
+              closeModal();
+              loadStaffTable();
+            }
+          } catch (err) {
+            alert('Error creating staff account: ' + (err.message || err));
+          }
+        }
+      );
+    }
+
+    // Load Staff Table Data
+    async function loadStaffTable() {
+      try {
+        const { data: profiles, error } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .order('full_name', { ascending: true });
+
+        if (error) throw error;
+        staffMembers = profiles || [];
+        const tbody = document.getElementById('staffTableBody');
+        if (!tbody) return;
+
+        if (staffMembers.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-gray-400 font-medium">No staff accounts found.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = '';
+        staffMembers.forEach(staff => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50';
+          row.innerHTML = `
+            <td class="py-4 px-6 font-medium text-gray-800">${staff.full_name || 'Unnamed Staff'}</td>
+            <td class="py-4 px-6 text-gray-600 font-mono text-xs">${staff.id.slice(0, 12)}...</td>
+            <td class="py-4 px-6"><span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded text-xs font-semibold uppercase">${staff.role || 'worker'}</span></td>
+            <td class="py-4 px-6 text-gray-500 text-xs">${staff.updated_at ? new Date(staff.updated_at).toLocaleDateString() : 'N/A'}</td>
+            <td class="py-4 px-6 text-right">
+              <button onclick="alert('Staff ID: ${staff.id}\\nRole: ${staff.role}')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-3 py-1.5 rounded text-xs transition cursor-pointer">Manage Role</button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        console.error("Error loading staff table:", err);
+      }
     }
 
     function reviewOrderModal(orderId) {
@@ -557,8 +710,7 @@
       openModal(
         `Review Order #${order.id.slice(0, 8)}`,
         `<div class="space-y-2 text-xs">
-           <p><strong>Customer City:</strong> ${order.delivery_city || 'Mansa'}</p>
-           <p><strong>Province:</strong> ${order.delivery_province || 'Luapula'}</p>
+           <p><strong>Customer Location:</strong> ${order.delivery_city || 'Mansa'}, ${order.delivery_province || 'Luapula'}</p>
            <p><strong>Total Amount:</strong> K${Number(order.total_amount).toFixed(2)}</p>
            <p><strong>Current Status:</strong> ${order.payment_status || 'Pending'}</p>
            <hr class="my-2">
@@ -581,6 +733,7 @@
             alert('Failed to update order status.');
           } else {
             alert('Order status updated successfully!');
+            closeModal();
             loadAdminData();
             loadOrdersTable();
           }
@@ -691,7 +844,7 @@
       }
     }
 
-    // Initialize default view on load
+    // Initialize session and default view
     supabaseClient.auth.onAuthStateChange((event, session) => {
       if (!session) {
         window.location.href = 'login.html';
