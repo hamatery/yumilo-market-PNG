@@ -189,7 +189,8 @@
 
     let currentOrders = [];
     let staffMembers = [];
-    let currentTimeRange = 'all';
+    let startDateFilter = '';
+    let endDateFilter = '';
     let windowActiveConfirm = null;
 
     // Instant Logout
@@ -267,19 +268,19 @@
       }
     }
 
-    // HTML Templates for Views
+    // HTML Templates for Views with Calendar Date Pickers
     function renderOverviewHTML() {
       return `
-        <div class="flex justify-between items-center">
+        <div class="flex flex-wrap justify-between items-center gap-4">
           <h3 class="text-2xl font-bold text-gray-900">Marketplace overview</h3>
-          <div class="flex items-center gap-2">
-            <label class="text-xs font-semibold text-gray-500">Filter Range:</label>
-            <select id="timeRangeFilter" onchange="changeTimeRange(this.value)" class="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 cursor-pointer">
-              <option value="all" ${currentTimeRange === 'all' ? 'selected' : ''}>All Time</option>
-              <option value="24h" ${currentTimeRange === '24h' ? 'selected' : ''}>Last 24 Hours</option>
-              <option value="7d" ${currentTimeRange === '7d' ? 'selected' : ''}>Last 7 Days</option>
-              <option value="30d" ${currentTimeRange === '30d' ? 'selected' : ''}>Last 30 Days</option>
-            </select>
+          
+          <!-- Calendar Date Range Filter -->
+          <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-3 py-1.5 shadow-sm text-xs font-medium text-gray-700">
+            <span>📅 Calendar:</span>
+            <input type="date" id="startDateInput" value="${startDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+            <span>to</span>
+            <input type="date" id="endDateInput" value="${endDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+            <button onclick="clearDateFilter()" class="text-red-600 hover:underline font-semibold ml-1">Reset</button>
           </div>
         </div>
 
@@ -353,7 +354,7 @@
                     </tr>
                   </thead>
                   <tbody id="reviewQueueBody" class="divide-y divide-gray-200 text-gray-700">
-                    <tr><td colspan="5" class="text-center py-8 text-gray-400 font-medium">No pending items in review queue.</td></tr>
+                    <tr><td colspan="5" class="text-center py-8 text-gray-400 font-medium">No pending items for selected calendar range.</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -480,26 +481,24 @@
       `;
     }
 
-    // Staff Management HTML Template (Fully functional staff creation)
+    // Staff Management HTML Template
     function renderStaffManagementHTML() {
       return `
         <div class="space-y-6">
           <div class="flex justify-between items-center">
             <div>
               <h3 class="text-2xl font-bold text-gray-900">Manage Staff & Permissions</h3>
-              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Create staff, assign roles, and manage access privileges.</p>
+              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Assign roles and manage access privileges for registered users.</p>
             </div>
-            <button onclick="openCreateStaffModal()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer flex items-center gap-1.5">
-              <span>➕</span> Create New Staff Account
+            <button onclick="loadStaffTable()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+              Refresh Staff List
             </button>
           </div>
 
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-5 border-b border-gray-200 flex justify-between items-center">
-              <h4 class="text-base font-bold text-gray-800">Active Staff & Administrators</h4>
-              <button onclick="loadStaffTable()" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-md font-semibold text-gray-700 transition cursor-pointer">
-                Refresh Staff List
-              </button>
+              <h4 class="text-base font-bold text-gray-800">Registered Users & Staff Profiles</h4>
+              <span class="text-xs text-gray-400">Click 'Edit Role' to promote or modify permissions</span>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse text-sm">
@@ -507,7 +506,7 @@
                   <tr class="bg-gray-50 text-gray-500 font-bold uppercase tracking-wider border-b border-gray-200 text-xs">
                     <th class="py-3 px-6">Name</th>
                     <th class="py-3 px-6">User ID</th>
-                    <th class="py-3 px-6">Role / Permission</th>
+                    <th class="py-3 px-6">Assigned Role</th>
                     <th class="py-3 px-6">Last Updated</th>
                     <th class="py-3 px-6 text-right">Actions</th>
                   </tr>
@@ -600,77 +599,44 @@
       );
     }
 
-    // Staff Creation Modal & Execution
-    function openCreateStaffModal() {
+    // Edit Staff Role Modal & Execution
+    function editStaffRoleModal(userId, currentName, currentRole) {
       openModal(
-        'Create New Staff Account',
+        `Edit Permissions: ${currentName || 'User'}`,
         `<div class="space-y-3 text-xs">
+           <p><strong>User ID:</strong> <span class="font-mono text-gray-500">${userId}</span></p>
            <div>
-             <label class="block font-bold text-gray-700 mb-1">Full Name</label>
-             <input type="text" id="staffName" placeholder="e.g. John Banda" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
-           </div>
-           <div>
-             <label class="block font-bold text-gray-700 mb-1">Email Address</label>
-             <input type="email" id="staffEmail" placeholder="staff@yumilomarket.store" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
-           </div>
-           <div>
-             <label class="block font-bold text-gray-700 mb-1">Temporary Password</label>
-             <input type="password" id="staffPassword" placeholder="Minimum 6 characters" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
-           </div>
-           <div>
-             <label class="block font-bold text-gray-700 mb-1">Assign Role / Permission</label>
-             <select id="staffRole" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
-               <option value="manager">Manager (Supervise, reassign, approve claims)</option>
-               <option value="worker">Worker (Support, order tasks, receipt checks)</option>
-               <option value="admin">Admin (Full operational access)</option>
+             <label class="block font-bold text-gray-700 mb-1">Select New Role / Permission</label>
+             <select id="editStaffRoleSelect" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+               <option value="super_admin" ${currentRole === 'super_admin' ? 'selected' : ''}>Super Admin (Full Owner Access)</option>
+               <option value="manager" ${currentRole === 'manager' ? 'selected' : ''}>Manager (Supervise, reassign, approve claims)</option>
+               <option value="worker" ${currentRole === 'worker' ? 'selected' : ''}>Worker (Support, order tasks, receipt checks)</option>
+               <option value="customer" ${currentRole === 'customer' ? 'selected' : ''}>Customer (Standard Buyer)</option>
              </select>
            </div>
          </div>`,
         async () => {
-          const name = document.getElementById('staffName').value.trim();
-          const email = document.getElementById('staffEmail').value.trim();
-          const password = document.getElementById('staffPassword').value;
-          const role = document.getElementById('staffRole').value;
-
-          if (!name || !email || !password) {
-            alert('Please fill out all required fields.');
-            return;
-          }
-
+          const newRole = document.getElementById('editStaffRoleSelect').value;
+          
           try {
-            const { data, error } = await supabaseClient.auth.signUp({
-              email: email,
-              password: password,
-              options: {
-                data: { full_name: name }
-              }
-            });
+            const { error } = await supabaseClient
+              .from('profiles')
+              .update({ role: newRole })
+              .eq('id', userId);
 
             if (error) throw error;
 
-            if (data.user) {
-              const { error: profileError } = await supabaseClient
-                .from('profiles')
-                .upsert({
-                  id: data.user.id,
-                  full_name: name,
-                  role: role
-                });
-
-              if (profileError) throw profileError;
-
-              alert(`Staff account for ${name} created successfully!`);
-              closeModal();
-              loadStaffTable();
-            }
+            alert('Staff permissions updated successfully!');
+            closeModal();
+            loadStaffTable();
           } catch (err) {
-            alert('Error creating staff account: ' + (err.message || err));
+            alert('Failed to update role: ' + (err.message || err));
           }
         }
       );
     }
 
-    // Load Staff Table Data
+    // Load Staff Table Data from profiles
     async function loadStaffTable() {
       try {
         const { data: profiles, error } = await supabaseClient
@@ -684,7 +650,7 @@
         if (!tbody) return;
 
         if (staffMembers.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-gray-400 font-medium">No staff accounts found.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-gray-400 font-medium">No user profiles found in database.</td></tr>`;
           return;
         }
 
@@ -693,12 +659,12 @@
           const row = document.createElement('tr');
           row.className = 'hover:bg-gray-50';
           row.innerHTML = `
-            <td class="py-4 px-6 font-medium text-gray-800">${staff.full_name || 'Unnamed Staff'}</td>
+            <td class="py-4 px-6 font-medium text-gray-800">${staff.full_name || 'Unnamed User'}</td>
             <td class="py-4 px-6 text-gray-600 font-mono text-xs">${staff.id.slice(0, 12)}...</td>
-            <td class="py-4 px-6"><span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded text-xs font-semibold uppercase">${staff.role || 'worker'}</span></td>
+            <td class="py-4 px-6"><span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded text-xs font-semibold uppercase">${staff.role || 'customer'}</span></td>
             <td class="py-4 px-6 text-gray-500 text-xs">${staff.updated_at ? new Date(staff.updated_at).toLocaleDateString() : 'N/A'}</td>
             <td class="py-4 px-6 text-right">
-              <button onclick="alert('Staff ID: ${staff.id}\\nRole: ${staff.role}')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-3 py-1.5 rounded text-xs transition cursor-pointer">Manage Role</button>
+              <button onclick="editStaffRoleModal('${staff.id}', '${staff.full_name || ''}', '${staff.role || 'customer'}')" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-3 py-1.5 rounded text-xs transition cursor-pointer">Edit Role</button>
             </td>
           `;
           tbody.appendChild(row);
@@ -707,14 +673,25 @@
         console.error("Error loading staff table:", err);
         const tbody = document.getElementById('staffTableBody');
         if (tbody) {
-          tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-red-500 font-medium">Error loading staff. Check database RLS policies.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-red-500 font-medium">Error loading profiles. Check RLS policies on 'profiles' table.</td></tr>`;
         }
       }
     }
 
-    // Time Range Filter Handler
-    function changeTimeRange(range) {
-      currentTimeRange = range;
+    // Calendar Date Filter Handlers
+    function updateDateFilter() {
+      startDateFilter = document.getElementById('startDateInput').value;
+      endDateFilter = document.getElementById('endDateInput').value;
+      loadAdminData();
+    }
+
+    function clearDateFilter() {
+      startDateFilter = '';
+      endDateFilter = '';
+      const startEl = document.getElementById('startDateInput');
+      const endEl = document.getElementById('endDateInput');
+      if (startEl) startEl.value = '';
+      if (endEl) endEl.value = '';
       loadAdminData();
     }
 
@@ -757,7 +734,7 @@
       );
     }
 
-    // Load Live Data for Overview with Time Filter Support
+    // Load Live Data for Overview with Calendar Date Filtering
     async function loadAdminData() {
       try {
         const { data: orders, error } = await supabaseClient
@@ -768,15 +745,13 @@
         if (error) throw error;
         let allOrders = orders || [];
 
-        // Apply Time Filter
-        const now = new Date();
+        // Apply Calendar Date Range Filter
         currentOrders = allOrders.filter(order => {
-          if (currentTimeRange === 'all') return true;
-          const orderDate = new Date(order.created_at);
-          const diffHours = (now - orderDate) / (1000 * 60 * 60);
-          if (currentTimeRange === '24h') return diffHours <= 24;
-          if (currentTimeRange === '7d') return diffHours <= (24 * 7);
-          if (currentTimeRange === '30d') return diffHours <= (24 * 30);
+          if (!order.created_at) return true;
+          const orderDateStr = order.created_at.split('T')[0]; // YYYY-MM-DD
+          
+          if (startDateFilter && orderDateStr < startDateFilter) return false;
+          if (endDateFilter && orderDateStr > endDateFilter) return false;
           return true;
         });
 
@@ -787,7 +762,7 @@
         const queueBody = document.getElementById('reviewQueueBody');
         if (queueBody) {
           if (currentOrders.length === 0) {
-            queueBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400 font-medium">No pending items for selected time range.</td></tr>`;
+            queueBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400 font-medium">No pending items for selected calendar range.</td></tr>`;
           } else {
             queueBody.innerHTML = '';
             currentOrders.forEach(order => {
