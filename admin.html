@@ -573,21 +573,21 @@
             <form id="siteSettingsForm" onsubmit="saveSiteSettings(event)" class="space-y-4">
               <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Store Name</label>
-                <input type="text" id="settingStoreName" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                <input type="text" id="settingStoreName" value="Yumilo Market" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Marketplace Currency</label>
-                  <input type="text" id="settingCurrency" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  <input type="text" id="settingCurrency" value="ZMW (K)" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                 </div>
                 <div>
                   <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Platform Fee Percent (%)</label>
-                  <input type="number" step="0.1" id="settingFee" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  <input type="number" step="0.1" id="settingFee" value="5.0" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                 </div>
               </div>
               <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Support Email Address</label>
-                <input type="email" id="settingEmail" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                <input type="email" id="settingEmail" value="support@yumilomarket.store" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
               </div>
               <div class="flex items-center space-x-3 pt-2">
                 <input type="checkbox" id="settingMaintenance" class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
@@ -719,7 +719,7 @@
       );
     }
 
-    // Load Site Settings into Form
+    // Load Site Settings into Form with safe fallbacks
     async function loadSiteSettings() {
       try {
         const { data, error } = await supabaseClient
@@ -728,14 +728,23 @@
           .eq('id', 1)
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.warn("site_settings table might not be created yet. Using defaults.");
+          return;
+        }
 
         if (data) {
-          document.getElementById('settingStoreName').value = data.store_name || 'Yumilo Market';
-          document.getElementById('settingCurrency').value = data.currency || 'ZMW (K)';
-          document.getElementById('settingFee').value = data.platform_fee_percent || 5.0;
-          document.getElementById('settingEmail').value = data.support_email || 'support@yumilomarket.store';
-          document.getElementById('settingMaintenance').checked = !!data.maintenance_mode;
+          const nameEl = document.getElementById('settingStoreName');
+          const currEl = document.getElementById('settingCurrency');
+          const feeEl = document.getElementById('settingFee');
+          const emailEl = document.getElementById('settingEmail');
+          const maintEl = document.getElementById('settingMaintenance');
+
+          if (nameEl) nameEl.value = data.store_name || 'Yumilo Market';
+          if (currEl) currEl.value = data.currency || 'ZMW (K)';
+          if (feeEl) feeEl.value = data.platform_fee_percent || 5.0;
+          if (emailEl) emailEl.value = data.support_email || 'support@yumilomarket.store';
+          if (maintEl) maintEl.checked = !!data.maintenance_mode;
         }
       } catch (err) {
         console.error("Error loading site settings:", err);
@@ -752,8 +761,10 @@
       const maintenance = document.getElementById('settingMaintenance').checked;
 
       const btn = document.getElementById('saveSettingsBtn');
-      btn.textContent = 'Saving...';
-      btn.disabled = true;
+      if (btn) {
+        btn.textContent = 'Saving...';
+        btn.disabled = true;
+      }
 
       try {
         const { error } = await supabaseClient
@@ -773,10 +784,12 @@
         await logAuditAction('Site Settings Updated', `Updated store name to '${storeName}', fee to ${fee}%`);
         alert('Site settings updated and saved successfully!');
       } catch (err) {
-        alert('Failed to save settings: ' + (err.message || err));
+        alert('Failed to save settings: ' + (err.message || err) + '\n\nNote: Make sure you ran the site_settings SQL table creation query in Supabase!');
       } finally {
-        btn.textContent = 'Save Site Settings';
-        btn.disabled = false;
+        if (btn) {
+          btn.textContent = 'Save Site Settings';
+          btn.disabled = false;
+        }
       }
     }
 
