@@ -121,7 +121,7 @@
     <!-- Sidebar Footer Environment -->
     <div class="p-4 border-t border-emerald-900/50 text-[11px] text-emerald-300 space-y-1">
       <p class="font-semibold text-white">Environment:</p>
-      <p>PRODUCTION • v2.1.0 • Live Data</p>
+      <p>PRODUCTION • v2.1.0 • Live Audit Log Active</p>
     </div>
   </aside>
 
@@ -192,6 +192,7 @@
     let startDateFilter = '';
     let endDateFilter = '';
     let windowActiveConfirm = null;
+    let currentUserEmail = 'henrymwansa16@gmail.com';
 
     // Instant Logout
     async function handleLogout() {
@@ -203,6 +204,21 @@
       localStorage.clear();
       sessionStorage.clear();
       window.location.href = 'login.html';
+    }
+
+    // Automated Audit Logger Helper
+    async function logAuditAction(actionType, description) {
+      try {
+        await supabaseClient.from('audit_logs').insert([
+          {
+            action_type: actionType,
+            description: description,
+            actor: currentUserEmail
+          }
+        ]);
+      } catch (err) {
+        console.error("Failed to write audit log:", err);
+      }
     }
 
     // View Switching Controller
@@ -224,6 +240,7 @@
         title.textContent = 'Owner Command Center';
         container.innerHTML = renderOverviewHTML();
         loadAdminData();
+        loadAuditLogsOverview();
       } else if (viewId === 'orders') {
         title.textContent = 'Orders & Delivery Management';
         container.innerHTML = renderOrdersViewHTML();
@@ -264,7 +281,8 @@
         container.innerHTML = renderOwnerControlView('Finance & Overrides', 'Execute payment manual overrides and escrow releases.');
       } else if (viewId === 'audit') {
         title.textContent = 'Audit History Log (Owner Only)';
-        container.innerHTML = renderOwnerControlView('Audit History Log', 'Review immutable system audit trails and administrative actions.');
+        container.innerHTML = renderAuditLogViewHTML();
+        loadFullAuditTable();
       }
     }
 
@@ -403,7 +421,7 @@
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
               <h4 class="text-sm font-bold text-gray-900 flex items-center gap-2">🕒 Recent audit activity</h4>
               <div id="auditActivityBody" class="space-y-3 text-xs">
-                <p class="text-gray-400 text-center py-2 font-medium">No recent audit logs recorded.</p>
+                <p class="text-gray-400 text-center py-2 font-medium">Loading audit trail...</p>
               </div>
             </div>
           </div>
@@ -487,7 +505,7 @@
       `;
     }
 
-    // Staff Management HTML Template with Create Staff Feature
+    // Staff Management HTML Template
     function renderStaffManagementHTML() {
       return `
         <div class="space-y-6">
@@ -524,6 +542,41 @@
                 </thead>
                 <tbody id="staffTableBody" class="divide-y divide-gray-200 text-gray-700">
                   <tr><td colspan="5" class="text-center py-12 text-gray-400">Loading staff records...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Full Audit Log View HTML Template
+    function renderAuditLogViewHTML() {
+      return `
+        <div class="space-y-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">Immutable Audit History Log</h3>
+              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Complete recorded history of all administrative actions.</p>
+            </div>
+            <button onclick="loadFullAuditTable()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+              Refresh Audit Trail
+            </button>
+          </div>
+
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="bg-gray-50 text-gray-500 font-bold uppercase tracking-wider border-b border-gray-200 text-xs">
+                    <th class="py-3 px-6">Action Type</th>
+                    <th class="py-3 px-6">Description</th>
+                    <th class="py-3 px-6">Actor</th>
+                    <th class="py-3 px-6">Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody id="fullAuditTableBody" class="divide-y divide-gray-200 text-gray-700">
+                  <tr><td colspan="4" class="text-center py-12 text-gray-400">Loading audit trail...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -603,14 +656,15 @@
         `Execute: ${actionName}`,
         `<p class="text-xs text-gray-600">Provide administrative note or parameters for <strong>${actionName}</strong>:</p>
          <textarea id="modalInputNote" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-emerald-600 focus:outline-none" rows="3" placeholder="Enter audit note or reason..."></textarea>`,
-        () => {
-          alert(`Successfully executed action for ${actionName}.`);
+        async () => {
+          await logAuditAction('Generic Action', `Executed action for ${actionName}`);
+          alert(`Successfully executed action for ${actionName}. Recorded in audit log.`);
           closeModal();
         }
       );
     }
 
-    // Create New Staff Account Modal & Execution (Keeps owner logged in)
+    // Create New Staff Account Modal & Execution
     function openCreateStaffModal() {
       openModal(
         'Create New Staff Account',
@@ -648,7 +702,6 @@
           }
 
           try {
-            // Create a secondary non-persisting client so owner stays logged in
             const tempClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
               auth: { persistSession: false }
             });
@@ -656,24 +709,19 @@
             const { data, error } = await tempClient.auth.signUp({
               email: email,
               password: password,
-              options: {
-                data: { full_name: name }
-              }
+              options: { data: { full_name: name } }
             });
 
             if (error) throw error;
 
             if (data.user) {
-              // Insert profile record
               const { error: profileError } = await supabaseClient
                 .from('profiles')
-                .upsert({
-                  id: data.user.id,
-                  full_name: name,
-                  role: role
-                });
+                .upsert({ id: data.user.id, full_name: name, role: role });
 
               if (profileError) throw profileError;
+
+              await logAuditAction('Staff Created', `Created staff account for ${name} (${email}) with role: ${role}`);
 
               alert(`Staff account for ${name} (${email}) created successfully!`);
               closeModal();
@@ -712,6 +760,8 @@
               .eq('id', userId);
 
             if (error) throw error;
+
+            await logAuditAction('Role Updated', `Updated role for user ${currentName || userId} to ${newRole}`);
 
             alert('Staff permissions updated successfully!');
             closeModal();
@@ -758,10 +808,72 @@
         });
       } catch (err) {
         console.error("Error loading staff table:", err);
-        const tbody = document.getElementById('staffTableBody');
-        if (tbody) {
-          tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-red-500 font-medium">Error loading profiles. Check RLS policies on 'profiles' table.</td></tr>`;
+      }
+    }
+
+    // Load Recent Audit Logs for Overview
+    async function loadAuditLogsOverview() {
+      try {
+        const { data: logs, error } = await supabaseClient
+          .from('audit_logs')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(5);
+
+        const container = document.getElementById('auditActivityBody');
+        if (!container) return;
+
+        if (error || !logs || logs.length === 0) {
+          container.innerHTML = `<p class="text-gray-400 text-center py-2 font-medium">No recent audit logs recorded.</p>`;
+          return;
         }
+
+        container.innerHTML = '';
+        logs.forEach(log => {
+          const div = document.createElement('div');
+          div.className = 'flex justify-between items-center';
+          div.innerHTML = `
+            <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-medium text-[10px]">${log.action_type}</span>
+            <span class="text-gray-700 font-medium truncate max-w-[140px]" title="${log.description}">${log.description}</span>
+            <span class="text-gray-400 text-[10px]">${new Date(log.created_at).toLocaleString([], {month: 'numeric', day: 'numeric', hour: '2-digit', minute:'2-digit'})}</span>
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        console.error("Error loading overview audit logs:", err);
+      }
+    }
+
+    // Load Full Audit Table
+    async function loadFullAuditTable() {
+      try {
+        const { data: logs, error } = await supabaseClient
+          .from('audit_logs')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        const tbody = document.getElementById('fullAuditTableBody');
+        if (!tbody) return;
+
+        if (error || !logs || logs.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" class="text-center py-12 text-gray-400 font-medium">No audit records found.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = '';
+        logs.forEach(log => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50';
+          row.innerHTML = `
+            <td class="py-4 px-6 font-semibold text-emerald-800 text-xs">${log.action_type}</td>
+            <td class="py-4 px-6 text-gray-800 text-xs">${log.description}</td>
+            <td class="py-4 px-6 text-gray-600 text-xs">${log.actor || 'System'}</td>
+            <td class="py-4 px-6 text-gray-500 text-xs">${new Date(log.created_at).toLocaleString()}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        console.error("Error loading full audit table:", err);
       }
     }
 
@@ -816,7 +928,8 @@
           if (error) {
             alert('Failed to update order status.');
           } else {
-            alert('Order status updated successfully!');
+            await logAuditAction('Order Status Updated', `Updated order #${orderId.slice(0, 8)} status to: ${status}`);
+            alert('Order status updated successfully and logged!');
             closeModal();
             loadAdminData();
             loadOrdersTable();
@@ -836,11 +949,9 @@
         if (error) throw error;
         let allOrders = orders || [];
 
-        // Apply Calendar Date Range Filter
         currentOrders = allOrders.filter(order => {
           if (!order.created_at) return true;
-          const orderDateStr = order.created_at.split('T')[0]; // YYYY-MM-DD
-          
+          const orderDateStr = order.created_at.split('T')[0];
           if (startDateFilter && orderDateStr < startDateFilter) return false;
           if (endDateFilter && orderDateStr > endDateFilter) return false;
           return true;
@@ -948,11 +1059,14 @@
       }
     }
 
-    // Initialize session and default view once on load without resetting user navigation
+    // Initialize session and default view once on load
     supabaseClient.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
         window.location.href = 'login.html';
       } else {
+        if (session.user && session.user.email) {
+          currentUserEmail = session.user.email;
+        }
         switchView('overview');
       }
     });
