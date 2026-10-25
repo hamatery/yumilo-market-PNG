@@ -12,12 +12,12 @@
     svg { width: 20px !important; height: 20px !important; min-width: 20px !important; min-height: 20px !important; }
     .slide { display: none; }
     .slide.active { display: flex; animation: fadeIn 0.5s ease-in-out; }
-    .view-section { display: none; }
+    .view-section { display: none; min-height: 70vh; }
     .view-section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
-<body class="pb-32 text-gray-800 antialiased selection:bg-emerald-600 selection:text-white">
+<body class="text-gray-800 antialiased selection:bg-emerald-600 selection:text-white flex flex-col min-h-screen">
 
   <!-- TOP HEADER -->
   <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -35,14 +35,14 @@
         </nav>
       </div>
       <div class="flex items-center space-x-4">
-        <a href="#" onclick="switchView('account')" class="text-xs font-bold text-gray-700 hover:text-emerald-700 px-3 py-2 transition">Sign In</a>
-        <a href="#" onclick="switchView('account')" class="bg-[#064e3b] hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition">Sign Up</a>
+        <a href="#" onclick="switchView('account')" class="text-xs font-bold text-gray-700 hover:text-emerald-700 px-3 py-2 transition cursor-pointer">Sign In</a>
+        <a href="#" onclick="switchView('account')" class="bg-[#064e3b] hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition cursor-pointer">Sign Up</a>
       </div>
     </div>
   </header>
 
   <!-- ================= VIEW 1: HOME ================= -->
-  <div id="home-view" class="view-section active">
+  <div id="home-view" class="view-section active pb-20">
     <!-- POWERPOINT-STYLE SLIDESHOW BILLBOARD -->
     <section class="bg-[#064e3b] text-white pt-8 pb-16 px-6 relative overflow-hidden">
       <div class="max-w-5xl mx-auto relative min-h-[220px] flex items-center">
@@ -130,7 +130,6 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Item 1 -->
         <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-xl transition group">
           <div>
             <div class="relative overflow-hidden rounded-2xl mb-3">
@@ -141,10 +140,9 @@
             <h4 class="font-bold text-xs text-gray-900 mt-1">X-Series Smart Phone 128GB</h4>
             <p class="text-emerald-700 font-black text-sm mt-2">K3,450.00</p>
           </div>
-          <button onclick="addToCart('X-Series Smart Phone 128GB', 3450, 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80')" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
+          <button onclick="addToCart('X-Series Smart Phone 128GB', 3450)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
         </div>
 
-        <!-- Item 2 -->
         <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-xl transition group">
           <div>
             <div class="relative overflow-hidden rounded-2xl mb-3">
@@ -155,10 +153,9 @@
             <h4 class="font-bold text-xs text-gray-900 mt-1">Premium Cotton Casual Tee</h4>
             <p class="text-emerald-700 font-black text-sm mt-2">K180.00</p>
           </div>
-          <button onclick="addToCart('Premium Cotton Casual Tee', 180, 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80')" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
+          <button onclick="addToCart('Premium Cotton Casual Tee', 180)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
         </div>
 
-        <!-- Item 3 -->
         <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-xl transition group">
           <div>
             <div class="relative overflow-hidden rounded-2xl mb-3">
@@ -169,10 +166,9 @@
             <h4 class="font-bold text-xs text-gray-900 mt-1">Super Meal Roller Meal (25kg)</h4>
             <p class="text-emerald-700 font-black text-sm mt-2">K240.00</p>
           </div>
-          <button onclick="addToCart('Super Meal Roller Meal (25kg)', 240, 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80')" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
+          <button onclick="addToCart('Super Meal Roller Meal (25kg)', 240)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
         </div>
 
-        <!-- Item 4 -->
         <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-xl transition group">
           <div>
             <div class="relative overflow-hidden rounded-2xl mb-3">
@@ -183,49 +179,63 @@
             <h4 class="font-bold text-xs text-gray-900 mt-1">Whole Broiler Chicken</h4>
             <p class="text-emerald-700 font-black text-sm mt-2">K95.00</p>
           </div>
-          <button onclick="addToCart('Whole Broiler Chicken', 95, 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=400&q=80')" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
+          <button onclick="addToCart('Whole Broiler Chicken', 95)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
         </div>
       </div>
     </section>
   </div>
 
   <!-- ================= VIEW 2: CATALOG / CATEGORIES ================= -->
-  <div id="catalog-view" class="view-section max-w-5xl mx-auto px-6 py-10 space-y-6">
+  <div id="catalog-view" class="view-section max-w-5xl mx-auto px-6 py-10 space-y-6 pb-20">
     <div class="bg-[#064e3b] text-white p-6 rounded-3xl flex justify-between items-center shadow-md">
       <div>
-        <h2 class="text-xl font-black">Live Marketplace Catalog</h2>
+        <h2 class="text-xl font-black">Live Marketplace Catalog & Categories</h2>
         <p class="text-xs text-emerald-200 mt-1">Browse verified goods across all 10 provinces of Zambia</p>
       </div>
       <button onclick="switchView('home')" class="bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl cursor-pointer">← Back Home</button>
     </div>
+
+    <!-- Category Filter Pills -->
+    <div class="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2">
+      <button onclick="filterCatalog('All')" class="bg-[#064e3b] text-white text-xs font-bold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer">All Categories</button>
+      <button onclick="filterCatalog('Electronics')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer">Electronics</button>
+      <button onclick="filterCatalog('Fashion')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer">Fashion & Wear</button>
+      <button onclick="filterCatalog('Groceries')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer">Groceries</button>
+      <button onclick="filterCatalog('Agriculture')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer">Agri & Livestock</button>
+    </div>
+
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between">
+      <div class="catalog-item bg-white p-4 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between" data-category="Electronics">
         <div>
           <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80" class="w-full h-44 object-cover rounded-2xl mb-3">
+          <span class="text-[10px] text-emerald-700 font-bold uppercase">Electronics</span>
           <h4 class="font-bold text-xs">X-Series Smart Phone 128GB</h4>
           <p class="text-emerald-700 font-black text-sm mt-1">K3,450.00</p>
         </div>
         <button onclick="addToCart('X-Series Smart Phone 128GB', 3450)" class="mt-4 w-full bg-[#f59e0b] text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
       </div>
-      <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between">
+      <div class="catalog-item bg-white p-4 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between" data-category="Fashion">
         <div>
           <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80" class="w-full h-44 object-cover rounded-2xl mb-3">
+          <span class="text-[10px] text-emerald-700 font-bold uppercase">Fashion & Wear</span>
           <h4 class="font-bold text-xs">Premium Cotton Casual Tee</h4>
           <p class="text-emerald-700 font-black text-sm mt-1">K180.00</p>
         </div>
         <button onclick="addToCart('Premium Cotton Casual Tee', 180)" class="mt-4 w-full bg-[#f59e0b] text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
       </div>
-      <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between">
+      <div class="catalog-item bg-white p-4 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between" data-category="Groceries">
         <div>
           <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80" class="w-full h-44 object-cover rounded-2xl mb-3">
+          <span class="text-[10px] text-emerald-700 font-bold uppercase">Groceries</span>
           <h4 class="font-bold text-xs">Super Meal Roller Meal (25kg)</h4>
           <p class="text-emerald-700 font-black text-sm mt-1">K240.00</p>
         </div>
         <button onclick="addToCart('Super Meal Roller Meal (25kg)', 240)" class="mt-4 w-full bg-[#f59e0b] text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
       </div>
-      <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between">
+      <div class="catalog-item bg-white p-4 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between" data-category="Agriculture">
         <div>
           <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=400&q=80" class="w-full h-44 object-cover rounded-2xl mb-3">
+          <span class="text-[10px] text-emerald-700 font-bold uppercase">Agri & Livestock</span>
           <h4 class="font-bold text-xs">Whole Broiler Chicken</h4>
           <p class="text-emerald-700 font-black text-sm mt-1">K95.00</p>
         </div>
@@ -235,7 +245,7 @@
   </div>
 
   <!-- ================= VIEW 3: ORDERS ================= -->
-  <div id="orders-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6">
+  <div id="orders-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-20">
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="flex justify-between items-center border-b pb-4">
         <h2 class="text-lg font-bold text-gray-900">My Escrow Orders</h2>
@@ -254,7 +264,7 @@
   </div>
 
   <!-- ================= VIEW 4: MESSAGES ================= -->
-  <div id="messages-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6">
+  <div id="messages-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-20">
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="border-b pb-4">
         <h2 class="text-lg font-bold text-gray-900">Customer Messages</h2>
@@ -271,7 +281,7 @@
   </div>
 
   <!-- ================= VIEW 5: CART ================= -->
-  <div id="cart-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6">
+  <div id="cart-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-20">
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="border-b pb-4 flex justify-between items-center">
         <h2 class="text-lg font-bold text-gray-900">Secure Escrow Cart</h2>
@@ -286,7 +296,7 @@
   </div>
 
   <!-- ================= VIEW 6: ACCOUNT ================= -->
-  <div id="account-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6">
+  <div id="account-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-20">
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="flex items-center space-x-4 border-b pb-4">
         <div class="w-12 h-12 rounded-full bg-emerald-800 text-white flex items-center justify-center font-black text-lg">HM</div>
@@ -304,7 +314,7 @@
   </div>
 
   <!-- PROFESSIONAL FOOTER -->
-  <footer class="bg-[#064e3b] text-emerald-100 border-t border-emerald-900 mt-24 py-14 px-6">
+  <footer class="bg-[#064e3b] text-emerald-100 border-t border-emerald-900 py-14 px-6 mt-auto">
     <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-xs">
       <div class="space-y-3">
         <div class="flex items-center space-x-2">
@@ -337,9 +347,9 @@
     </div>
   </footer>
 
-  <!-- BOTTOM NAVIGATION BAR (Instant View Switcher) -->
+  <!-- BOTTOM NAVIGATION BAR -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 py-3 px-6 flex justify-around items-center z-40 shadow-2xl">
-    <button onclick="switchView('home')" id="nav-home" class="flex flex-col items-center text-emerald-700 cursor-pointer">
+    <button onclick="switchView('home')" id="nav-home" class="flex flex-col items-center text-emerald-700 cursor-pointer font-bold">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
       <span class="text-[10px] font-bold mt-1">Home</span>
     </button>
@@ -394,7 +404,7 @@
       </div>
 
       <div class="p-2 bg-white border-t border-gray-100 flex gap-1.5 overflow-x-auto hide-scrollbar text-[10px]">
-        <button onclick="sendQuickPrompt('Hello! How are you?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 text-gray-700 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">👋 Say Hello</button>
+        <button onclick="sendQuickPrompt('Hello! How are you?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">👋 Say Hello</button>
         <button onclick="sendQuickPrompt('What products do you have?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">📦 Our Products</button>
         <button onclick="sendQuickPrompt('How does escrow work?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">🛡️ Escrow Guide</button>
       </div>
@@ -410,24 +420,34 @@
 
   <!-- SCRIPT LOGIC -->
   <script>
-    // SPA View Switcher
     function switchView(viewId) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       document.getElementById(viewId + '-view').classList.add('active');
 
-      // Update Nav Icons
       ['home', 'catalog', 'orders', 'messages', 'cart', 'account'].forEach(id => {
         let navBtn = document.getElementById('nav-' + id);
         if (navBtn) {
           if (id === viewId) {
             navBtn.className = "flex flex-col items-center text-emerald-700 cursor-pointer font-bold";
           } else {
-            navBtn.className = "flex flex-col items-center text-gray-400 hover:text-emerald-700 transition cursor-pointer";
+            navBtn.className = "flex flex-col items-center text-gray-400 hover:text-emerald-700 transition cursor-pointer font-normal";
           }
         }
       });
       window.scrollTo(0, 0);
       if (viewId === 'cart') renderCart();
+    }
+
+    // Category Filter Function
+    function filterCatalog(category) {
+      const items = document.querySelectorAll('.catalog-item');
+      items.forEach(item => {
+        if (category === 'All' || item.getAttribute('data-category') === category) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
     }
 
     // Slideshow
@@ -479,11 +499,8 @@
       }
     }
 
-    // Search
     function handleHomeSearch(e) {
-      if (e.key === 'Enter') {
-        switchView('catalog');
-      }
+      if (e.key === 'Enter') switchView('catalog');
     }
 
     // AI Chat
