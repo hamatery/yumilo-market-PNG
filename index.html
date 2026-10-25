@@ -275,7 +275,7 @@
     </div>
   </div>
 
-  <!-- ================= VIEW 7: ACCOUNT (SIGN IN & ENHANCED SIGN UP WITH REAL EMAIL OTP) ================= -->
+  <!-- ================= VIEW 7: ACCOUNT (SIGN IN & SIGN UP WITH ROLE SELECTOR) ================= -->
   <div id="account-view" class="view-section max-w-md mx-auto px-6 py-10 space-y-6 pb-28">
     <!-- Switcher Tabs -->
     <div id="authSwitchTabs" class="flex bg-gray-200 p-1 rounded-2xl text-xs font-bold text-center">
@@ -303,15 +303,25 @@
       <p class="text-center text-xs text-gray-500 pt-2">Don't have an account? <a href="#" onclick="switchAccountTab('signup')" class="text-emerald-700 font-bold underline">Create Account</a></p>
     </div>
 
-    <!-- SIGN UP FORM (Real Email OTP & Province/District Selectors) -->
+    <!-- SIGN UP FORM (Role Selector, Province/District, Email OTP & Terms) -->
     <div id="signupFormContainer" class="hidden bg-white p-8 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="text-center space-y-1">
         <h2 class="text-lg font-bold text-gray-900">Create Account</h2>
         <p class="text-xs text-gray-500">Join Zambia's trusted escrow marketplace</p>
       </div>
       <div class="space-y-3 text-xs">
+        <!-- Role Selection -->
         <div>
-          <label class="block font-bold text-gray-700 mb-1">Full Name</label>
+          <label class="block font-bold text-gray-700 mb-1">I want to sign up as a:</label>
+          <select id="signupRole" class="w-full bg-emerald-50 border border-emerald-200 text-emerald-900 font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+            <option value="Customer">Customer (Buyer)</option>
+            <option value="Vendor">Vendor / Seller</option>
+            <option value="Courier">Courier / Delivery Partner</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Full Name / Business Name</label>
           <input type="text" id="signupName" placeholder="e.g., Henry Mwansa" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
         </div>
 
@@ -328,7 +338,7 @@
           </div>
         </div>
 
-        <!-- OTP Verification Input (Appears after clicking Send Code) -->
+        <!-- OTP Verification Input -->
         <div id="otpInputContainer" class="hidden space-y-1 bg-emerald-50 p-3 rounded-2xl border border-emerald-200">
           <label class="block font-bold text-emerald-900 mb-1">Enter 6-Digit Code Sent to Email</label>
           <div class="flex gap-2">
@@ -388,10 +398,14 @@
         <div id="userAvatar" class="w-12 h-12 rounded-full bg-emerald-800 text-white flex items-center justify-center font-black text-lg">HM</div>
         <div>
           <h2 id="profileNameDisplay" class="font-bold text-sm text-gray-900">Henry Mwansa</h2>
-          <p id="profileLocationDisplay" class="text-xs text-gray-500">Mansa, Luapula • Verified Buyer</p>
+          <p id="profileRoleLocationDisplay" class="text-xs text-emerald-700 font-bold">Customer • Mansa, Luapula</p>
         </div>
       </div>
       <div class="space-y-2 text-xs">
+        <div id="roleSpecificDashboardInfo" class="p-3 bg-emerald-50 rounded-xl text-emerald-900">
+          <p class="font-bold">Account Status: Verified</p>
+          <p class="text-[11px] mt-0.5">You can browse the catalog, add items to cart, and track escrow orders.</p>
+        </div>
         <a href="terms.html" class="block p-3 bg-gray-50 hover:bg-gray-100 rounded-xl font-semibold text-gray-700">Terms of Service</a>
         <a href="privacy.html" class="block p-3 bg-gray-50 hover:bg-gray-100 rounded-xl font-semibold text-gray-700">Privacy Policy</a>
         <button onclick="processSignOut()" class="w-full text-left p-3 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl font-bold cursor-pointer transition">Sign Out</button>
@@ -466,6 +480,7 @@
     let isLoggedIn = localStorage.getItem('yumilo_logged_in') === 'true';
     let userName = localStorage.getItem('yumilo_user_name') || 'Henry Mwansa';
     let userLocation = localStorage.getItem('yumilo_user_location') || 'Mansa, Luapula';
+    let userRole = localStorage.getItem('yumilo_user_role') || 'Customer';
     let generatedOtp = null;
     let isEmailVerified = false;
 
@@ -511,7 +526,6 @@
 
       generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
       
-      // Send real email using EmailJS
       let templateParams = {
         to_email: email,
         otp_code: generatedOtp,
@@ -520,7 +534,6 @@
 
       showToast("Sending verification code to " + email + "...");
 
-      // NOTE: Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with your EmailJS dashboard values
       emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
         .then(function(response) {
           showToast("Verification code successfully sent to your email!");
@@ -611,6 +624,7 @@
     }
 
     function processSignUp() {
+      let role = document.getElementById('signupRole').value;
       let name = document.getElementById('signupName').value.trim();
       let phone = document.getElementById('signupPhone').value.trim();
       let email = document.getElementById('signupEmail').value.trim();
@@ -634,18 +648,22 @@
 
       userName = name;
       userLocation = `${district}, ${province}`;
+      userRole = role;
       localStorage.setItem('yumilo_user_name', name);
       localStorage.setItem('yumilo_user_location', userLocation);
-      isLoggedIn = true;
+      localStorage.setItem('yumilo_user_role', userRole);
       localStorage.setItem('yumilo_logged_in', 'true');
+      isLoggedIn = true;
       updateAuthUI();
-      showToast("Account created successfully!");
+      showToast(`Account created successfully as ${role}!`);
       switchView('home');
     }
 
     function processSignOut() {
       localStorage.removeItem('yumilo_logged_in');
+      localStorage.removeItem('yumilo_user_role');
       isLoggedIn = false;
+      userRole = 'Customer';
       updateAuthUI();
       showToast("Signed out successfully.");
       switchAccountTab('signin');
@@ -656,122 +674,29 @@
       let unlocked = document.getElementById('ordersUnlockedContainer');
       let headerAuth = document.getElementById('headerAuthStatus');
       let profileName = document.getElementById('profileNameDisplay');
-      let profileLocation = document.getElementById('profileLocationDisplay');
+      let profileRoleLocation = document.getElementById('profileRoleLocationDisplay');
+      let roleDashboardInfo = document.getElementById('roleSpecificDashboardInfo');
 
       if (profileName) profileName.innerText = userName;
-      if (profileLocation) profileLocation.innerText = `${userLocation} • Verified Buyer`;
+      if (profileRoleLocation) profileRoleLocation.innerText = `${userRole} • ${userLocation}`;
+
+      if (roleDashboardInfo) {
+        if (userRole === 'Vendor') {
+          roleDashboardInfo.innerHTML = `<p class='font-bold'>Vendor Portal Active 📦</p><p class='text-[11px] mt-0.5'>Manage your store inventory, list products across Zambia, and receive payouts via Escrow.</p>`;
+        } else if (userRole === 'Courier') {
+          roleDashboardInfo.innerHTML = `<p class='font-bold'>Courier Logistics Partner 🚚</p><p class='text-[11px] mt-0.5'>View dispatch schedules, update transit statuses, and coordinate deliveries across all 10 provinces.</p>`;
+        } else {
+          roleDashboardInfo.innerHTML = `<p class='font-bold'>Customer Account Active 🛒</p><p class='text-[11px] mt-0.5'>Browse catalog, manage shopping cart, and track mobile money escrow purchases.</p>`;
+        }
+      }
 
       if (isLoggedIn) {
         if (locked) locked.classList.add('hidden');
         if (unlocked) unlocked.classList.remove('hidden');
         if (headerAuth) {
-          headerAuth.innerHTML = `<span class='text-xs font-bold text-emerald-800'>👤 ${userName}</span> <button onclick="processSignOut()" class='text-xs text-red-600 font-bold underline cursor-pointer ml-2'>Sign Out</button>`;
+          headerAuth.innerHTML = `<span class='text-xs font-bold text-emerald-800'>👤 ${userName} (${userRole})</span> <button onclick="processSignOut()" class='text-xs text-red-600 font-bold underline cursor-pointer ml-2'>Sign Out</button>`;
         }
       } else {
         if (locked) locked.classList.remove('hidden');
         if (unlocked) unlocked.classList.add('hidden');
-        if (headerAuth) {
-          headerAuth.innerHTML = `<a href="#" onclick="switchAccountTab('signin')" class="text-xs font-bold text-gray-700 hover:text-emerald-700 px-3 py-2 transition cursor-pointer">Sign In</a> <a href="#" onclick="switchAccountTab('signup')" class="bg-[#064e3b] hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition cursor-pointer">Sign Up</a>`;
-        }
-      }
-    }
-
-    function filterCatalog(category) {
-      const items = document.querySelectorAll('.catalog-item');
-      items.forEach(item => {
-        if (category === 'All' || item.getAttribute('data-category') === category) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    }
-
-    function addToCart(name, price) {
-      let cart = JSON.parse(localStorage.getItem('yumilo_cart')) || [];
-      cart.push({ name, price });
-      localStorage.setItem('yumilo_cart', JSON.stringify(cart));
-      showToast(`Added ${name} to Cart!`);
-    }
-
-    function renderCart() {
-      let cart = JSON.parse(localStorage.getItem('yumilo_cart')) || [];
-      let listEl = document.getElementById('cartItemsList');
-      let totalEl = document.getElementById('cartTotal');
-      let badgeEl = document.getElementById('cartCountBadge');
-      let checkoutContainer = document.getElementById('checkoutActionContainer');
-      badgeEl.innerText = cart.length + " Items";
-
-      if (cart.length === 0) {
-        listEl.innerHTML = "<p class='text-gray-500'>Your cart is empty. Add items from the catalog!</p>";
-        totalEl.innerHTML = "Total Escrow Amount: K0.00";
-        checkoutContainer.innerHTML = "";
-      } else {
-        let total = 0;
-        listEl.innerHTML = cart.map((item, idx) => {
-          total += item.price;
-          return `<div class='flex justify-between items-center border-b pb-2'><span>${item.name}</span><span class='font-bold text-emerald-700'>K${item.price.toLocaleString()}</span></div>`;
-        }).join('');
-        totalEl.innerHTML = `Total Escrow Amount: K${total.toLocaleString()}`;
-
-        if (isLoggedIn) {
-          checkoutContainer.innerHTML = `<button onclick="checkoutCart()" class="w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold py-3 rounded-xl text-xs transition shadow cursor-pointer">Proceed to Mobile Money Escrow Checkout</button>`;
-        } else {
-          checkoutContainer.innerHTML = `
-            <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 text-center space-y-2">
-              <p class="font-bold">Account required for Escrow Checkout</p>
-              <p>Please <a href="#" onclick="switchAccountTab('signin')" class="text-emerald-700 font-bold underline">Sign In</a> or <a href="#" onclick="switchAccountTab('signup')" class="text-emerald-700 font-bold underline">Create an Account</a> to complete your purchase.</p>
-            </div>
-          `;
-        }
-      }
-    }
-
-    function checkoutCart() {
-      let cart = JSON.parse(localStorage.getItem('yumilo_cart')) || [];
-      if (cart.length === 0) return;
-
-      if (!isLoggedIn) {
-        switchAccountTab('signin');
-        return;
-      }
-
-      let orders = JSON.parse(localStorage.getItem('yumilo_orders')) || [];
-      let newOrder = {
-        id: 'YM-' + Math.floor(1000 + Math.random() * 9000),
-        items: cart,
-        date: new Date().toLocaleDateString(),
-        status: 'Escrow Held / Processing'
-      };
-      orders.unshift(newOrder);
-      localStorage.setItem('yumilo_orders', JSON.stringify(orders));
-      localStorage.removeItem('yumilo_cart');
-      showToast("Order placed successfully! Escrow payment secured.");
-      switchView('orders');
-    }
-
-    function renderOrders() {
-      if (!isLoggedIn) return;
-      let orders = JSON.parse(localStorage.getItem('yumilo_orders')) || [];
-      let container = document.getElementById('ordersListContainer');
-
-      if (orders.length === 0) {
-        container.innerHTML = "<p class='text-gray-500 py-6 text-center'>You have no active escrow orders yet. Orders placed through cart checkout will appear here.</p>";
-      } else {
-        container.innerHTML = orders.map(order => `
-          <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-gray-900">Order #${order.id}</span>
-              <span class="bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full text-[10px]">${order.status}</span>
-            </div>
-            <p class="text-[11px] text-gray-500">Date: ${order.date}</p>
-            <div class="pt-2 border-t border-gray-200">
-              ${order.items.map(i => `<div class='flex justify-between text-gray-700'><span>${i.name}</span><span class='font-semibold'>K${i.price.toLocaleString()}</span></div>`).join('')}
-            </div>
-          </div>
-        `).join('');
-      }
-    }
-  </script>
-</body>
-</html>
+        if (headerAuth
