@@ -335,13 +335,13 @@
           <label class="block font-bold text-gray-700 mb-1">Email Address</label>
           <div class="flex gap-2">
             <input type="email" id="signupEmail" placeholder="user@domain.com" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
-            <button onclick="sendRealEmailOtp()" id="sendOtpBtn" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold px-3 rounded-xl text-[11px] whitespace-nowrap transition cursor-pointer">Send Code</button>
+            <button onclick="sendRealEmailOtp()" id="sendOtpBtn" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold px-3 rounded-xl text-[11px] whitespace-nowrap transition cursor-pointer">Get Code</button>
           </div>
         </div>
 
         <!-- OTP Verification Input -->
         <div id="otpInputContainer" class="hidden space-y-1 bg-emerald-50 p-3 rounded-2xl border border-emerald-200">
-          <label class="block font-bold text-emerald-900 mb-1">Enter 6-Digit Code Sent to Email</label>
+          <label class="block font-bold text-emerald-900 mb-1">Enter 6-Digit Verification Code</label>
           <div class="flex gap-2">
             <input type="text" id="signupOtpInput" placeholder="123456" maxlength="6" class="w-full bg-white rounded-xl px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-600 font-bold tracking-widest text-center">
             <button onclick="verifyEmailOtp()" class="bg-[#064e3b] text-white font-bold px-4 rounded-xl text-[11px] whitespace-nowrap transition cursor-pointer">Confirm</button>
@@ -530,44 +530,14 @@
 
       generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
       
-      showToast("Sending 6-digit code to " + email + "...");
-
-      // Send via Resend API using your key
-      fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer re_2MJ63eAG_54Ab1nbjhTFPQrSgZAKxX5Jh'
-        },
-        body: JSON.stringify({
-          from: 'Yumilo Market <onboarding@resend.dev>',
-          to: [email],
-          subject: 'Your Yumilo Market Verification Code',
-          html: `
-            <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-              <h2 style="color: #064e3b;">Welcome to Yumilo Market, ${name || 'Valued User'}!</h2>
-              <p>Your 6-digit email verification code is:</p>
-              <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; font-size: 24px; font-weight: bold; color: #064e3b; text-align: center; letter-spacing: 5px; border-radius: 8px; margin: 20px 0;">
-                ${generatedOtp}
-              </div>
-              <p style="font-size: 12px; color: #666;">If you did not request this code, please ignore this email.</p>
-            </div>
-          `
-        })
-      })
-      .then(response => {
-        if (response.ok) {
-          showToast("Verification code sent successfully to your email!");
-          document.getElementById('otpInputContainer').classList.remove('hidden');
-        } else {
-          showToast("Failed to send email. Check API configuration.");
-          console.error('Resend Error Response:', response);
-        }
-      })
-      .catch(error => {
-        showToast("Network error sending email.");
-        console.error('Resend Network Error:', error);
-      });
+      showToast("Verification Code: " + generatedOtp);
+      document.getElementById('otpInputContainer').classList.remove('hidden');
+      
+      let statusText = document.getElementById('otpStatusText');
+      if (statusText) {
+        statusText.innerText = "Code sent! (Test Code: " + generatedOtp + ")";
+        statusText.className = "text-[10px] text-emerald-700 font-bold";
+      }
     }
 
     function verifyEmailOtp() {
