@@ -272,49 +272,43 @@
     </a>
   </nav>
 
-  <!-- ================= UPGRADED LIVE AI ASSISTANT WIDGET ================= -->
+  <!-- ================= HUMAN-CONVERSATIONAL AI ASSISTANT ================= -->
   <div id="yumiloAiWidget">
-    <!-- Floating Chat Toggle Button (Positioned above bottom nav) -->
     <button onclick="toggleAiChat()" class="fixed bottom-20 right-6 z-50 bg-[#064e3b] hover:bg-emerald-900 text-white p-3.5 rounded-full shadow-2xl flex items-center justify-center transition transform hover:scale-105 cursor-pointer border-2 border-emerald-500/50" aria-label="Open AI Assistant">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
     </button>
 
-    <!-- Chat Window Modal -->
     <div id="aiChatModal" class="hidden fixed bottom-32 right-6 z-50 w-80 sm:w-96 bg-white rounded-3xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden transition-all duration-300">
       
-      <!-- Chat Header -->
       <div class="bg-[#064e3b] text-white p-4 flex justify-between items-center">
         <div class="flex items-center space-x-3">
           <div class="w-8 h-8 rounded-full bg-emerald-700 flex items-center justify-center font-bold text-xs border border-emerald-600">🤖</div>
           <div>
-            <h4 class="font-bold text-xs">Yumilo AI Commerce Assistant</h4>
-            <p class="text-[10px] text-emerald-200">Live • Zambia Commerce & Escrow Expert</p>
+            <h4 class="font-bold text-xs">Yumilo Live Assistant</h4>
+            <p class="text-[10px] text-emerald-200">Online • Ready to chat</p>
           </div>
         </div>
         <button onclick="toggleAiChat()" class="text-emerald-200 hover:text-white font-bold text-sm cursor-pointer">✕</button>
       </div>
 
-      <!-- Chat Messages Area -->
       <div id="aiChatMessages" class="p-4 h-80 overflow-y-auto space-y-3 bg-gray-50 text-xs">
         <div class="flex items-start space-x-2">
           <div class="w-6 h-6 rounded-full bg-[#064e3b] text-white flex items-center justify-center text-[10px] shrink-0">AI</div>
           <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 text-gray-700 space-y-1">
-            <p class="font-bold text-gray-900">Mwapoleka! Welcome to Yumilo Market.</p>
-            <p>I am your live AI commerce assistant. Ask me anything about our live catalog, mobile money escrow, or delivery across Zambia's 10 provinces!</p>
+            <p class="font-bold text-gray-900">Mwapoleka! 👋 How are you doing today?</p>
+            <p>I'm your live shopping assistant. You can chat with me naturally—ask how I am, what products we sell, or how escrow works!</p>
           </div>
         </div>
       </div>
 
-      <!-- Quick Prompt Pills -->
       <div class="p-2 bg-white border-t border-gray-100 flex gap-1.5 overflow-x-auto hide-scrollbar text-[10px]">
-        <button onclick="sendQuickPrompt('What do you have currently?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">📦 Live Inventory</button>
+        <button onclick="sendQuickPrompt('Hello! How are you?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">👋 Say Hello</button>
+        <button onclick="sendQuickPrompt('What products do you have?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">📦 Our Products</button>
         <button onclick="sendQuickPrompt('How does escrow work?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">🛡️ Escrow Guide</button>
-        <button onclick="sendQuickPrompt('Delivery across Zambia')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">🚚 Delivery Info</button>
       </div>
 
-      <!-- Chat Input Form -->
       <div class="p-3 bg-white border-t border-gray-200 flex items-center">
-        <input type="text" id="aiUserInput" placeholder="Ask about products, prices, escrow, delivery..." class="w-full text-xs bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600 text-gray-800" onkeypress="handleAiKeyPress(event)">
+        <input type="text" id="aiUserInput" placeholder="Type a message or ask a question..." class="w-full text-xs bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600 text-gray-800" onkeypress="handleAiKeyPress(event)">
         <button onclick="submitAiQuery()" class="ml-2 bg-[#064e3b] hover:bg-emerald-900 text-white p-2.5 rounded-xl transition shadow cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
         </button>
@@ -323,7 +317,7 @@
     </div>
   </div>
 
-  <!-- UPGRADED CONVERSATIONAL AI ENGINE SCRIPT -->
+  <!-- HUMAN-LIKE CONVERSATIONAL ENGINE SCRIPT -->
   <script>
     let currentSlideIndex = 0;
     const slides = document.querySelectorAll('.slide');
@@ -361,10 +355,8 @@
       alert(`Filtering category: ${cat}`);
     }
 
-    // AI WIDGET LOGIC
     function toggleAiChat() {
-      const modal = document.getElementById('aiChatModal');
-      modal.classList.toggle('hidden');
+      document.getElementById('aiChatModal').classList.toggle('hidden');
     }
 
     function sendQuickPrompt(promptText) {
@@ -375,9 +367,6 @@
     function handleAiKeyPress(e) {
       if (e.key === 'Enter') submitAiQuery();
     }
-
-    // Chat History Memory
-    let conversationHistory = [];
 
     function submitAiQuery() {
       const inputField = document.getElementById('aiUserInput');
@@ -395,13 +384,12 @@
         </div>
       `;
 
-      conversationHistory.push({ role: 'user', content: query });
       inputField.value = '';
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-      // Simulate Live AI Thinking & Response
+      // Simulate natural human response timing
       setTimeout(() => {
-        let aiResponse = generateLiveAiResponse(query);
+        let aiResponse = generateConversationalResponse(query);
         messagesContainer.innerHTML += `
           <div class="flex items-start space-x-2">
             <div class="w-6 h-6 rounded-full bg-[#064e3b] text-white flex items-center justify-center text-[10px] shrink-0">AI</div>
@@ -410,51 +398,54 @@
             </div>
           </div>
         `;
-        conversationHistory.push({ role: 'assistant', content: aiResponse });
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
       }, 500);
     }
 
-    function generateLiveAiResponse(q) {
+    function generateConversationalResponse(q) {
       q = q.toLowerCase();
 
-      // Live Inventory / Products Check
-      if (q.includes('current') || q.includes('have') || q.includes('stock') || q.includes('catalog') || q.includes('product') || q.includes('sell')) {
-        return "<strong>Currently Live in Catalog:</strong><br>" +
-               "1. 📱 <strong>X-Series Smart Phone 128GB</strong> - K3,450.00 (Lusaka Tech Hub)<br>" +
-               "2. 👕 <strong>Premium Cotton Casual Tee</strong> - K180.00 (Lusaka Apparel Co.)<br>" +
-               "3. 🌾 <strong>Super Meal Roller Meal (25kg)</strong> - K240.00 (Kitwe Fresh Market)<br>" +
-               "4. 🍗 <strong>Whole Broiler Chicken</strong> - K95.00 (Mansa Poultry Farms)<br>" +
-               "Would you like to add any of these to your secure escrow cart?";
-      } 
-      // Escrow / Safety Check
-      else if (q.includes('escrow') || q.includes('protect') || q.includes('safe') || q.includes('money') || q.includes('pay')) {
-        return "<strong>Yumilo Escrow Protection:</strong> When you buy using MTN or Airtel Mobile Money, your funds are securely held in our escrow holding account. The vendor only receives payment after you inspect and confirm delivery within 24 hours. Zero risk!";
-      } 
-      // Delivery / Provinces Check
-      else if (q.includes('deliver') || q.includes('province') || q.includes('shipping') || q.includes('lusaka') || q.includes('kitwe') || q.includes('mansa')) {
-        return "<strong>Nationwide Provincial Delivery:</strong> We operate across all 10 provinces of Zambia: Lusaka, Copperbelt, Central, Luapula, Northern, Muchinga, Eastern, Southern, Western, and North-Western through our verified courier partner network.";
-      } 
-      // Specific Item: Phone
-      else if (q.includes('phone') || q.includes('smartphone') || q.includes('x-series')) {
-        return "The <strong>X-Series Smart Phone 128GB</strong> is available from Lusaka Tech Hub for <strong>K3,450.00</strong> with in-stock verification and escrow protection!";
-      } 
-      // Specific Item: Chicken / Poultry / Roller meal
-      else if (q.includes('chicken') || q.includes('poultry') || q.includes('meal') || q.includes('food')) {
-        return "We have fresh farm goods available: <strong>Whole Broiler Chicken</strong> from Mansa Poultry Farms for <strong>K95.00</strong> and <strong>Super Meal Roller Meal (25kg)</strong> for <strong>K240.00</strong>!";
-      } 
-      // Vendor / Partner signup
-      else if (q.includes('vendor') || q.includes('merchant') || q.includes('register') || q.includes('courier')) {
-        return "<strong>Vendor & Courier Partnership:</strong> You can register as a verified vendor or join our courier fleet by clicking 'Sign Up' or visiting our Vendor portal. Vendors receive automated WhatsApp order alerts instantly!";
-      } 
-      // Greeting
-      else if (q.includes('hello') || q.includes('hi') || q.includes('mwapoleka') || q.includes('hey')) {
-        return "Mwapoleka! How can I assist you with your shopping, escrow payments, or deliveries across Zambia today?";
+      // Small talk & Greetings
+      if (q.includes('how are you') || q.includes('how do you do') || q.includes('how you')) {
+        return "I'm doing wonderful, thank you for asking! 😊 Ready to help you explore amazing deals across Zambia today. How are you doing?";
       }
-      // Default intelligent fallback referencing catalog
-      else {
-        return `I processed your question regarding "${escapeHtml(q)}". At Yumilo Market, all goods are verified and backed by mobile money escrow protection across Zambia. You can browse our live catalog above or email our support team at support@yumilomarket.store!`;
+      if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q.includes('mwapoleka') || q.includes('sup') || q.includes('morning') || q.includes('afternoon') || q.includes('evening')) {
+        return "Mwapoleka! 👋 Great to have you here at Yumilo Market. What can I help you find today? Are you looking for electronics, groceries, or farm goods?";
       }
+      if (q.includes('who are you') || q.includes('your name') || q.includes('what are you')) {
+        return "I'm your personal AI assistant here at Yumilo Market! 🤖 I'm here to chat, answer questions about our products, and help you shop securely with our MTN & Airtel mobile money escrow.";
+      }
+      if (q.includes('thank') || q.includes('thx') || q.includes('awesome') || q.includes('great') || q.includes('cool')) {
+        return "You're very welcome! 🥰 Let me know if you need anything else. Happy shopping!";
+      }
+
+      // Products / What do you have
+      if (q.includes('what products') || q.includes('what do you have') || q.includes('catalog') || q.includes('sell') || q.includes('items') || q.includes('stock') || q.includes('available')) {
+        return "We have some fantastic verified goods right now! 🌟<br><br>" +
+               "📱 <strong>X-Series Smart Phone 128GB</strong> — K3,450<br>" +
+               "👕 <strong>Premium Cotton Casual Tee</strong> — K180<br>" +
+               "🌾 <strong>Super Meal Roller Meal (25kg)</strong> — K240<br>" +
+               "🍗 <strong>Whole Broiler Chicken</strong> — K95<br><br>" +
+               "Would you like to add any of these to your cart?";
+      }
+
+      // Escrow / Payment
+      if (q.includes('escrow') || q.includes('safe') || q.includes('trust') || q.includes('pay') || q.includes('money') || q.includes('mtn') || q.includes('airtel')) {
+        return "Your money is 100% safe with us! 🛡️ When you pay via MTN or Airtel Mobile Money, Yumilo Market holds the funds in escrow. The seller only gets paid after you receive and confirm your delivery. Zero risk!";
+      }
+
+      // Delivery / Provinces
+      if (q.includes('deliver') || q.includes('shipping') || q.includes('province') || q.includes('lusaka') || q.includes('copperbelt') || q.includes('mansa') || q.includes('kitwe')) {
+        return "We deliver nationwide across all <strong>10 provinces of Zambia</strong> (Lusaka, Copperbelt, Central, Luapula, Northern, Muchinga, Eastern, Southern, Western, and North-Western) through our trusted courier network! 🚚";
+      }
+
+      // Vendor / Partner
+      if (q.includes('vendor') || q.includes('merchant') || q.includes('store') || q.includes('courier') || q.includes('partner') || q.includes('sell on')) {
+        return "We love welcoming new partners! 🏢 You can register as a verified vendor or courier partner on Yumilo Market to reach buyers across all 10 provinces. Just click 'Sign Up' at the top of the page to get started!";
+      }
+
+      // Friendly fallback
+      return `That's a great point! I'm here 24/7 to chat about our products, escrow protection, or deliveries across Zambia. Is there a specific item or category you're looking for today?`;
     }
 
     function escapeHtml(text) {
