@@ -311,5 +311,128 @@
       alert(`Filtering category: ${cat}`);
     }
   </script>
+ <!-- ================= YUMILO AI ASSISTANT WIDGET ================= -->
+<div id="yumiloAiWidget">
+  <!-- Floating Chat Toggle Button -->
+  <button onclick="toggleAiChat()" class="fixed bottom-20 right-6 z-50 bg-[#064e3b] hover:bg-emerald-900 text-white p-3.5 rounded-full shadow-2xl flex items-center justify-center transition transform hover:scale-105 cursor-pointer border-2 border-emerald-500/50" aria-label="Open AI Assistant">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+  </button>
+
+  <!-- Chat Window Modal -->
+  <div id="aiChatModal" class="hidden fixed bottom-36 right-6 z-50 w-80 sm:w-96 bg-white rounded-3xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden transition-all duration-300">
+    
+    <!-- Chat Header -->
+    <div class="bg-[#064e3b] text-white p-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-full bg-emerald-700 flex items-center justify-center font-bold text-xs border border-emerald-600">🤖</div>
+        <div>
+          <h4 class="font-bold text-xs">Yumilo AI Assistant</h4>
+          <p class="text-[10px] text-emerald-200">Online • Zambia Commerce Expert</p>
+        </div>
+      </div>
+      <button onclick="toggleAiChat()" class="text-emerald-200 hover:text-white font-bold text-sm">✕</button>
+    </div>
+
+    <!-- Chat Messages Area -->
+    <div id="aiChatMessages" class="p-4 h-80 overflow-y-auto space-y-3 bg-gray-50 text-xs">
+      <div class="flex items-start space-x-2">
+        <div class="w-6 h-6 rounded-full bg-[#064e3b] text-white flex items-center justify-center text-[10px] shrink-0">AI</div>
+        <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 text-gray-700 space-y-1">
+          <p class="font-bold text-gray-900">Mwapoleka! Welcome to Yumilo Market.</p>
+          <p>I'm your AI shopping and support assistant. How can I help you today across Zambia?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Prompt Pills -->
+    <div class="p-2 bg-white border-t border-gray-100 flex gap-1.5 overflow-x-auto hide-scrollbar text-[10px]">
+      <button onclick="sendQuickPrompt('How does escrow work?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200">🛡️ Escrow Guide</button>
+      <button onclick="sendQuickPrompt('Provincial Delivery')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200">🚚 Delivery Info</button>
+      <button onclick="sendQuickPrompt('Become a Vendor')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200">🏢 Sell on Yumilo</button>
+    </div>
+
+    <!-- Chat Input Form -->
+    <div class="p-3 bg-white border-t border-gray-200 flex items-center">
+      <input type="text" id="aiUserInput" placeholder="Ask about products, escrow, delivery..." class="w-full text-xs bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600 text-gray-800" onkeypress="handleAiKeyPress(event)">
+      <button onclick="submitAiQuery()" class="ml-2 bg-[#064e3b] hover:bg-emerald-900 text-white p-2.5 rounded-xl transition shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- AI Chat Script Logic -->
+<script>
+  function toggleAiChat() {
+    const modal = document.getElementById('aiChatModal');
+    modal.classList.toggle('hidden');
+  }
+
+  function sendQuickPrompt(promptText) {
+    document.getElementById('aiUserInput').value = promptText;
+    submitAiQuery();
+  }
+
+  function handleAiKeyPress(e) {
+    if (e.key === 'Enter') submitAiQuery();
+  }
+
+  function submitAiQuery() {
+    const inputField = document.getElementById('aiUserInput');
+    const query = inputField.value.trim();
+    if (!query) return;
+
+    const messagesContainer = document.getElementById('aiChatMessages');
+
+    // Append User Message
+    messagesContainer.innerHTML += `
+      <div class="flex items-end justify-end space-x-2">
+        <div class="bg-[#064e3b] text-white p-3 rounded-2xl shadow-sm max-w-[80%]">
+          <p>${escapeHtml(query)}</p>
+        </div>
+      </div>
+    `;
+
+    inputField.value = '';
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    // Simulate AI Intelligence & Response Generation
+    setTimeout(() => {
+      let aiResponse = getAiSmartResponse(query);
+      messagesContainer.innerHTML += `
+        <div class="flex items-start space-x-2">
+          <div class="w-6 h-6 rounded-full bg-[#064e3b] text-white flex items-center justify-center text-[10px] shrink-0">AI</div>
+          <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 text-gray-700 space-y-1 max-w-[80%]">
+            <p>${aiResponse}</p>
+          </div>
+        </div>
+      `;
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, 600);
+  }
+
+  function getAiSmartResponse(q) {
+    q = q.toLowerCase();
+    if (q.includes('escrow') || q.includes('protect') || q.includes('safe') || q.includes('money')) {
+      return "<strong>Secure Mobile Money Escrow:</strong> When you pay via MTN or Airtel Money, your funds are safely held in Yumilo escrow. The seller only receives payment after you inspect and confirm delivery within 24 hours!";
+    } else if (q.includes('deliver') || q.includes('province') || q.includes('shipping') || q.includes('lusaka') || q.includes('kitwe')) {
+      return "<strong>Nationwide Delivery:</strong> We deliver across all 10 provinces of Zambia (Lusaka, Copperbelt, Luapula, Central, Northern, Muchinga, Eastern, Southern, Western, North-Western) in partnership with verified local courier fleets.";
+    } else if (q.includes('vendor') || q.includes('sell') || q.includes('merchant') || q.includes('list')) {
+      return "<strong>Become a Vendor:</strong> List your products on Yumilo Market to reach buyers nationwide. Vendors receive automated WhatsApp order notifications upon purchase. Sign up via the vendor portal!";
+    } else if (q.includes('phone') || q.includes('tech') || q.includes('smartphone')) {
+      return "<strong>X-Series Smartphone 128GB:</strong> Verified stock from Lusaka Tech Hub priced at <strong>K3,450.00</strong> with full escrow protection and instant cart add available.";
+    } else if (q.includes('chicken') || q.includes('poultry') || q.includes('meal') || q.includes('food')) {
+      return "<strong>Farm Direct & Groceries:</strong> We feature fresh daily produce like Super Meal Roller Meal (K240) and Whole Broiler Chicken from Mansa Poultry Farms (K95).";
+    } else {
+      return "That's a great question about Yumilo Market! You can browse our live catalog across Electronics, Fashion, Groceries, and Agriculture, or contact our operations team at support@yumilomarket.store.";
+    }
+  }
+
+  function escapeHtml(text) {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+</script>
+<!-- ================= END AI WIDGET ================= --> 
 </body>
 </html>
