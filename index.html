@@ -35,8 +35,10 @@
         </nav>
       </div>
       <div class="flex items-center space-x-4">
-        <a href="#" onclick="switchView('account')" class="text-xs font-bold text-gray-700 hover:text-emerald-700 px-3 py-2 transition cursor-pointer">Sign In</a>
-        <a href="#" onclick="switchView('account')" class="bg-[#064e3b] hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition cursor-pointer">Sign Up</a>
+        <span id="headerAuthStatus" class="flex items-center gap-3">
+          <a href="#" onclick="switchView('account')" class="text-xs font-bold text-gray-700 hover:text-emerald-700 px-3 py-2 transition cursor-pointer">Sign In</a>
+          <a href="#" onclick="switchView('account')" class="bg-[#064e3b] hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition cursor-pointer">Sign Up</a>
+        </span>
       </div>
     </div>
   </header>
@@ -86,7 +88,7 @@
             <h4 class="font-bold text-xs">X-Series Smart Phone 128GB</h4>
             <p class="text-emerald-700 font-black text-sm mt-2">K3,450.00</p>
           </div>
-          <button onclick="addToCart('X-Series Smart Phone 128GB', 3450)" class="mt-5 w-full bg-[#f59e0b] text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
+          <button onclick="addToCart('X-Series Smart Phone 128GB', 3450)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
         </div>
         <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between">
           <div>
@@ -94,7 +96,7 @@
             <h4 class="font-bold text-xs">Premium Cotton Casual Tee</h4>
             <p class="text-emerald-700 font-black text-sm mt-2">K180.00</p>
           </div>
-          <button onclick="addToCart('Premium Cotton Casual Tee', 180)" class="mt-5 w-full bg-[#f59e0b] text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
+          <button onclick="addToCart('Premium Cotton Casual Tee', 180)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
         </div>
         <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between">
           <div>
@@ -102,7 +104,7 @@
             <h4 class="font-bold text-xs">Super Meal Roller Meal (25kg)</h4>
             <p class="text-emerald-700 font-black text-sm mt-2">K240.00</p>
           </div>
-          <button onclick="addToCart('Super Meal Roller Meal (25kg)', 240)" class="mt-5 w-full bg-[#f59e0b] text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
+          <button onclick="addToCart('Super Meal Roller Meal (25kg)', 240)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
         </div>
         <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between">
           <div>
@@ -110,7 +112,7 @@
             <h4 class="font-bold text-xs">Whole Broiler Chicken</h4>
             <p class="text-emerald-700 font-black text-sm mt-2">K95.00</p>
           </div>
-          <button onclick="addToCart('Whole Broiler Chicken', 95)" class="mt-5 w-full bg-[#f59e0b] text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
+          <button onclick="addToCart('Whole Broiler Chicken', 95)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
         </div>
       </div>
     </section>
@@ -126,27 +128,26 @@
       <button onclick="switchView('home')" class="bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl cursor-pointer">← Back Home</button>
     </div>
 
-    <!-- Category Grid Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       <div onclick="switchView('catalog'); filterCatalog('Electronics');" class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 hover:shadow-xl transition cursor-pointer text-center space-y-3 group">
         <div class="w-16 h-16 mx-auto bg-emerald-100 rounded-2xl flex items-center justify-center text-2xl group-hover:bg-emerald-800 group-hover:text-white transition">📱</div>
         <h3 class="font-bold text-sm text-gray-900">Electronics</h3>
-        <p class="text-[11px] text-gray-500">Smartphones, accessories & gadgets from Lusaka Tech Hub</p>
+        <p class="text-[11px] text-gray-500">Smartphones, accessories & gadgets</p>
       </div>
       <div onclick="switchView('catalog'); filterCatalog('Fashion');" class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 hover:shadow-xl transition cursor-pointer text-center space-y-3 group">
         <div class="w-16 h-16 mx-auto bg-emerald-100 rounded-2xl flex items-center justify-center text-2xl group-hover:bg-emerald-800 group-hover:text-white transition">👕</div>
         <h3 class="font-bold text-sm text-gray-900">Fashion & Wear</h3>
-        <p class="text-[11px] text-gray-500">Casual tees, apparel & style from verified vendors</p>
+        <p class="text-[11px] text-gray-500">Casual tees, apparel & style</p>
       </div>
       <div onclick="switchView('catalog'); filterCatalog('Groceries');" class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 hover:shadow-xl transition cursor-pointer text-center space-y-3 group">
         <div class="w-16 h-16 mx-auto bg-emerald-100 rounded-2xl flex items-center justify-center text-2xl group-hover:bg-emerald-800 group-hover:text-white transition">🌾</div>
         <h3 class="font-bold text-sm text-gray-900">Groceries</h3>
-        <p class="text-[11px] text-gray-500">Roller meal, daily essentials & fresh market produce</p>
+        <p class="text-[11px] text-gray-500">Roller meal & daily essentials</p>
       </div>
       <div onclick="switchView('catalog'); filterCatalog('Agriculture');" class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 hover:shadow-xl transition cursor-pointer text-center space-y-3 group">
         <div class="w-16 h-16 mx-auto bg-emerald-100 rounded-2xl flex items-center justify-center text-2xl group-hover:bg-emerald-800 group-hover:text-white transition">🍗</div>
         <h3 class="font-bold text-sm text-gray-900">Agri & Livestock</h3>
-        <p class="text-[11px] text-gray-500">Farm direct broiler chickens, feeds & poultry equipment</p>
+        <p class="text-[11px] text-gray-500">Broiler chickens, feeds & equipment</p>
       </div>
     </div>
   </div>
@@ -209,21 +210,22 @@
     </div>
   </div>
 
-  <!-- ================= VIEW 4: ORDERS ================= -->
+  <!-- ================= VIEW 4: ORDERS (LOGIN REQUIRED) ================= -->
   <div id="orders-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-20">
-    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
+    <div id="ordersLockedContainer" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 text-center space-y-4">
+      <div class="w-16 h-16 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">🔒</div>
+      <h2 class="text-lg font-bold text-gray-900">Sign In Required to View Orders</h2>
+      <p class="text-xs text-gray-500 max-w-md mx-auto">Please sign in to your Yumilo Market account to track your secure escrow orders and deliveries.</p>
+      <button onclick="switchView('account')" class="bg-[#064e3b] hover:bg-emerald-900 text-white font-extrabold px-6 py-3 rounded-xl text-xs transition cursor-pointer shadow">Sign In / Register Now</button>
+    </div>
+
+    <div id="ordersUnlockedContainer" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="flex justify-between items-center border-b pb-4">
         <h2 class="text-lg font-bold text-gray-900">My Escrow Orders</h2>
-        <span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-3 py-1 rounded-full">Secure Tracking</span>
+        <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-3 py-1 rounded-full">Secure Tracking</span>
       </div>
-      <div class="space-y-3 text-xs text-gray-600">
-        <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex justify-between items-center">
-          <div>
-            <p class="font-bold text-gray-900">Order #YM-8492</p>
-            <p class="text-[11px] text-gray-500">X-Series Smartphone • Escrow Held</p>
-          </div>
-          <span class="bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full text-[10px]">In Transit</span>
-        </div>
+      <div id="ordersListContainer" class="space-y-3 text-xs">
+        <p class="text-gray-500 py-6 text-center">You have no active escrow orders yet.</p>
       </div>
     </div>
   </div>
@@ -237,10 +239,10 @@
       </div>
       <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 space-y-1">
         <div class="flex justify-between text-[10px] text-emerald-800 font-bold">
-          <span>Lusaka Tech Hub</span>
+          <span>Yumilo Support Hub</span>
           <span>Today</span>
         </div>
-        <p class="text-xs text-gray-700">Hello! Your phone has been dispatched via courier with escrow protection.</p>
+        <p class="text-xs text-gray-700">Mwapoleka! Welcome to Yumilo Market. All trade conversations with verified vendors appear here.</p>
       </div>
     </div>
   </div>
@@ -256,13 +258,33 @@
         <p class="text-gray-500">Your cart is empty. Add items from the catalog!</p>
       </div>
       <div id="cartTotal" class="font-black text-emerald-700 text-sm pt-4 border-t border-gray-100">Total Escrow Amount: K0.00</div>
-      <button onclick="alert('Proceeding to MTN & Airtel Mobile Money Escrow Checkout!')" class="w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold py-3 rounded-xl text-xs transition shadow cursor-pointer">Proceed to Mobile Money Escrow</button>
+      <button onclick="checkoutCart()" class="w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold py-3 rounded-xl text-xs transition shadow cursor-pointer">Proceed to Mobile Money Escrow Checkout</button>
     </div>
   </div>
 
-  <!-- ================= VIEW 7: ACCOUNT ================= -->
-  <div id="account-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-20">
-    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
+  <!-- ================= VIEW 7: ACCOUNT & LOGIN ================= -->
+  <div id="account-view" class="view-section max-w-md mx-auto px-6 py-10 space-y-6 pb-20">
+    <div id="loginCard" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 space-y-5">
+      <div class="text-center space-y-2">
+        <div class="w-12 h-12 bg-[#064e3b] text-white rounded-2xl flex items-center justify-center mx-auto text-xl font-bold">YM</div>
+        <h2 class="text-lg font-bold text-gray-900">Sign in to Yumilo Market</h2>
+        <p class="text-xs text-gray-500">Access your orders, escrow tracking, and vendor chats.</p>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Mobile Number or Email</label>
+          <input type="text" id="userEmailOrPhone" placeholder="e.g., 0970000000 or email@domain.com" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Password</label>
+          <input type="password" id="userPassword" placeholder="••••••••" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+        </div>
+        <button onclick="simulateLogin()" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-extrabold py-3 rounded-xl transition shadow cursor-pointer">Sign In</button>
+      </div>
+    </div>
+
+    <!-- Logged in state dashboard -->
+    <div id="profileCard" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="flex items-center space-x-4 border-b pb-4">
         <div class="w-12 h-12 rounded-full bg-emerald-800 text-white flex items-center justify-center font-black text-lg">HM</div>
         <div>
@@ -273,7 +295,7 @@
       <div class="space-y-2 text-xs">
         <a href="terms.html" class="block p-3 bg-gray-50 hover:bg-gray-100 rounded-xl font-semibold text-gray-700">Terms of Service</a>
         <a href="privacy.html" class="block p-3 bg-gray-50 hover:bg-gray-100 rounded-xl font-semibold text-gray-700">Privacy Policy</a>
-        <a href="refund.html" class="block p-3 bg-gray-50 hover:bg-gray-100 rounded-xl font-semibold text-gray-700">Refund & Escrow Policy</a>
+        <button onclick="simulateLogout()" class="w-full text-left p-3 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl font-bold cursor-pointer transition">Sign Out</button>
       </div>
     </div>
   </div>
@@ -385,7 +407,17 @@
 
   <!-- SCRIPT LOGIC -->
   <script>
+    // Check login state on load
+    let isLoggedIn = localStorage.getItem('yumilo_logged_in') === 'true';
+    updateAuthUI();
+
     function switchView(viewId) {
+      // If trying to access orders while logged out, redirect to account/login
+      if (viewId === 'orders' && !isLoggedIn) {
+        viewId = 'account';
+        alert("Please sign in to view your orders.");
+      }
+
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       document.getElementById(viewId + '-view').classList.add('active');
 
@@ -401,6 +433,54 @@
       });
       window.scrollTo(0, 0);
       if (viewId === 'cart') renderCart();
+      if (viewId === 'orders') renderOrders();
+    }
+
+    function simulateLogin() {
+      let val = document.getElementById('userEmailOrPhone').value.trim();
+      if (!val) {
+        alert("Please enter your email or phone number.");
+        return;
+      }
+      localStorage.setItem('yumilo_logged_in', 'true');
+      isLoggedIn = true;
+      updateAuthUI();
+      alert("Successfully signed in!");
+      switchView('home');
+    }
+
+    function simulateLogout() {
+      localStorage.removeItem('yumilo_logged_in');
+      isLoggedIn = false;
+      updateAuthUI();
+      alert("Signed out successfully.");
+      switchView('home');
+    }
+
+    function updateAuthUI() {
+      let locked = document.getElementById('ordersLockedContainer');
+      let unlocked = document.getElementById('ordersUnlockedContainer');
+      let loginCard = document.getElementById('loginCard');
+      let profileCard = document.getElementById('profileCard');
+      let headerAuth = document.getElementById('headerAuthStatus');
+
+      if (isLoggedIn) {
+        if (locked) locked.classList.add('hidden');
+        if (unlocked) unlocked.classList.remove('hidden');
+        if (loginCard) loginCard.classList.add('hidden');
+        if (profileCard) profileCard.classList.remove('hidden');
+        if (headerAuth) {
+          headerAuth.innerHTML = `<span class='text-xs font-bold text-emerald-800'>👤 Henry Mwansa</span> <button onclick="simulateLogout()" class='text-xs text-red-600 font-bold underline cursor-pointer'>Sign Out</button>`;
+        }
+      } else {
+        if (locked) locked.classList.remove('hidden');
+        if (unlocked) unlocked.classList.add('hidden');
+        if (loginCard) loginCard.classList.remove('hidden');
+        if (profileCard) profileCard.classList.add('hidden');
+        if (headerAuth) {
+          headerAuth.innerHTML = `<a href="#" onclick="switchView('account')" class="text-xs font-bold text-gray-700 hover:text-emerald-700 px-3 py-2 transition cursor-pointer">Sign In</a> <a href="#" onclick="switchView('account')" class="bg-[#064e3b] hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition cursor-pointer">Sign Up</a>`;
+        }
+      }
     }
 
     function filterCatalog(category) {
@@ -439,6 +519,57 @@
           return `<div class='flex justify-between items-center border-b pb-2'><span>${item.name}</span><span class='font-bold text-emerald-700'>K${item.price.toLocaleString()}</span></div>`;
         }).join('');
         totalEl.innerHTML = `Total Escrow Amount: K${total.toLocaleString()}`;
+      }
+    }
+
+    function checkoutCart() {
+      let cart = JSON.parse(localStorage.getItem('yumilo_cart')) || [];
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+
+      // Require login before placing an order
+      if (!isLoggedIn) {
+        alert("Please sign in or create an account to complete your Mobile Money Escrow checkout.");
+        switchView('account');
+        return;
+      }
+
+      let orders = JSON.parse(localStorage.getItem('yumilo_orders')) || [];
+      let newOrder = {
+        id: 'YM-' + Math.floor(1000 + Math.random() * 9000),
+        items: cart,
+        date: new Date().toLocaleDateString(),
+        status: 'Escrow Held / Processing'
+      };
+      orders.unshift(newOrder);
+      localStorage.setItem('yumilo_orders', JSON.stringify(orders));
+      localStorage.removeItem('yumilo_cart');
+      alert("Order successfully placed! Funds securely held in escrow via Mobile Money.");
+      switchView('orders');
+    }
+
+    function renderOrders() {
+      if (!isLoggedIn) return;
+      let orders = JSON.parse(localStorage.getItem('yumilo_orders')) || [];
+      let container = document.getElementById('ordersListContainer');
+
+      if (orders.length === 0) {
+        container.innerHTML = "<p class='text-gray-500 py-6 text-center'>You have no active escrow orders yet. Orders placed through cart checkout will appear here.</p>";
+      } else {
+        container.innerHTML = orders.map(order => `
+          <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-gray-900">Order #${order.id}</span>
+              <span class="bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full text-[10px]">${order.status}</span>
+            </div>
+            <p class="text-[11px] text-gray-500">Date: ${order.date}</p>
+            <div class="pt-2 border-t border-gray-200">
+              ${order.items.map(i => `<div class='flex justify-between text-gray-700'><span>${i.name}</span><span class='font-semibold'>K${i.price.toLocaleString()}</span></div>`).join('')}
+            </div>
+          </div>
+        `).join('');
       }
     }
 
