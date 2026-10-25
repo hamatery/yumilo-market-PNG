@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yumilo Market - Zambia's Verified Universal Marketplace</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- EmailJS SDK for Real Email Delivery -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      // TODO: Replace with your actual EmailJS Public Key from emailjs.com
+      emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+    })();
+  </script>
   <style>
     body { background-color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -41,7 +49,7 @@
     </div>
   </header>
 
-  <!-- FLOATING NOTIFICATION BANNER (Replaces pop-up alerts) -->
+  <!-- FLOATING NOTIFICATION BANNER -->
   <div id="toastBanner" class="fixed top-20 right-6 z-50 hidden bg-[#064e3b] text-white text-xs font-bold px-5 py-3 rounded-2xl shadow-2xl border border-emerald-600 transition-all duration-300">
     <span id="toastMessage">Success message here</span>
   </div>
@@ -213,7 +221,7 @@
     </div>
   </div>
 
-  <!-- ================= VIEW 4: ORDERS (LOGIN REQUIRED - NO POPUPS) ================= -->
+  <!-- ================= VIEW 4: ORDERS (LOGIN REQUIRED) ================= -->
   <div id="orders-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-28">
     <div id="ordersLockedContainer" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 text-center space-y-4">
       <div class="w-16 h-16 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">🔒</div>
@@ -261,14 +269,13 @@
       </div>
       <div id="cartTotal" class="font-black text-emerald-700 text-sm pt-4 border-t border-gray-100">Total Escrow Amount: K0.00</div>
       
-      <!-- Checkout section with inline link if logged out -->
       <div id="checkoutActionContainer">
         <button onclick="checkoutCart()" class="w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold py-3 rounded-xl text-xs transition shadow cursor-pointer">Proceed to Mobile Money Escrow Checkout</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= VIEW 7: ACCOUNT (SEPARATE SIGN IN & SIGN UP WORKFLOWS) ================= -->
+  <!-- ================= VIEW 7: ACCOUNT (SIGN IN & ENHANCED SIGN UP WITH REAL EMAIL OTP) ================= -->
   <div id="account-view" class="view-section max-w-md mx-auto px-6 py-10 space-y-6 pb-28">
     <!-- Switcher Tabs -->
     <div id="authSwitchTabs" class="flex bg-gray-200 p-1 rounded-2xl text-xs font-bold text-center">
@@ -296,8 +303,8 @@
       <p class="text-center text-xs text-gray-500 pt-2">Don't have an account? <a href="#" onclick="switchAccountTab('signup')" class="text-emerald-700 font-bold underline">Create Account</a></p>
     </div>
 
-    <!-- SIGN UP FORM -->
-    <div id="signupFormContainer" class="hidden bg-white p-8 rounded-3xl shadow-sm border border-gray-200 space-y-5">
+    <!-- SIGN UP FORM (Real Email OTP & Province/District Selectors) -->
+    <div id="signupFormContainer" class="hidden bg-white p-8 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="text-center space-y-1">
         <h2 class="text-lg font-bold text-gray-900">Create Account</h2>
         <p class="text-xs text-gray-500">Join Zambia's trusted escrow marketplace</p>
@@ -307,17 +314,72 @@
           <label class="block font-bold text-gray-700 mb-1">Full Name</label>
           <input type="text" id="signupName" placeholder="e.g., Henry Mwansa" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
         </div>
+
         <div>
-          <label class="block font-bold text-gray-700 mb-1">Mobile Number or Email</label>
-          <input type="text" id="signupIdentifier" placeholder="e.g., 0970000000 or email@domain.com" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+          <label class="block font-bold text-gray-700 mb-1">Mobile Number (MTN / Airtel)</label>
+          <input type="tel" id="signupPhone" placeholder="0970000000" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
         </div>
+
         <div>
-          <label class="block font-bold text-gray-700 mb-1">Create Password</label>
+          <label class="block font-bold text-gray-700 mb-1">Email Address</label>
+          <div class="flex gap-2">
+            <input type="email" id="signupEmail" placeholder="user@domain.com" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+            <button onclick="sendRealEmailOtp()" id="sendOtpBtn" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold px-3 rounded-xl text-[11px] whitespace-nowrap transition cursor-pointer">Send Code</button>
+          </div>
+        </div>
+
+        <!-- OTP Verification Input (Appears after clicking Send Code) -->
+        <div id="otpInputContainer" class="hidden space-y-1 bg-emerald-50 p-3 rounded-2xl border border-emerald-200">
+          <label class="block font-bold text-emerald-900 mb-1">Enter 6-Digit Code Sent to Email</label>
+          <div class="flex gap-2">
+            <input type="text" id="signupOtpInput" placeholder="123456" maxlength="6" class="w-full bg-white rounded-xl px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-600 font-bold tracking-widest text-center">
+            <button onclick="verifyEmailOtp()" class="bg-[#064e3b] text-white font-bold px-4 rounded-xl text-[11px] whitespace-nowrap transition cursor-pointer">Confirm</button>
+          </div>
+          <p id="otpStatusText" class="text-[10px] text-emerald-700 font-semibold"></p>
+        </div>
+
+        <!-- Province Selector -->
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Province</label>
+          <select id="signupProvince" onchange="updateDistricts()" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+            <option value="">Select Province</option>
+            <option value="Lusaka">Lusaka Province</option>
+            <option value="Copperbelt">Copperbelt Province</option>
+            <option value="Central">Central Province</option>
+            <option value="Luapula">Luapula Province</option>
+            <option value="Northern">Northern Province</option>
+            <option value="Muchinga">Muchinga Province</option>
+            <option value="Eastern">Eastern Province</option>
+            <option value="Southern">Southern Province</option>
+            <option value="Western">Western Province</option>
+            <option value="North-Western">North-Western Province</option>
+          </select>
+        </div>
+
+        <!-- District Selector -->
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">District</label>
+          <select id="signupDistrict" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+            <option value="">Select Province First</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Password</label>
           <input type="password" id="signupPassword" placeholder="••••••••" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
         </div>
-        <button onclick="processSignUp()" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-extrabold py-3 rounded-xl transition shadow cursor-pointer">Register Account</button>
+
+        <!-- Terms & Conditions Checkbox -->
+        <div class="flex items-start gap-2 pt-1">
+          <input type="checkbox" id="termsCheckbox" class="mt-0.5 rounded text-emerald-700 focus:ring-emerald-600 cursor-pointer">
+          <label for="termsCheckbox" class="text-[11px] text-gray-600">
+            I agree to Yumilo Market's <a href="terms.html" class="text-emerald-700 font-bold underline" target="_blank">Terms of Service</a>, <a href="privacy.html" class="text-emerald-700 font-bold underline" target="_blank">Privacy Policy</a>, and Escrow Rules.
+          </label>
+        </div>
+
+        <button onclick="processSignUp()" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-extrabold py-3 rounded-xl transition shadow cursor-pointer mt-2">Register Account</button>
       </div>
-      <p class="text-center text-xs text-gray-500 pt-2">Already have an account? <a href="#" onclick="switchAccountTab('signin')" class="text-emerald-700 font-bold underline">Sign In</a></p>
+      <p class="text-center text-xs text-gray-500 pt-1">Already have an account? <a href="#" onclick="switchAccountTab('signin')" class="text-emerald-700 font-bold underline">Sign In</a></p>
     </div>
 
     <!-- LOGGED IN PROFILE DASHBOARD -->
@@ -326,7 +388,7 @@
         <div id="userAvatar" class="w-12 h-12 rounded-full bg-emerald-800 text-white flex items-center justify-center font-black text-lg">HM</div>
         <div>
           <h2 id="profileNameDisplay" class="font-bold text-sm text-gray-900">Henry Mwansa</h2>
-          <p class="text-xs text-gray-500">Zambia Operations Hub • Verified Buyer</p>
+          <p id="profileLocationDisplay" class="text-xs text-gray-500">Mansa, Luapula • Verified Buyer</p>
         </div>
       </div>
       <div class="space-y-2 text-xs">
@@ -403,13 +465,86 @@
   <script>
     let isLoggedIn = localStorage.getItem('yumilo_logged_in') === 'true';
     let userName = localStorage.getItem('yumilo_user_name') || 'Henry Mwansa';
+    let userLocation = localStorage.getItem('yumilo_user_location') || 'Mansa, Luapula';
+    let generatedOtp = null;
+    let isEmailVerified = false;
+
+    const zambiaDistricts = {
+      "Lusaka": ["Lusaka", "Chongwe", "Kafue", "Luangwa"],
+      "Copperbelt": ["Ndola", "Kitwe", "Mufulira", "Luanshya", "Chingola", "Chililabombwe", "Kalulushi"],
+      "Central": ["Kabwe", "Kapiri Mposhi", "Serenje", "Mkushi", "Mumbwa", "Chibombo"],
+      "Luapula": ["Mansa", "Samfya", "Nchelenge", "Kawambwa", "Mwense", "Milenge"],
+      "Northern": ["Kasama", "Mbala", "Luwingu", "Mporokoso", "Nsama", "Chinsali"],
+      "Muchinga": ["Chinsali", "Mpika", "Isoka", "Nakonde", "Mafinga"],
+      "Eastern": ["Chipata", "Katete", "Petauke", "Lundazi", "Chadiza", "Nyimba"],
+      "Southern": ["Choma", "Livingstone", "Mazabuka", "Monze", "Kalomo", "Kazungula"],
+      "Western": ["Mongu", "Senanga", "Kaoma", "Sesheke", "Kalabo", "Lukulu"],
+      "North-Western": ["Solwezi", "Kasempa", "Mwinilunga", "Zambezi", "Kafue", "Chifunabuli"]
+    };
+
     updateAuthUI();
 
     function showToast(msg) {
       let toast = document.getElementById('toastBanner');
       document.getElementById('toastMessage').innerText = msg;
       toast.classList.remove('hidden');
-      setTimeout(() => { toast.classList.add('hidden'); }, 3000);
+      setTimeout(() => { toast.classList.add('hidden'); }, 3500);
+    }
+
+    function updateDistricts() {
+      let provinceSelect = document.getElementById('signupProvince').value;
+      let districtSelect = document.getElementById('signupDistrict');
+      districtSelect.innerHTML = '<option value="">Select District</option>';
+      if (zambiaDistricts[provinceSelect]) {
+        zambiaDistricts[provinceSelect].forEach(d => {
+          districtSelect.innerHTML += `<option value="${d}">${d}</option>`;
+        });
+      }
+    }
+
+    function sendRealEmailOtp() {
+      let email = document.getElementById('signupEmail').value.trim();
+      if (!email || !email.includes('@')) {
+        showToast("Please enter a valid email address first.");
+        return;
+      }
+
+      generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      // Send real email using EmailJS
+      let templateParams = {
+        to_email: email,
+        otp_code: generatedOtp,
+        to_name: document.getElementById('signupName').value.trim() || 'New User'
+      };
+
+      showToast("Sending verification code to " + email + "...");
+
+      // NOTE: Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with your EmailJS dashboard values
+      emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+        .then(function(response) {
+          showToast("Verification code successfully sent to your email!");
+          document.getElementById('otpInputContainer').classList.remove('hidden');
+        }, function(error) {
+          showToast("Failed to send email. Please check EmailJS configuration.");
+          console.error('EmailJS Error:', error);
+        });
+    }
+
+    function verifyEmailOtp() {
+      let enteredOtp = document.getElementById('signupOtpInput').value.trim();
+      let statusText = document.getElementById('otpStatusText');
+
+      if (enteredOtp === generatedOtp) {
+        isEmailVerified = true;
+        statusText.innerText = "✓ Email verified successfully!";
+        statusText.className = "text-[10px] text-emerald-700 font-bold";
+        showToast("Email verified successfully!");
+      } else {
+        isEmailVerified = false;
+        statusText.innerText = "✗ Invalid code. Please try again.";
+        statusText.className = "text-[10px] text-red-600 font-bold";
+      }
     }
 
     function switchView(viewId) {
@@ -477,14 +612,30 @@
 
     function processSignUp() {
       let name = document.getElementById('signupName').value.trim();
-      let val = document.getElementById('signupIdentifier').value.trim();
+      let phone = document.getElementById('signupPhone').value.trim();
+      let email = document.getElementById('signupEmail').value.trim();
+      let province = document.getElementById('signupProvince').value;
+      let district = document.getElementById('signupDistrict').value;
       let pass = document.getElementById('signupPassword').value.trim();
-      if (!name || !val || !pass) {
+      let termsChecked = document.getElementById('termsCheckbox').checked;
+
+      if (!name || !phone || !email || !province || !district || !pass) {
         showToast("Please fill in all registration fields.");
         return;
       }
+      if (!isEmailVerified) {
+        showToast("Please verify your email address with the code sent to your inbox first.");
+        return;
+      }
+      if (!termsChecked) {
+        showToast("You must agree to the Terms of Service to register.");
+        return;
+      }
+
       userName = name;
+      userLocation = `${district}, ${province}`;
       localStorage.setItem('yumilo_user_name', name);
+      localStorage.setItem('yumilo_user_location', userLocation);
       isLoggedIn = true;
       localStorage.setItem('yumilo_logged_in', 'true');
       updateAuthUI();
@@ -505,8 +656,10 @@
       let unlocked = document.getElementById('ordersUnlockedContainer');
       let headerAuth = document.getElementById('headerAuthStatus');
       let profileName = document.getElementById('profileNameDisplay');
+      let profileLocation = document.getElementById('profileLocationDisplay');
 
       if (profileName) profileName.innerText = userName;
+      if (profileLocation) profileLocation.innerText = `${userLocation} • Verified Buyer`;
 
       if (isLoggedIn) {
         if (locked) locked.classList.add('hidden');
