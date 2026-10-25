@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yumilo Market - Zambia's Verified Universal Marketplace</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { background-color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -67,7 +66,7 @@
           <p class="text-xs md:text-sm text-emerald-100 font-normal leading-relaxed">High performance 128GB smartphone. Verified stock from Lusaka Tech Hub with escrow protection.</p>
           <div class="pt-1 flex items-center gap-4">
             <span class="text-xl font-black text-amber-400">K3,450.00</span>
-            <a href="#catalog-section" class="bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold px-5 py-2.5 rounded-xl text-xs transition shadow-lg inline-block">Shop Now</a>
+            <a href="catalog.html" class="bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold px-5 py-2.5 rounded-xl text-xs transition shadow-lg inline-block">Shop Now</a>
           </div>
         </div>
         <div class="w-full md:w-auto">
@@ -121,22 +120,22 @@
     </div>
   </section>
 
-  <!-- SEARCH BAR -->
+  <!-- SEARCH BAR (Redirects to Catalog with search query) -->
   <section class="max-w-4xl mx-auto px-6 -mt-5 relative z-30">
     <div class="bg-white rounded-2xl shadow-xl p-3.5 flex items-center border border-gray-200">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      <input type="text" id="searchInput" placeholder="Search electronics, fashion, groceries, farm goods across Zambia..." class="w-full ml-3 text-xs text-gray-700 bg-transparent focus:outline-none">
+      <input type="text" id="searchInput" placeholder="Search electronics, fashion, groceries, farm goods across Zambia..." class="w-full ml-3 text-xs text-gray-700 bg-transparent focus:outline-none" onkeypress="handleSearchKey(event)">
     </div>
   </section>
 
-  <!-- CATEGORY FILTER TABS -->
+  <!-- CATEGORY FILTER TABS (Links to Catalog Category pages) -->
   <section class="max-w-5xl mx-auto px-6 mt-12">
     <div class="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2">
-      <button onclick="filterCategory('All')" class="bg-[#064e3b] text-white text-xs font-bold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer transition">All Goods</button>
-      <button onclick="filterCategory('Electronics')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer transition">Electronics</button>
-      <button onclick="filterCategory('Fashion')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer transition">Fashion & Wear</button>
-      <button onclick="filterCategory('Groceries')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer transition">Groceries</button>
-      <button onclick="filterCategory('Agriculture')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer transition">Agri & Livestock</button>
+      <a href="catalog.html" class="bg-[#064e3b] text-white text-xs font-bold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap transition">All Goods</a>
+      <a href="catalog.html?cat=Electronics" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap transition">Electronics</a>
+      <a href="catalog.html?cat=Fashion" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap transition">Fashion & Wear</a>
+      <a href="catalog.html?cat=Groceries" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap transition">Groceries</a>
+      <a href="catalog.html?cat=Agriculture" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-full shadow-sm whitespace-nowrap transition">Agri & Livestock</a>
     </div>
   </section>
 
@@ -147,7 +146,7 @@
         <h3 class="text-lg font-bold text-gray-900 tracking-tight">Featured Zambian Marketplace Catalog</h3>
         <p class="text-xs text-gray-500">Escrow-protected goods ready for nationwide delivery</p>
       </div>
-      <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-3.5 py-1.5 rounded-full">4 Items Live</span>
+      <a href="catalog.html" class="text-xs font-bold bg-emerald-100 text-emerald-800 px-3.5 py-1.5 rounded-full hover:bg-emerald-200 transition">View All Catalog →</a>
     </div>
 
     <!-- PRODUCT GRID -->
@@ -163,7 +162,7 @@
           <h4 class="font-bold text-xs text-gray-900 mt-1">X-Series Smart Phone 128GB</h4>
           <p class="text-emerald-700 font-black text-sm mt-2">K3,450.00</p>
         </div>
-        <button onclick="addToCart('X-Series Smart Phone 128GB', 3450)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
+        <button onclick="addToCart('X-Series Smart Phone 128GB', 3450, 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80')" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
       </div>
 
       <!-- Item 2 -->
@@ -177,7 +176,7 @@
           <h4 class="font-bold text-xs text-gray-900 mt-1">Premium Cotton Casual Tee</h4>
           <p class="text-emerald-700 font-black text-sm mt-2">K180.00</p>
         </div>
-        <button onclick="addToCart('Premium Cotton Casual Tee', 180)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
+        <button onclick="addToCart('Premium Cotton Casual Tee', 180, 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80')" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
       </div>
 
       <!-- Item 3 -->
@@ -191,7 +190,7 @@
           <h4 class="font-bold text-xs text-gray-900 mt-1">Super Meal Roller Meal (25kg)</h4>
           <p class="text-emerald-700 font-black text-sm mt-2">K240.00</p>
         </div>
-        <button onclick="addToCart('Super Meal Roller Meal (25kg)', 240)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
+        <button onclick="addToCart('Super Meal Roller Meal (25kg)', 240, 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80')" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
       </div>
 
       <!-- Item 4 -->
@@ -205,7 +204,7 @@
           <h4 class="font-bold text-xs text-gray-900 mt-1">Whole Broiler Chicken</h4>
           <p class="text-emerald-700 font-black text-sm mt-2">K95.00</p>
         </div>
-        <button onclick="addToCart('Whole Broiler Chicken', 95)" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
+        <button onclick="addToCart('Whole Broiler Chicken', 95, 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=400&q=80')" class="mt-5 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
       </div>
     </div>
   </section>
@@ -244,7 +243,7 @@
     </div>
   </footer>
 
-  <!-- BOTTOM NAVIGATION BAR -->
+  <!-- BOTTOM NAVIGATION BAR (Fully Linked to Actual Pages) -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 py-3 px-6 flex justify-around items-center z-40 shadow-2xl">
     <a href="index.html" class="flex flex-col items-center text-emerald-700">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -317,7 +316,7 @@
     </div>
   </div>
 
-  <!-- HUMAN-LIKE CONVERSATIONAL ENGINE SCRIPT -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
     let currentSlideIndex = 0;
     const slides = document.querySelectorAll('.slide');
@@ -348,34 +347,41 @@
 
     if (slides.length > 0) showSlide(0);
 
-    function addToCart(name, price) {
-      alert(`${name} (K${price.toLocaleString()}) added to your secure escrow cart!`);
-    }
-    function filterCategory(cat) {
-      alert(`Filtering category: ${cat}`);
+    // Cart Storage Function
+    function addToCart(name, price, image) {
+      let cart = JSON.parse(localStorage.getItem('yumilo_cart')) || [];
+      cart.push({ name, price, image, qty: 1 });
+      localStorage.setItem('yumilo_cart', JSON.stringify(cart));
+      alert(`Success! ${name} (K${price.toLocaleString()}) added to your secure escrow cart. Open Cart to checkout.`);
     }
 
+    // Search Redirection
+    function handleSearchKey(e) {
+      if (e.key === 'Enter') {
+        const query = e.target.value.trim();
+        if (query) {
+          window.location.href = `catalog.html?search=${encodeURIComponent(query)}`;
+        }
+      }
+    }
+
+    // AI Chatbot Logic
     function toggleAiChat() {
       document.getElementById('aiChatModal').classList.toggle('hidden');
     }
-
     function sendQuickPrompt(promptText) {
       document.getElementById('aiUserInput').value = promptText;
       submitAiQuery();
     }
-
     function handleAiKeyPress(e) {
       if (e.key === 'Enter') submitAiQuery();
     }
-
     function submitAiQuery() {
       const inputField = document.getElementById('aiUserInput');
       const query = inputField.value.trim();
       if (!query) return;
 
       const messagesContainer = document.getElementById('aiChatMessages');
-
-      // Append User Message
       messagesContainer.innerHTML += `
         <div class="flex items-end justify-end space-x-2">
           <div class="bg-[#064e3b] text-white p-3 rounded-2xl shadow-sm max-w-[80%]">
@@ -383,11 +389,9 @@
           </div>
         </div>
       `;
-
       inputField.value = '';
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-      // Simulate natural human response timing
       setTimeout(() => {
         let aiResponse = generateConversationalResponse(query);
         messagesContainer.innerHTML += `
@@ -404,55 +408,17 @@
 
     function generateConversationalResponse(q) {
       q = q.toLowerCase();
-
-      // Small talk & Greetings
-      if (q.includes('how are you') || q.includes('how do you do') || q.includes('how you')) {
-        return "I'm doing wonderful, thank you for asking! 😊 Ready to help you explore amazing deals across Zambia today. How are you doing?";
-      }
-      if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q.includes('mwapoleka') || q.includes('sup') || q.includes('morning') || q.includes('afternoon') || q.includes('evening')) {
-        return "Mwapoleka! 👋 Great to have you here at Yumilo Market. What can I help you find today? Are you looking for electronics, groceries, or farm goods?";
-      }
-      if (q.includes('who are you') || q.includes('your name') || q.includes('what are you')) {
-        return "I'm your personal AI assistant here at Yumilo Market! 🤖 I'm here to chat, answer questions about our products, and help you shop securely with our MTN & Airtel mobile money escrow.";
-      }
-      if (q.includes('thank') || q.includes('thx') || q.includes('awesome') || q.includes('great') || q.includes('cool')) {
-        return "You're very welcome! 🥰 Let me know if you need anything else. Happy shopping!";
-      }
-
-      // Products / What do you have
-      if (q.includes('what products') || q.includes('what do you have') || q.includes('catalog') || q.includes('sell') || q.includes('items') || q.includes('stock') || q.includes('available')) {
-        return "We have some fantastic verified goods right now! 🌟<br><br>" +
-               "📱 <strong>X-Series Smart Phone 128GB</strong> — K3,450<br>" +
-               "👕 <strong>Premium Cotton Casual Tee</strong> — K180<br>" +
-               "🌾 <strong>Super Meal Roller Meal (25kg)</strong> — K240<br>" +
-               "🍗 <strong>Whole Broiler Chicken</strong> — K95<br><br>" +
-               "Would you like to add any of these to your cart?";
-      }
-
-      // Escrow / Payment
-      if (q.includes('escrow') || q.includes('safe') || q.includes('trust') || q.includes('pay') || q.includes('money') || q.includes('mtn') || q.includes('airtel')) {
-        return "Your money is 100% safe with us! 🛡️ When you pay via MTN or Airtel Mobile Money, Yumilo Market holds the funds in escrow. The seller only gets paid after you receive and confirm your delivery. Zero risk!";
-      }
-
-      // Delivery / Provinces
-      if (q.includes('deliver') || q.includes('shipping') || q.includes('province') || q.includes('lusaka') || q.includes('copperbelt') || q.includes('mansa') || q.includes('kitwe')) {
-        return "We deliver nationwide across all <strong>10 provinces of Zambia</strong> (Lusaka, Copperbelt, Central, Luapula, Northern, Muchinga, Eastern, Southern, Western, and North-Western) through our trusted courier network! 🚚";
-      }
-
-      // Vendor / Partner
-      if (q.includes('vendor') || q.includes('merchant') || q.includes('store') || q.includes('courier') || q.includes('partner') || q.includes('sell on')) {
-        return "We love welcoming new partners! 🏢 You can register as a verified vendor or courier partner on Yumilo Market to reach buyers across all 10 provinces. Just click 'Sign Up' at the top of the page to get started!";
-      }
-
-      // Friendly fallback
-      return `That's a great point! I'm here 24/7 to chat about our products, escrow protection, or deliveries across Zambia. Is there a specific item or category you're looking for today?`;
+      if (q.includes('how are you')) return "I'm doing wonderful, thank you for asking! 😊 Ready to help you explore amazing deals across Zambia today.";
+      if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q.includes('mwapoleka')) return "Mwapoleka! 👋 Great to have you here at Yumilo Market. What can I help you find today?";
+      if (q.includes('what products') || q.includes('catalog') || q.includes('stock')) return "We have smartphones (K3,450), cotton tees (K180), roller meal (K240), and broiler chickens (K95) available with escrow protection!";
+      if (q.includes('escrow') || q.includes('safe')) return "Your money is 100% safe! When you pay via MTN or Airtel Money, funds are held in escrow until you confirm delivery.";
+      if (q.includes('deliver') || q.includes('province')) return "We deliver nationwide across all 10 provinces of Zambia through verified courier partners.";
+      return `That's a great question! I'm here 24/7 to assist with your shopping and escrow orders across Zambia.`;
     }
 
     function escapeHtml(text) {
       return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
   </script>
-  <!-- ================= END AI WIDGET ================= -->
-
 </body>
 </html>
