@@ -12,7 +12,7 @@
     svg { width: 20px !important; height: 20px !important; min-width: 20px !important; min-height: 20px !important; }
     .slide { display: none; }
     .slide.active { display: flex; animation: fadeIn 0.5s ease-in-out; }
-    .view-section { display: none; min-height: 70vh; }
+    .view-section { display: none; }
     .view-section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   </style>
@@ -34,17 +34,20 @@
           <a href="#" onclick="switchView('catalog')" class="hover:text-emerald-700 transition">Live Catalog</a>
         </nav>
       </div>
-      <div class="flex items-center space-x-4">
-        <span id="headerAuthStatus" class="flex items-center gap-3">
-          <a href="#" onclick="switchView('account')" class="text-xs font-bold text-gray-700 hover:text-emerald-700 px-3 py-2 transition cursor-pointer">Sign In</a>
-          <a href="#" onclick="switchView('account')" class="bg-[#064e3b] hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition cursor-pointer">Sign Up</a>
-        </span>
+      <div id="headerAuthStatus" class="flex items-center space-x-3">
+        <a href="#" onclick="switchAccountTab('signin')" class="text-xs font-bold text-gray-700 hover:text-emerald-700 px-3 py-2 transition cursor-pointer">Sign In</a>
+        <a href="#" onclick="switchAccountTab('signup')" class="bg-[#064e3b] hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition cursor-pointer">Sign Up</a>
       </div>
     </div>
   </header>
 
+  <!-- FLOATING NOTIFICATION BANNER (Replaces pop-up alerts) -->
+  <div id="toastBanner" class="fixed top-20 right-6 z-50 hidden bg-[#064e3b] text-white text-xs font-bold px-5 py-3 rounded-2xl shadow-2xl border border-emerald-600 transition-all duration-300">
+    <span id="toastMessage">Success message here</span>
+  </div>
+
   <!-- ================= VIEW 1: HOME ================= -->
-  <div id="home-view" class="view-section active pb-20">
+  <div id="home-view" class="view-section active pb-28">
     <section class="bg-[#064e3b] text-white pt-8 pb-16 px-6 relative overflow-hidden">
       <div class="max-w-5xl mx-auto relative min-h-[220px] flex items-center">
         <div class="slide active flex-col md:flex-row items-center justify-between gap-8 w-full">
@@ -119,7 +122,7 @@
   </div>
 
   <!-- ================= VIEW 2: CATEGORIES DIRECTORY ================= -->
-  <div id="categories-view" class="view-section max-w-5xl mx-auto px-6 py-10 space-y-6 pb-20">
+  <div id="categories-view" class="view-section max-w-5xl mx-auto px-6 py-10 space-y-6 pb-28">
     <div class="bg-[#064e3b] text-white p-6 rounded-3xl flex justify-between items-center shadow-md">
       <div>
         <h2 class="text-xl font-black">Marketplace Categories</h2>
@@ -153,7 +156,7 @@
   </div>
 
   <!-- ================= VIEW 3: LIVE CATALOG ================= -->
-  <div id="catalog-view" class="view-section max-w-5xl mx-auto px-6 py-10 space-y-6 pb-20">
+  <div id="catalog-view" class="view-section max-w-5xl mx-auto px-6 py-10 space-y-6 pb-28">
     <div class="bg-[#064e3b] text-white p-6 rounded-3xl flex justify-between items-center shadow-md">
       <div>
         <h2 class="text-xl font-black">Live Marketplace Catalog</h2>
@@ -210,13 +213,12 @@
     </div>
   </div>
 
-  <!-- ================= VIEW 4: ORDERS (LOGIN REQUIRED) ================= -->
-  <div id="orders-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-20">
+  <!-- ================= VIEW 4: ORDERS (LOGIN REQUIRED - NO POPUPS) ================= -->
+  <div id="orders-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-28">
     <div id="ordersLockedContainer" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 text-center space-y-4">
       <div class="w-16 h-16 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">🔒</div>
       <h2 class="text-lg font-bold text-gray-900">Sign In Required to View Orders</h2>
-      <p class="text-xs text-gray-500 max-w-md mx-auto">Please sign in to your Yumilo Market account to track your secure escrow orders and deliveries.</p>
-      <button onclick="switchView('account')" class="bg-[#064e3b] hover:bg-emerald-900 text-white font-extrabold px-6 py-3 rounded-xl text-xs transition cursor-pointer shadow">Sign In / Register Now</button>
+      <p class="text-xs text-gray-500 max-w-md mx-auto">Please <a href="#" onclick="switchAccountTab('signin')" class="text-emerald-700 font-bold underline">Sign In</a> or <a href="#" onclick="switchAccountTab('signup')" class="text-emerald-700 font-bold underline">Create an Account</a> to track your secure escrow orders and deliveries.</p>
     </div>
 
     <div id="ordersUnlockedContainer" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
@@ -231,7 +233,7 @@
   </div>
 
   <!-- ================= VIEW 5: MESSAGES ================= -->
-  <div id="messages-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-20">
+  <div id="messages-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-28">
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="border-b pb-4">
         <h2 class="text-lg font-bold text-gray-900">Customer Messages</h2>
@@ -248,7 +250,7 @@
   </div>
 
   <!-- ================= VIEW 6: CART ================= -->
-  <div id="cart-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-20">
+  <div id="cart-view" class="view-section max-w-3xl mx-auto px-6 py-10 space-y-6 pb-28">
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="border-b pb-4 flex justify-between items-center">
         <h2 class="text-lg font-bold text-gray-900">Secure Escrow Cart</h2>
@@ -258,44 +260,79 @@
         <p class="text-gray-500">Your cart is empty. Add items from the catalog!</p>
       </div>
       <div id="cartTotal" class="font-black text-emerald-700 text-sm pt-4 border-t border-gray-100">Total Escrow Amount: K0.00</div>
-      <button onclick="checkoutCart()" class="w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold py-3 rounded-xl text-xs transition shadow cursor-pointer">Proceed to Mobile Money Escrow Checkout</button>
+      
+      <!-- Checkout section with inline link if logged out -->
+      <div id="checkoutActionContainer">
+        <button onclick="checkoutCart()" class="w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold py-3 rounded-xl text-xs transition shadow cursor-pointer">Proceed to Mobile Money Escrow Checkout</button>
+      </div>
     </div>
   </div>
 
-  <!-- ================= VIEW 7: ACCOUNT & LOGIN ================= -->
-  <div id="account-view" class="view-section max-w-md mx-auto px-6 py-10 space-y-6 pb-20">
-    <div id="loginCard" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 space-y-5">
-      <div class="text-center space-y-2">
-        <div class="w-12 h-12 bg-[#064e3b] text-white rounded-2xl flex items-center justify-center mx-auto text-xl font-bold">YM</div>
-        <h2 class="text-lg font-bold text-gray-900">Sign in to Yumilo Market</h2>
-        <p class="text-xs text-gray-500">Access your orders, escrow tracking, and vendor chats.</p>
+  <!-- ================= VIEW 7: ACCOUNT (SEPARATE SIGN IN & SIGN UP WORKFLOWS) ================= -->
+  <div id="account-view" class="view-section max-w-md mx-auto px-6 py-10 space-y-6 pb-28">
+    <!-- Switcher Tabs -->
+    <div id="authSwitchTabs" class="flex bg-gray-200 p-1 rounded-2xl text-xs font-bold text-center">
+      <button onclick="switchAccountTab('signin')" id="tabSigninBtn" class="flex-1 py-2.5 rounded-xl bg-white text-[#064e3b] shadow-sm transition cursor-pointer">Sign In</button>
+      <button onclick="switchAccountTab('signup')" id="tabSignupBtn" class="flex-1 py-2.5 rounded-xl text-gray-600 transition cursor-pointer">Create Account</button>
+    </div>
+
+    <!-- SIGN IN FORM -->
+    <div id="signinFormContainer" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 space-y-5">
+      <div class="text-center space-y-1">
+        <h2 class="text-lg font-bold text-gray-900">Welcome Back</h2>
+        <p class="text-xs text-gray-500">Sign in to your Yumilo Market account</p>
       </div>
       <div class="space-y-3 text-xs">
         <div>
           <label class="block font-bold text-gray-700 mb-1">Mobile Number or Email</label>
-          <input type="text" id="userEmailOrPhone" placeholder="e.g., 0970000000 or email@domain.com" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+          <input type="text" id="signinIdentifier" placeholder="e.g., 0970000000" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
         </div>
         <div>
           <label class="block font-bold text-gray-700 mb-1">Password</label>
-          <input type="password" id="userPassword" placeholder="••••••••" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+          <input type="password" id="signinPassword" placeholder="••••••••" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
         </div>
-        <button onclick="simulateLogin()" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-extrabold py-3 rounded-xl transition shadow cursor-pointer">Sign In</button>
+        <button onclick="processSignIn()" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-extrabold py-3 rounded-xl transition shadow cursor-pointer">Sign In</button>
       </div>
+      <p class="text-center text-xs text-gray-500 pt-2">Don't have an account? <a href="#" onclick="switchAccountTab('signup')" class="text-emerald-700 font-bold underline">Create Account</a></p>
     </div>
 
-    <!-- Logged in state dashboard -->
+    <!-- SIGN UP FORM -->
+    <div id="signupFormContainer" class="hidden bg-white p-8 rounded-3xl shadow-sm border border-gray-200 space-y-5">
+      <div class="text-center space-y-1">
+        <h2 class="text-lg font-bold text-gray-900">Create Account</h2>
+        <p class="text-xs text-gray-500">Join Zambia's trusted escrow marketplace</p>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Full Name</label>
+          <input type="text" id="signupName" placeholder="e.g., Henry Mwansa" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Mobile Number or Email</label>
+          <input type="text" id="signupIdentifier" placeholder="e.g., 0970000000 or email@domain.com" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Create Password</label>
+          <input type="password" id="signupPassword" placeholder="••••••••" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600">
+        </div>
+        <button onclick="processSignUp()" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-extrabold py-3 rounded-xl transition shadow cursor-pointer">Register Account</button>
+      </div>
+      <p class="text-center text-xs text-gray-500 pt-2">Already have an account? <a href="#" onclick="switchAccountTab('signin')" class="text-emerald-700 font-bold underline">Sign In</a></p>
+    </div>
+
+    <!-- LOGGED IN PROFILE DASHBOARD -->
     <div id="profileCard" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="flex items-center space-x-4 border-b pb-4">
-        <div class="w-12 h-12 rounded-full bg-emerald-800 text-white flex items-center justify-center font-black text-lg">HM</div>
+        <div id="userAvatar" class="w-12 h-12 rounded-full bg-emerald-800 text-white flex items-center justify-center font-black text-lg">HM</div>
         <div>
-          <h2 class="font-bold text-sm text-gray-900">Henry Mwansa</h2>
+          <h2 id="profileNameDisplay" class="font-bold text-sm text-gray-900">Henry Mwansa</h2>
           <p class="text-xs text-gray-500">Zambia Operations Hub • Verified Buyer</p>
         </div>
       </div>
       <div class="space-y-2 text-xs">
         <a href="terms.html" class="block p-3 bg-gray-50 hover:bg-gray-100 rounded-xl font-semibold text-gray-700">Terms of Service</a>
         <a href="privacy.html" class="block p-3 bg-gray-50 hover:bg-gray-100 rounded-xl font-semibold text-gray-700">Privacy Policy</a>
-        <button onclick="simulateLogout()" class="w-full text-left p-3 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl font-bold cursor-pointer transition">Sign Out</button>
+        <button onclick="processSignOut()" class="w-full text-left p-3 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl font-bold cursor-pointer transition">Sign Out</button>
       </div>
     </div>
   </div>
@@ -362,62 +399,20 @@
     </button>
   </nav>
 
-  <!-- ================= AI ASSISTANT WIDGET ================= -->
-  <div id="yumiloAiWidget">
-    <button onclick="toggleAiChat()" class="fixed bottom-20 right-6 z-50 bg-[#064e3b] hover:bg-emerald-900 text-white p-3.5 rounded-full shadow-2xl flex items-center justify-center transition transform hover:scale-105 cursor-pointer border-2 border-emerald-500/50" aria-label="Open AI Assistant">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-    </button>
-
-    <div id="aiChatModal" class="hidden fixed bottom-32 right-6 z-50 w-80 sm:w-96 bg-white rounded-3xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden transition-all duration-300">
-      <div class="bg-[#064e3b] text-white p-4 flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-          <div class="w-8 h-8 rounded-full bg-emerald-700 flex items-center justify-center font-bold text-xs border border-emerald-600">🤖</div>
-          <div>
-            <h4 class="font-bold text-xs">Yumilo Live Assistant</h4>
-            <p class="text-[10px] text-emerald-200">Online • Ready to chat</p>
-          </div>
-        </div>
-        <button onclick="toggleAiChat()" class="text-emerald-200 hover:text-white font-bold text-sm cursor-pointer">✕</button>
-      </div>
-
-      <div id="aiChatMessages" class="p-4 h-80 overflow-y-auto space-y-3 bg-gray-50 text-xs">
-        <div class="flex items-start space-x-2">
-          <div class="w-6 h-6 rounded-full bg-[#064e3b] text-white flex items-center justify-center text-[10px] shrink-0">AI</div>
-          <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 text-gray-700 space-y-1">
-            <p class="font-bold text-gray-900">Mwapoleka! 👋 How are you doing today?</p>
-            <p>I'm your live shopping assistant. You can chat with me naturally—ask how I am, what products we sell, or how escrow works!</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="p-2 bg-white border-t border-gray-100 flex gap-1.5 overflow-x-auto hide-scrollbar text-[10px]">
-        <button onclick="sendQuickPrompt('Hello! How are you?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">👋 Say Hello</button>
-        <button onclick="sendQuickPrompt('What products do you have?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">📦 Our Products</button>
-        <button onclick="sendQuickPrompt('How does escrow work?')" class="bg-gray-100 hover:bg-emerald-50 text-gray-700 px-3 py-1 rounded-full whitespace-nowrap transition border border-gray-200 cursor-pointer">🛡️ Escrow Guide</button>
-      </div>
-
-      <div class="p-3 bg-white border-t border-gray-200 flex items-center">
-        <input type="text" id="aiUserInput" placeholder="Type a message or ask a question..." class="w-full text-xs bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-600 text-gray-800" onkeypress="handleAiKeyPress(event)">
-        <button onclick="submitAiQuery()" class="ml-2 bg-[#064e3b] hover:bg-emerald-900 text-white p-2.5 rounded-xl transition shadow cursor-pointer">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- SCRIPT LOGIC -->
   <script>
-    // Check login state on load
     let isLoggedIn = localStorage.getItem('yumilo_logged_in') === 'true';
+    let userName = localStorage.getItem('yumilo_user_name') || 'Henry Mwansa';
     updateAuthUI();
 
-    function switchView(viewId) {
-      // If trying to access orders while logged out, redirect to account/login
-      if (viewId === 'orders' && !isLoggedIn) {
-        viewId = 'account';
-        alert("Please sign in to view your orders.");
-      }
+    function showToast(msg) {
+      let toast = document.getElementById('toastBanner');
+      document.getElementById('toastMessage').innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => { toast.classList.add('hidden'); }, 3000);
+    }
 
+    function switchView(viewId) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       document.getElementById(viewId + '-view').classList.add('active');
 
@@ -436,49 +431,94 @@
       if (viewId === 'orders') renderOrders();
     }
 
-    function simulateLogin() {
-      let val = document.getElementById('userEmailOrPhone').value.trim();
-      if (!val) {
-        alert("Please enter your email or phone number.");
+    function switchAccountTab(tab) {
+      switchView('account');
+      let signinForm = document.getElementById('signinFormContainer');
+      let signupForm = document.getElementById('signupFormContainer');
+      let profileCard = document.getElementById('profileCard');
+      let tabsContainer = document.getElementById('authSwitchTabs');
+
+      if (isLoggedIn) {
+        if (tabsContainer) tabsContainer.classList.add('hidden');
+        signinForm.classList.add('hidden');
+        signupForm.classList.add('hidden');
+        profileCard.classList.remove('hidden');
         return;
       }
-      localStorage.setItem('yumilo_logged_in', 'true');
+
+      if (tabsContainer) tabsContainer.classList.remove('hidden');
+      profileCard.classList.add('hidden');
+
+      if (tab === 'signin') {
+        signinForm.classList.remove('hidden');
+        signupForm.classList.add('hidden');
+        document.getElementById('tabSigninBtn').className = "flex-1 py-2.5 rounded-xl bg-white text-[#064e3b] shadow-sm transition cursor-pointer";
+        document.getElementById('tabSignupBtn').className = "flex-1 py-2.5 rounded-xl text-gray-600 transition cursor-pointer";
+      } else {
+        signinForm.classList.add('hidden');
+        signupForm.classList.remove('hidden');
+        document.getElementById('tabSignupBtn').className = "flex-1 py-2.5 rounded-xl bg-white text-[#064e3b] shadow-sm transition cursor-pointer";
+        document.getElementById('tabSigninBtn').className = "flex-1 py-2.5 rounded-xl text-gray-600 transition cursor-pointer";
+      }
+    }
+
+    function processSignIn() {
+      let val = document.getElementById('signinIdentifier').value.trim();
+      if (!val) {
+        showToast("Please enter your mobile number or email.");
+        return;
+      }
       isLoggedIn = true;
+      localStorage.setItem('yumilo_logged_in', 'true');
       updateAuthUI();
-      alert("Successfully signed in!");
+      showToast("Successfully signed in!");
       switchView('home');
     }
 
-    function simulateLogout() {
+    function processSignUp() {
+      let name = document.getElementById('signupName').value.trim();
+      let val = document.getElementById('signupIdentifier').value.trim();
+      let pass = document.getElementById('signupPassword').value.trim();
+      if (!name || !val || !pass) {
+        showToast("Please fill in all registration fields.");
+        return;
+      }
+      userName = name;
+      localStorage.setItem('yumilo_user_name', name);
+      isLoggedIn = true;
+      localStorage.setItem('yumilo_logged_in', 'true');
+      updateAuthUI();
+      showToast("Account created successfully!");
+      switchView('home');
+    }
+
+    function processSignOut() {
       localStorage.removeItem('yumilo_logged_in');
       isLoggedIn = false;
       updateAuthUI();
-      alert("Signed out successfully.");
-      switchView('home');
+      showToast("Signed out successfully.");
+      switchAccountTab('signin');
     }
 
     function updateAuthUI() {
       let locked = document.getElementById('ordersLockedContainer');
       let unlocked = document.getElementById('ordersUnlockedContainer');
-      let loginCard = document.getElementById('loginCard');
-      let profileCard = document.getElementById('profileCard');
       let headerAuth = document.getElementById('headerAuthStatus');
+      let profileName = document.getElementById('profileNameDisplay');
+
+      if (profileName) profileName.innerText = userName;
 
       if (isLoggedIn) {
         if (locked) locked.classList.add('hidden');
         if (unlocked) unlocked.classList.remove('hidden');
-        if (loginCard) loginCard.classList.add('hidden');
-        if (profileCard) profileCard.classList.remove('hidden');
         if (headerAuth) {
-          headerAuth.innerHTML = `<span class='text-xs font-bold text-emerald-800'>👤 Henry Mwansa</span> <button onclick="simulateLogout()" class='text-xs text-red-600 font-bold underline cursor-pointer'>Sign Out</button>`;
+          headerAuth.innerHTML = `<span class='text-xs font-bold text-emerald-800'>👤 ${userName}</span> <button onclick="processSignOut()" class='text-xs text-red-600 font-bold underline cursor-pointer ml-2'>Sign Out</button>`;
         }
       } else {
         if (locked) locked.classList.remove('hidden');
         if (unlocked) unlocked.classList.add('hidden');
-        if (loginCard) loginCard.classList.remove('hidden');
-        if (profileCard) profileCard.classList.add('hidden');
         if (headerAuth) {
-          headerAuth.innerHTML = `<a href="#" onclick="switchView('account')" class="text-xs font-bold text-gray-700 hover:text-emerald-700 px-3 py-2 transition cursor-pointer">Sign In</a> <a href="#" onclick="switchView('account')" class="bg-[#064e3b] hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition cursor-pointer">Sign Up</a>`;
+          headerAuth.innerHTML = `<a href="#" onclick="switchAccountTab('signin')" class="text-xs font-bold text-gray-700 hover:text-emerald-700 px-3 py-2 transition cursor-pointer">Sign In</a> <a href="#" onclick="switchAccountTab('signup')" class="bg-[#064e3b] hover:bg-emerald-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition cursor-pointer">Sign Up</a>`;
         }
       }
     }
@@ -494,12 +534,11 @@
       });
     }
 
-    // Cart Management
-    function addToCart(name, price, image) {
+    function addToCart(name, price) {
       let cart = JSON.parse(localStorage.getItem('yumilo_cart')) || [];
-      cart.push({ name, price, image });
+      cart.push({ name, price });
       localStorage.setItem('yumilo_cart', JSON.stringify(cart));
-      alert(`Success! ${name} (K${price.toLocaleString()}) added to your escrow cart.`);
+      showToast(`Added ${name} to Cart!`);
     }
 
     function renderCart() {
@@ -507,11 +546,13 @@
       let listEl = document.getElementById('cartItemsList');
       let totalEl = document.getElementById('cartTotal');
       let badgeEl = document.getElementById('cartCountBadge');
+      let checkoutContainer = document.getElementById('checkoutActionContainer');
       badgeEl.innerText = cart.length + " Items";
 
       if (cart.length === 0) {
         listEl.innerHTML = "<p class='text-gray-500'>Your cart is empty. Add items from the catalog!</p>";
         totalEl.innerHTML = "Total Escrow Amount: K0.00";
+        checkoutContainer.innerHTML = "";
       } else {
         let total = 0;
         listEl.innerHTML = cart.map((item, idx) => {
@@ -519,20 +560,26 @@
           return `<div class='flex justify-between items-center border-b pb-2'><span>${item.name}</span><span class='font-bold text-emerald-700'>K${item.price.toLocaleString()}</span></div>`;
         }).join('');
         totalEl.innerHTML = `Total Escrow Amount: K${total.toLocaleString()}`;
+
+        if (isLoggedIn) {
+          checkoutContainer.innerHTML = `<button onclick="checkoutCart()" class="w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold py-3 rounded-xl text-xs transition shadow cursor-pointer">Proceed to Mobile Money Escrow Checkout</button>`;
+        } else {
+          checkoutContainer.innerHTML = `
+            <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 text-center space-y-2">
+              <p class="font-bold">Account required for Escrow Checkout</p>
+              <p>Please <a href="#" onclick="switchAccountTab('signin')" class="text-emerald-700 font-bold underline">Sign In</a> or <a href="#" onclick="switchAccountTab('signup')" class="text-emerald-700 font-bold underline">Create an Account</a> to complete your purchase.</p>
+            </div>
+          `;
+        }
       }
     }
 
     function checkoutCart() {
       let cart = JSON.parse(localStorage.getItem('yumilo_cart')) || [];
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
+      if (cart.length === 0) return;
 
-      // Require login before placing an order
       if (!isLoggedIn) {
-        alert("Please sign in or create an account to complete your Mobile Money Escrow checkout.");
-        switchView('account');
+        switchAccountTab('signin');
         return;
       }
 
@@ -546,7 +593,7 @@
       orders.unshift(newOrder);
       localStorage.setItem('yumilo_orders', JSON.stringify(orders));
       localStorage.removeItem('yumilo_cart');
-      alert("Order successfully placed! Funds securely held in escrow via Mobile Money.");
+      showToast("Order placed successfully! Escrow payment secured.");
       switchView('orders');
     }
 
@@ -572,35 +619,6 @@
         `).join('');
       }
     }
-
-    // AI Chat
-    function toggleAiChat() { document.getElementById('aiChatModal').classList.toggle('hidden'); }
-    function sendQuickPrompt(txt) { document.getElementById('aiUserInput').value = txt; submitAiQuery(); }
-    function handleAiKeyPress(e) { if (e.key === 'Enter') submitAiQuery(); }
-    function submitAiQuery() {
-      const inputField = document.getElementById('aiUserInput');
-      const query = inputField.value.trim();
-      if (!query) return;
-      const messagesContainer = document.getElementById('aiChatMessages');
-      messagesContainer.innerHTML += `<div class="flex items-end justify-end space-x-2"><div class="bg-[#064e3b] text-white p-3 rounded-2xl shadow-sm max-w-[80%]"><p>${escapeHtml(query)}</p></div></div>`;
-      inputField.value = '';
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-      setTimeout(() => {
-        let resp = getAiReply(query);
-        messagesContainer.innerHTML += `<div class="flex items-start space-x-2"><div class="w-6 h-6 rounded-full bg-[#064e3b] text-white flex items-center justify-center text-[10px] shrink-0">AI</div><div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 text-gray-700 space-y-1 max-w-[80%]"><p>${resp}</p></div></div>`;
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      }, 500);
-    }
-    function getAiReply(q) {
-      q = q.toLowerCase();
-      if (q.includes('how are you')) return "I'm doing wonderful, thank you for asking! 😊 Ready to help you shop across Zambia today.";
-      if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q.includes('mwapoleka')) return "Mwapoleka! 👋 How can I assist you with your orders or escrow today?";
-      if (q.includes('product') || q.includes('stock') || q.includes('catalog')) return "We have smartphones (K3,450), cotton tees (K180), roller meal (K240), and broiler chickens (K95) available with escrow protection!";
-      if (q.includes('escrow') || q.includes('safe')) return "Your funds are held safely in escrow via MTN or Airtel Mobile Money until you confirm delivery. Zero risk!";
-      return "That's a great question! I'm here 24/7 to assist with your orders and escrow protection across Zambia.";
-    }
-    function escapeHtml(text) { return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
   </script>
 </body>
 </html>
