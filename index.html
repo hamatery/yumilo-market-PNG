@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yumilo Market - Zambia's Verified Universal Marketplace</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- EmailJS fallback script with safe error handling -->
+  <!-- EmailJS SDK initialization with your public key -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script type="text/javascript">
     try {
-      emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+      emailjs.init("7SzlFG8FhKaiATvdP");
     } catch(e) {
       console.log("EmailJS initialization skipped.");
     }
@@ -520,6 +520,7 @@
       }
     }
 
+    // Real Email Dispatch via EmailJS
     function sendRealEmailOtp() {
       let email = document.getElementById('signupEmail').value.trim();
       let name = document.getElementById('signupName').value.trim();
@@ -528,16 +529,30 @@
         return;
       }
 
+      // Generate a secure 6-digit code
       generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
       
-      showToast("Verification Code: " + generatedOtp);
-      document.getElementById('otpInputContainer').classList.remove('hidden');
-      
-      let statusText = document.getElementById('otpStatusText');
-      if (statusText) {
-        statusText.innerText = "Code sent! (Test Code: " + generatedOtp + ")";
-        statusText.className = "text-[10px] text-emerald-700 font-bold";
-      }
+      showToast("Sending real verification code to " + email + "...");
+
+      let templateParams = {
+        email: email,
+        passcode: generatedOtp
+      };
+
+      // Send email using your EmailJS Service, Template, and Public Key
+      emailjs.send('service_pwa1g9o', 'template_3es2glm', templateParams, '7SzlFG8FhKaiATvdP')
+        .then(function(response) {
+          showToast("Verification code successfully sent to " + email + "!");
+          document.getElementById('otpInputContainer').classList.remove('hidden');
+          let statusText = document.getElementById('otpStatusText');
+          if (statusText) {
+            statusText.innerText = "Check your email inbox for the 6-digit code.";
+            statusText.className = "text-[10px] text-emerald-700 font-bold";
+          }
+        }, function(error) {
+          showToast("Failed to send email. Please check your network or configuration.");
+          console.error('EmailJS Error:', error);
+        });
     }
 
     function verifyEmailOtp() {
