@@ -7,3 +7,4 @@ for file in index.html admin.html customer-dashboard.html login.html privacy.htm
   cp "$file" public/
 done
 printf '%s\n' 'Prepared approved public website files.'
+# Keep the generated public directory restricted to website assets.
