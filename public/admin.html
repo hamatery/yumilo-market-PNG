@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yumilo Market - Owner Command Center</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>body { background-color: #fcfbf9; }</style>
+</head>
+<body class="min-h-screen flex text-gray-800">
+
+  <!-- SIDEBAR -->
+  <aside class="w-72 bg-[#064e3b] text-emerald-100 flex flex-col justify-between hidden lg:flex shrink-0 h-screen sticky top-0 overflow-y-auto">
+    <div>
+      <div class="p-6 border-b border-emerald-900/50 sticky top-0 bg-[#064e3b] z-10">
+        <h1 class="text-xl font-bold tracking-tight text-white">Yumilo Market</h1>
+        <p class="text-xs text-emerald-300 mt-0.5">Nationwide Command Center</p>
+      </div>
+
+      <nav class="p-4 space-y-6 text-sm font-medium">
+        <div>
+          <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Main</p>
+          <div class="space-y-1">
+            <button onclick="switchView('overview')" id="nav-overview" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-emerald-700 text-white font-semibold transition cursor-pointer text-left"><span>🏠</span><span>Overview</span></button>
+            <button onclick="switchView('orders')" id="nav-orders" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>📦</span><span>Orders & delivery</span></button>
+            <button onclick="switchView('payments')" id="nav-payments" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>💳</span><span>Payments & receipt review</span></button>
+            <button onclick="switchView('refunds')" id="nav-refunds" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>↩️</span><span>Refund claims</span></button>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Onboarding & Approvals</p>
+          <div class="space-y-1">
+            <button onclick="switchView('vendor-kyc')" id="nav-vendor-kyc" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>🏢</span><span>Vendor applications & KYC</span></button>
+            <button onclick="switchView('courier-kyc')" id="nav-courier-kyc" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>🚚</span><span>Courier applications & KYC</span></button>
+            <button onclick="switchView('listings')" id="nav-listings" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>📋</span><span>Listing approvals</span></button>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Accounts</p>
+          <div class="space-y-1">
+            <button onclick="switchView('customers')" id="nav-customers" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>👤</span><span>Customer accounts</span></button>
+            <button onclick="switchView('vendor-accounts')" id="nav-vendor-accounts" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>👥</span><span>Vendor accounts & subs</span></button>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold tracking-wider uppercase text-emerald-400 mb-2 px-3">Support & Content</p>
+          <div class="space-y-1">
+            <button onclick="switchView('support')" id="nav-support" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>💬</span><span>Messages & support</span></button>
+            <button onclick="switchView('content')" id="nav-content" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-800/60 text-emerald-200 transition cursor-pointer text-left"><span>📰</span><span>Marketplace content</span></button>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold tracking-wider uppercase text-amber-300 mb-2 px-3 flex items-center gap-1">🔒 Owner Controls</p>
+          <div class="space-y-1">
+            <button onclick="switchView('staff')" id="nav-staff" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left"><span>Manage staff & permissions</span><span>🔒</span></button>
+            <button onclick="switchView('settings')" id="nav-settings" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left"><span>Site settings & records</span><span>🔒</span></button>
+            <button onclick="switchView('finance')" id="nav-finance" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left"><span>Finance & overrides</span><span>🔒</span></button>
+            <button onclick="switchView('audit')" id="nav-audit" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-emerald-800/60 text-emerald-200 text-xs transition cursor-pointer text-left"><span>Audit log</span><span>🔒</span></button>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="p-4 border-t border-emerald-900/50 text-[11px] text-emerald-300 space-y-1 bg-[#064e3b]">
+      <p class="font-semibold text-white">Environment:</p>
+      <p>PRODUCTION • Nationwide Zambia • v2.3.3</p>
+    </div>
+  </aside>
+
+  <!-- MAIN WRAPPER -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <header class="bg-white border-b border-gray-200 px-8 py-4 flex flex-wrap justify-between items-center gap-4">
+      <div class="flex items-center space-x-4">
+        <h2 class="text-xl font-bold text-gray-900">Yumilo Market</h2>
+        <span id="pageTitle" class="text-lg font-medium text-gray-600">Owner Command Center</span>
+      </div>
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-900 text-white gap-1.5"><span>🛡️</span> OWNER • FULL ACCESS</span>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 gap-1.5"><span>🟢</span> NATIONWIDE ZAMBIA</span>
+        <div class="flex items-center space-x-2 pl-4 border-l border-gray-200">
+          <span id="userName" class="text-sm font-medium text-gray-700">Yumilo Admin</span>
+          <div class="w-8 h-8 rounded-full bg-emerald-800 text-white font-bold flex items-center justify-center text-xs">YA</div>
+          <button onclick="handleLogout()" class="ml-2 bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1.5 rounded font-medium transition cursor-pointer">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="mainContent" class="p-8 space-y-8 flex-1">
+      <div class="text-center py-12 text-gray-500">Loading Command Center...</div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 px-8 py-6 text-[11px] text-gray-500 leading-relaxed">
+      <p><strong class="text-gray-700">Permission boundaries:</strong> Only the Owner can create or deactivate staff, assign roles, change site settings, record board decisions, and perform finance controls and payment overrides. Nationwide operations across Zambia.</p>
+    </footer>
+  </div>
+
+  <!-- MODAL -->
+  <div id="actionModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4 border border-gray-200">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 id="modalTitle" class="text-lg font-bold text-gray-900">Action Management</h3>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-lg font-bold cursor-pointer">×</button>
+      </div>
+      <div id="modalBody" class="text-sm text-gray-600 space-y-3"></div>
+      <div class="flex justify-end space-x-3 pt-3 border-t border-gray-100">
+        <button onclick="closeModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-lg transition cursor-pointer">Close</button>
+        <button id="modalConfirmBtn" onclick="executeModalAction()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-lg transition cursor-pointer">Confirm Action</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let currentOrders = [];
+    let staffMembers = [];
+    let startDateFilter = '';
+    let endDateFilter = '';
+    let windowActiveConfirm = null;
+    let currentUserEmail = 'henrymwansa16@gmail.com';
+
+    async function handleLogout() {
+      try { await supabaseClient.auth.signOut(); } catch (err) {}
+      localStorage.clear(); sessionStorage.clear();
+      window.location.href = 'login.html';
+    }
+
+    async function logAuditAction(actionType, description) {
+      try {
+        await supabaseClient.from('audit_logs').insert([{ action_type: actionType, description: description, actor: currentUserEmail }]);
+      } catch (err) {}
+    }
+
+    function switchView(viewId) {
+      document.querySelectorAll('aside nav button').forEach(btn => {
+        btn.classList.remove('bg-emerald-700', 'text-white', 'font-semibold');
+        btn.classList.add('hover:bg-emerald-800/60', 'text-emerald-200');
+      });
+      const activeBtn = document.getElementById(`nav-${viewId}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('hover:bg-emerald-800/60', 'text-emerald-200');
+        activeBtn.classList.add('bg-emerald-700', 'text-white', 'font-semibold');
+      }
+
+      const container = document.getElementById('mainContent');
+      const title = document.getElementById('pageTitle');
+      if (!container) return;
+
+      if (viewId === 'overview') {
+        title.textContent = 'Nationwide Operations Overview';
+        container.innerHTML = renderOverviewHTML();
+        loadAdminData();
+        loadAuditLogsOverview();
+      } else if (viewId === 'orders') {
+        title.textContent = 'Orders & Nationwide Delivery Management';
+        container.innerHTML = renderOrdersViewHTML();
+        loadOrdersTable();
+      } else if (viewId === 'payments') {
+        title.textContent = 'Payments & Receipt Review';
+        container.innerHTML = renderGenericManagementView('Payments & Receipt Review', 'Verify customer payment proofs and escrow transfers.');
+      } else if (viewId === 'refunds') {
+        title.textContent = 'Refund Claims Management';
+        container.innerHTML = renderGenericManagementView('Refund Claims', 'Review escalated refund and dispute claims.');
+      } else if (viewId === 'vendor-kyc') {
+        title.textContent = 'Vendor Applications & KYC';
+        container.innerHTML = renderGenericManagementView('Vendor Applications & KYC', 'Approve or reject vendor onboarding documents.');
+      } else if (viewId === 'courier-kyc') {
+        title.textContent = 'Courier Applications & KYC';
+        container.innerHTML = renderGenericManagementView('Courier Applications & KYC', 'Verify courier partner credentials and coverage zones.');
+      } else if (viewId === 'listings') {
+        title.textContent = 'Listing Approvals';
+        container.innerHTML = renderGenericManagementView('Listing Approvals', 'Moderate and approve new product marketplace listings.');
+      } else if (viewId === 'customers') {
+        title.textContent = 'Customer Accounts Management';
+        container.innerHTML = renderGenericManagementView('Customer Accounts', 'View registered customer profiles and activity history.');
+      } else if (viewId === 'vendor-accounts') {
+        title.textContent = 'Vendor Accounts & Subscriptions';
+        container.innerHTML = renderGenericManagementView('Vendor Accounts & Subscriptions', 'Manage active vendor tiers and subscription statuses.');
+      } else if (viewId === 'support') {
+        title.textContent = 'Messages & Support Desk';
+        container.innerHTML = renderGenericManagementView('Messages & Support', 'Respond to customer and vendor inquiries.');
+      } else if (viewId === 'content') {
+        title.textContent = 'Marketplace Content Management';
+        container.innerHTML = renderGenericManagementView('Marketplace Content', 'Manage banners, announcements, and static notices.');
+      } else if (viewId === 'staff') {
+        title.textContent = 'Manage Staff & Permissions (Owner Only)';
+        container.innerHTML = renderStaffManagementHTML();
+        loadStaffTable();
+      } else if (viewId === 'settings') {
+        title.textContent = 'Site Settings & Records (Owner Only)';
+        container.innerHTML = renderSiteSettingsHTML();
+        loadSiteSettings();
+      } else if (viewId === 'finance') {
+        title.textContent = 'Finance & Overrides (Owner Only)';
+        container.innerHTML = renderOwnerControlView('Finance & Overrides', 'Execute payment manual overrides and escrow releases.');
+      } else if (viewId === 'audit') {
+        title.textContent = 'Audit History Log (Owner Only)';
+        container.innerHTML = renderAuditLogViewHTML();
+        loadFullAuditTable();
+      }
+    }
+
+    function renderOverviewHTML() {
+      return `
+        <div class="flex flex-wrap justify-between items-center gap-4">
+          <h3 class="text-2xl font-bold text-gray-900">Nationwide operations overview</h3>
+          <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-3 py-1.5 shadow-sm text-xs font-medium text-gray-700">
+            <span>📅 Calendar:</span>
+            <input type="date" id="startDateInput" value="${startDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1">
+            <span>to</span>
+            <input type="date" id="endDateInput" value="${endDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1">
+            <button onclick="clearDateFilter()" class="text-red-600 hover:underline font-semibold ml-1 cursor-pointer">Reset</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div onclick="switchView('orders')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
+            <div class="flex justify-between items-start"><span class="text-xs font-semibold text-gray-600">Orders review</span><span class="w-7 h-7 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center text-xs">⚠️</span></div>
+            <p id="statOrdersReview" class="text-3xl font-extrabold text-gray-900">0</p>
+            <p class="text-[11px] text-gray-400">Awaiting action</p>
+          </div>
+          <div onclick="switchView('payments')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
+            <div class="flex justify-between items-start"><span class="text-xs font-semibold text-gray-600">Payment receipts</span><span class="w-7 h-7 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center text-xs">📄</span></div>
+            <p id="statPaymentReceipts" class="text-3xl font-extrabold text-gray-900">0</p>
+            <p class="text-[11px] text-gray-400">To review & verify</p>
+          </div>
+          <div onclick="switchView('vendor-kyc')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
+            <div class="flex justify-between items-start"><span class="text-xs font-semibold text-gray-600">Vendor apps</span><span class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs">👥</span></div>
+            <p id="statApplications" class="text-3xl font-extrabold text-gray-900">0</p>
+            <p class="text-[11px] text-gray-400">Pending KYC</p>
+          </div>
+          <div onclick="switchView('listings')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
+            <div class="flex justify-between items-start"><span class="text-xs font-semibold text-gray-600">Listing approvals</span><span class="w-7 h-7 rounded-full bg-purple-100 text-purple-800 flex items-center justify-center text-xs">📋</span></div>
+            <p id="statListingApprovals" class="text-3xl font-extrabold text-gray-900">0</p>
+            <p class="text-[11px] text-gray-400">In review</p>
+          </div>
+          <div onclick="switchView('support')" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3 cursor-pointer hover:border-emerald-600 transition">
+            <div class="flex justify-between items-start"><span class="text-xs font-semibold text-gray-600">Account issues</span><span class="w-7 h-7 rounded-full bg-red-100 text-red-800 flex items-center justify-center text-xs">🚨</span></div>
+            <p id="statAccountIssues" class="text-3xl font-extrabold text-gray-900">0</p>
+            <p class="text-[11px] text-gray-400">Flagged accounts</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col justify-between">
+            <div>
+              <div class="p-5 border-b border-gray-200 flex items-center justify-between">
+                <div><h4 class="text-base font-bold text-gray-900">Review queue</h4><p class="text-xs text-gray-500">Pending items requiring review across Zambia</p></div>
+                <button onclick="loadAdminData()" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-md font-semibold text-gray-700 cursor-pointer">Refresh</button>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                  <thead><tr class="bg-gray-50 text-gray-500 font-bold uppercase border-b"><th class="py-3 px-4"># Reference</th><th class="py-3 px-4">Type</th><th class="py-3 px-4">Status</th><th class="py-3 px-4">Submitted</th><th class="py-3 px-4 text-right">Action</th></tr></thead>
+                  <tbody id="reviewQueueBody" class="divide-y divide-gray-200 text-gray-700"><tr><td colspan="5" class="text-center py-8 text-gray-400">No pending items.</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="p-3 bg-gray-50 border-t text-[11px] text-gray-500">🔒 Secure nationwide records — Confidential data.</div>
+          </div>
+          <div class="space-y-6">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
+              <h4 class="text-sm font-bold text-gray-900">📊 Operational snapshot</h4>
+              <div class="space-y-3 text-xs">
+                <div><div class="flex justify-between mb-1 font-semibold text-gray-700"><span>Pending</span><span id="snapshotPending">0 orders</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div id="barPending" class="bg-amber-500 h-full w-[0%]"></div></div></div>
+                <div><div class="flex justify-between mb-1 font-semibold text-gray-700"><span>In transit</span><span id="snapshotTransit">0 orders</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div id="barTransit" class="bg-blue-500 h-full w-[0%]"></div></div></div>
+                <div><div class="flex justify-between mb-1 font-semibold text-gray-700"><span>Completed</span><span id="snapshotCompleted">0 orders</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div id="barCompleted" class="bg-emerald-600 h-full w-[0%]"></div></div></div>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
+              <h4 class="text-sm font-bold text-gray-900">🕒 Recent audit activity</h4>
+              <div id="auditActivityBody" class="space-y-3 text-xs"><p class="text-gray-400 text-center py-2">Loading...</p></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderOrdersViewHTML() {
+      return `
+        <div class="space-y-6">
+          <div class="flex flex-wrap justify-between items-center gap-4">
+            <div><h3 class="text-2xl font-bold text-gray-900">Orders & Nationwide Delivery</h3><p class="text-xs text-gray-500">Manage customer purchases and escrow fulfillment across all provinces.</p></div>
+            <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-3 py-1.5 shadow-sm text-xs font-medium text-gray-700">
+              <span>📅 Calendar:</span>
+              <input type="date" id="startDateInput" value="${startDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1">
+              <span>to</span>
+              <input type="date" id="endDateInput" value="${endDateFilter}" onchange="updateDateFilter()" class="border border-gray-200 rounded p-1">
+              <button onclick="clearDateFilter()" class="text-red-600 hover:underline font-semibold ml-1 cursor-pointer">Reset</button>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead><tr class="bg-gray-50 text-gray-500 font-bold uppercase border-b text-xs"><th class="py-3 px-6">Order ID</th><th class="py-3 px-6">Province / City</th><th class="py-3 px-6">Total Amount</th><th class="py-3 px-6">Status</th><th class="py-3 px-6">Date</th><th class="py-3 px-6 text-right">Actions</th></tr></thead>
+                <tbody id="fullOrdersTableBody" class="divide-y divide-gray-200 text-gray-700"><tr><td colspan="6" class="text-center py-12 text-gray-400">Loading orders...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderStaffManagementHTML() {
+      return `
+        <div class="space-y-6">
+          <div class="flex justify-between items-center">
+            <div><h3 class="text-2xl font-bold text-gray-900">Manage Staff & Permissions</h3><p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Create staff accounts and assign roles.</p></div>
+            <button onclick="openCreateStaffModal()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer">➕ Create Staff Account</button>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead><tr class="bg-gray-50 text-gray-500 font-bold uppercase border-b text-xs"><th class="py-3 px-6">Name</th><th class="py-3 px-6">User ID</th><th class="py-3 px-6">Role</th><th class="py-3 px-6">Updated</th><th class="py-3 px-6 text-right">Actions</th></tr></thead>
+                <tbody id="staffTableBody" class="divide-y divide-gray-200 text-gray-700"><tr><td colspan="5" class="text-center py-12 text-gray-400">Loading staff...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSiteSettingsHTML() {
+      return `
+        <div class="space-y-6 max-w-4xl mx-auto">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">Site Settings & Records</h3>
+              <p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Nationwide config: Zambia delivery zones, vendor alerts, payout rules, and policy URLs.</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-8 space-y-6">
+            <form id="siteSettingsForm" onsubmit="saveSiteSettings(event)" class="space-y-6">
+              <div class="space-y-4">
+                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">🏢 General Store Profile & Announcement</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Store Name</label>
+                    <input type="text" id="settingStoreName" value="Yumilo Market" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Support Email Address</label>
+                    <input type="email" id="settingEmail" value="support@yumilomarket.store" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Live Homepage Announcement Ticker (Marquee Banner)</label>
+                  <input type="text" id="settingTicker" value="🔥 Welcome to Yumilo Market - Nationwide Delivery Across Zambia!" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">💳 Financials, Taxes & Vendor Payouts</h4>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Currency Symbol</label>
+                    <input type="text" id="settingCurrency" value="ZMW (K)" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Platform Fee (%)</label>
+                    <input type="number" step="0.1" id="settingFee" value="5.0" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tax / VAT Rate (%)</label>
+                    <input type="number" step="0.1" id="settingTax" value="0.0" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Min Vendor Payout (K)</label>
+                    <input type="number" step="1" id="settingMinPayout" value="500" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Merchant Mobile Money / Payout Number (MTN/Airtel)</label>
+                  <input type="text" id="settingMobileMoney" placeholder="e.g. 097... / 096..." class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">📦 Nationwide Delivery Zones & Order Rules</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Default Base Delivery Fee (K)</label>
+                    <input type="number" step="1" id="settingDeliveryFee" value="100" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Minimum Order Amount (K)</label>
+                    <input type="number" step="1" id="settingMinOrder" value="100" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Provincial Delivery Zones & Pricing</label>
+                  <input type="text" id="settingDeliveryZones" value="Lusaka & Copperbelt Hub: K100, Other Provinces: K180, Local Pickup: Free" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                </div>
+              </div>
+
+              <div class="space-y-4 bg-emerald-50/60 p-5 rounded-xl border border-emerald-200">
+                <h4 class="text-sm font-bold text-emerald-900 border-b border-emerald-200 pb-2">📲 Vendor Offline Order Alerts (WhatsApp & SMS)</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-emerald-900 uppercase mb-1">SMS / WhatsApp Gateway Provider</label>
+                    <input type="text" id="settingGateway" value="Africa's Talking / Twilio API" class="w-full px-3 py-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-emerald-900 uppercase mb-1">Vendor Alert Notification Channel</label>
+                    <select id="settingVendorAlertMethod" class="w-full px-3 py-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                      <option value="WhatsApp & SMS">WhatsApp & SMS (Recommended)</option>
+                      <option value="WhatsApp Only">WhatsApp Only</option>
+                      <option value="SMS Only">SMS Only</option>
+                      <option value="Disabled">Disabled</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">⚖️ Legal Compliance & Policy URLs</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Terms of Service URL</label>
+                    <input type="text" id="settingTermsUrl" value="https://www.yumilomarket.store/terms.html" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Privacy Policy URL</label>
+                    <input type="text" id="settingPrivacyUrl" value="https://www.yumilomarket.store/privacy.html" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Refund Policy URL</label>
+                    <input type="text" id="settingRefundUrl" value="https://www.yumilomarket.store/refund.html" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-4 pt-2">
+                <h4 class="text-sm font-bold text-gray-900 border-b pb-2">⚙️ System Operating States</h4>
+                <div class="space-y-3">
+                  <div class="flex items-center space-x-3">
+                    <input type="checkbox" id="settingStoreOpen" class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500" checked>
+                    <label class="text-xs font-bold text-gray-700 uppercase">Store Open for Live Nationwide Orders</label>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <input type="checkbox" id="settingMaintenance" class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
+                    <label class="text-xs font-bold text-gray-700 uppercase">Enable System Maintenance Mode (Offline)</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-6 border-t border-gray-100 flex justify-end">
+                <button type="submit" id="saveSettingsBtn" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-2.5 rounded-lg text-xs transition cursor-pointer">Save All Site Settings</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAuditLogViewHTML() {
+      return `
+        <div class="space-y-6">
+          <div class="flex justify-between items-center">
+            <div><h3 class="text-2xl font-bold text-gray-900">Immutable Audit History Log</h3><p class="text-xs text-amber-700 font-medium">🔒 Owner Only — Complete recorded history.</p></div>
+            <button onclick="loadFullAuditTable()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer">Refresh Audit Trail</button>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead><tr class="bg-gray-50 text-gray-500 font-bold uppercase border-b text-xs"><th class="py-3 px-6">Action Type</th><th class="py-3 px-6">Description</th><th class="py-3 px-6">Actor</th><th class="py-3 px-6">Timestamp</th></tr></thead>
+                <tbody id="fullAuditTableBody" class="divide-y divide-gray-200 text-gray-700"><tr><td colspan="4" class="text-center py-12 text-gray-400">Loading audit trail...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGenericManagementView(title, subtitle) {
+      return `
+        <div class="space-y-6">
+          <div class="flex justify-between items-center">
+            <div><h3 class="text-2xl font-bold text-gray-900">${title}</h3><p class="text-xs text-gray-500">${subtitle}</p></div>
+            <button onclick="openGenericModal('${title}')" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer">+ Record Action</button>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-12 text-center space-y-3">
+            <div class="text-4xl">📂</div><h4 class="text-base font-bold text-gray-800">No active records in ${title}</h4>
+            <p class="text-xs text-gray-500 max-w-md mx-auto">This queue is clean. Incoming submissions from across Zambia will appear here.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderOwnerControlView(title, subtitle) {
+      return `
+        <div class="space-y-6">
+          <div class="flex justify-between items-center">
+            <div><h3 class="text-2xl font-bold text-gray-900">${title}</h3><p class="text-xs text-amber-700 font-medium">🔒 Restricted Access</p></div>
+            <button onclick="openGenericModal('${title}')" class="bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer">Configure & Execute</button>
+          </div>
+          <div class="bg-white rounded-xl border border-amber-200 shadow-sm p-8 space-y-4">
+            <h4 class="text-sm font-bold text-gray-900">System Parameters & Security Logs</h4>
+            <p class="text-xs text-gray-600">${subtitle}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function openModal(title, contentHTML, confirmCallback) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML = contentHTML;
+      document.getElementById('actionModal').classList.remove('hidden');
+      document.getElementById('actionModal').classList.add('flex');
+      windowActiveConfirm = confirmCallback;
+    }
+
+    function closeModal() {
+      document.getElementById('actionModal').classList.remove('flex');
+      document.getElementById('actionModal').classList.add('hidden');
+    }
+
+    function executeModalAction() {
+      if (typeof windowActiveConfirm === 'function') windowActiveConfirm();
+    }
+
+    async function loadSiteSettings() {
+      try {
+        const { data, error } = await supabaseClient.from('site_settings').select('*').eq('id', 1).single();
+        if (error || !data) return;
+        document.getElementById('settingStoreName').value = data.store_name || 'Yumilo Market';
+        document.getElementById('settingCurrency').value = data.currency || 'ZMW (K)';
+        document.getElementById('settingFee').value = data.platform_fee_percent ?? 5.0;
+        document.getElementById('settingTax').value = data.tax_rate_percent ?? 0.0;
+        document.getElementById('settingMobileMoney').value = data.merchant_mobile_money || '';
+        document.getElementById('settingDeliveryFee').value = data.delivery_fee ?? 100;
+        document.getElementById('settingMinOrder').value = data.min_order_amount ?? 100;
+        document.getElementById('settingDeliveryZones').value = data.delivery_zones || '';
+        document.getElementById('settingGateway').value = data.notification_gateway || '';
+        document.getElementById('settingVendorAlertMethod').value = data.vendor_alert_method || 'WhatsApp & SMS';
+        document.getElementById('settingMinPayout').value = data.min_vendor_payout ?? 500;
+        document.getElementById('settingTermsUrl').value = data.terms_url || '';
+        document.getElementById('settingPrivacyUrl').value = data.privacy_url || '';
+        document.getElementById('settingRefundUrl').value = data.refund_url || '';
+        document.getElementById('settingTicker').value = data.announcement_ticker || '';
+        document.getElementById('settingStoreOpen').checked = data.store_open !== false;
+        document.getElementById('settingEmail').value = data.support_email || 'support@yumilomarket.store';
+        document.getElementById('settingMaintenance').checked = !!data.maintenance_mode;
+      } catch (err) { console.error(err); }
+    }
+
+    async function saveSiteSettings(e) {
+      e.preventDefault();
+      const btn = document.getElementById('saveSettingsBtn');
+      if (btn) { btn.textContent = 'Saving...'; btn.disabled = true; }
+
+      try {
+        const { error } = await supabaseClient.from('site_settings').upsert({
+          id: 1,
+          store_name: document.getElementById('settingStoreName').value.trim(),
+          currency: document.getElementById('settingCurrency').value.trim(),
+          platform_fee_percent: parseFloat(document.getElementById('settingFee').value),
+          tax_rate_percent: parseFloat(document.getElementById('settingTax').value),
+          merchant_mobile_money: document.getElementById('settingMobileMoney').value.trim(),
+          delivery_fee: parseFloat(document.getElementById('settingDeliveryFee').value),
+          min_order_amount: parseFloat(document.getElementById('settingMinOrder').value),
+          delivery_zones: document.getElementById('settingDeliveryZones').value.trim(),
+          notification_gateway: document.getElementById('settingGateway').value.trim(),
+          vendor_alert_method: document.getElementById('settingVendorAlertMethod').value,
+          min_vendor_payout: parseFloat(document.getElementById('settingMinPayout').value),
+          terms_url: document.getElementById('settingTermsUrl').value.trim(),
+          privacy_url: document.getElementById('settingPrivacyUrl').value.trim(),
+          refund_url: document.getElementById('settingRefundUrl').value.trim(),
+          announcement_ticker: document.getElementById('settingTicker').value.trim(),
+          store_open: document.getElementById('settingStoreOpen').checked,
+          support_email: document.getElementById('settingEmail').value.trim(),
+          maintenance_mode: document.getElementById('settingMaintenance').checked,
+          updated_at: new Date().toISOString()
+        });
+
+        if (error) throw error;
+        await logAuditAction('Site Settings Updated', `Updated nationwide platform configurations.`);
+        alert('All nationwide site settings updated and saved successfully!');
+      } catch (err) {
+        alert('Failed to save settings: ' + (err.message || err));
+      } finally {
+        if (btn) { btn.textContent = 'Save All Site Settings'; btn.disabled = false; }
+      }
+    }
+
+    function openCreateStaffModal() {
+      openModal(
+        'Create New Staff Account',
+        `<div class="space-y-3 text-xs">
+           <div><label class="block font-bold mb-1">Full Name</label><input type="text" id="newStaffName" placeholder="e.g. John Banda" class="w-full border p-2.5 rounded-lg"></div>
+           <div><label class="block font-bold mb-1">Email</label><input type="email" id="newStaffEmail" placeholder="staff@yumilomarket.store" class="w-full border p-2.5 rounded-lg"></div>
+           <div><label class="block font-bold mb-1">Password</label><input type="password" id="newStaffPassword" placeholder="Min 6 characters" class="w-full border p-2.5 rounded-lg"></div>
+           <div><label class="block font-bold mb-1">Role</label><select id="newStaffRole" class="w-full border p-2.5 rounded-lg"><option value="manager">Manager</option><option value="worker">Worker</option><option value="admin">Admin</option></select></div>
+         </div>`,
+        async () => {
+          const name = document.getElementById('newStaffName').value.trim();
+          const email = document.getElementById('newStaffEmail').value.trim();
+          const password = document.getElementById('newStaffPassword').value;
+          const role = document.getElementById('newStaffRole').value;
+          if (!name || !email || !password) { alert('Fill all fields.'); return; }
+          try {
+            const tempClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: false } });
+            const { data, error } = await tempClient.auth.signUp({ email, password, options: { data: { full_name: name } } });
+            if (error) throw error;
+            if (data.user) {
+              await supabaseClient.from('profiles').upsert({ id: data.user.id, full_name: name, role: role });
+              await logAuditAction('Staff Created', `Created staff for ${name} (${role})`);
+              alert('Staff account created successfully!');
+              closeModal(); loadStaffTable();
+            }
+          } catch (err) { alert('Error: ' + err.message); }
+        }
+      );
+    }
+
+    function editStaffRoleModal(userId, currentName, currentRole) {
+      openModal(
+        `Edit Permissions: ${currentName || 'User'}`,
+        `<div class="space-y-3 text-xs">
+           <p><strong>ID:</strong> ${userId}</p>
+           <div><label class="block font-bold mb-1">Role</label><select id="editStaffRoleSelect" class="w-full border p-2.5 rounded-lg"><option value="super_admin" ${currentRole==='super_admin'?'selected':''}>Super Admin</option><option value="manager" ${currentRole==='manager'?'selected':''}>Manager</option><option value="worker" ${currentRole==='worker'?'selected':''}>Worker</option><option value="customer" ${currentRole==='customer'?'selected':''}>Customer</option></select></div>
+         </div>`,
+        async () => {
+          const newRole = document.getElementById('editStaffRoleSelect').value;
+          try {
+            const { error } = await supabaseClient.from('profiles').update({ role: newRole }).eq('id', userId);
+            if (error) throw error;
+            await logAuditAction('Role Updated', `Updated role for ${currentName} to ${newRole}`);
+            alert('Permissions updated!'); closeModal(); loadStaffTable();
+          } catch (err) { alert('Error: ' + err.message); }
+        }
+      );
+    }
+
+    async function loadStaffTable() {
+      try {
+        const { data, error } = await supabaseClient.from('profiles').select('*').order('full_name', { ascending: true });
+        if (error) throw error;
+        staffMembers = data || [];
+        const tbody = document.getElementById('staffTableBody');
+        if (!tbody) return;
+        if (staffMembers.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-gray-400">No profiles found.</td></tr>`; return; }
+        tbody.innerHTML = '';
+        staffMembers.forEach(s => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50';
+          row.innerHTML = `<td class="py-4 px-6 font-medium">${s.full_name||'Unnamed'}</td><td class="py-4 px-6 font-mono text-xs">${s.id.slice(0,12)}...</td><td class="py-4 px-6"><span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded text-xs font-semibold uppercase">${s.role||'customer'}</span></td><td class="py-4 px-6 text-xs text-gray-500">${s.updated_at?new Date(s.updated_at).toLocaleDateString():'N/A'}</td><td class="py-4 px-6 text-right"><button onclick="editStaffRoleModal('${s.id}', '${s.full_name||''}', '${s.role||'customer'}')" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-3 py-1.5 rounded text-xs">Edit</button></td>`;
+          tbody.appendChild(row);
+        });
+      } catch (err) {}
+    }
+
+    async function loadAuditLogsOverview() {
+      try {
+        const { data, error } = await supabaseClient.from('audit_logs').select('*').order('created_at', { ascending: false }).limit(5);
+        const container = document.getElementById('auditActivityBody');
+        if (!container) return;
+        if (error || !data || data.length === 0) { container.innerHTML = `<p class="text-gray-400 text-center py-2">No recent audit logs.</p>`; return; }
+        container.innerHTML = '';
+        data.forEach(log => {
+          const div = document.createElement('div');
+          div.className = 'flex justify-between items-center';
+          div.innerHTML = `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px]">${log.action_type}</span><span class="text-gray-700 truncate max-w-[140px]" title="${log.description}">${log.description}</span><span class="text-gray-400 text-[10px]">${new Date(log.created_at).toLocaleDateString()}</span>`;
+          container.appendChild(div);
+        });
+      } catch (err) {}
+    }
+
+    async function loadFullAuditTable() {
+      try {
+        const { data, error } = await supabaseClient.from('audit_logs').select('*').order('created_at', { ascending: false });
+        const tbody = document.getElementById('fullAuditTableBody');
+        if (!tbody) return;
+        if (error || !data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="4" class="text-center py-12 text-gray-400">No records.</td></tr>`; return; }
+        tbody.innerHTML = '';
+        data.forEach(log => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50';
+          row.innerHTML = `<td class="py-4 px-6 font-semibold text-emerald-800 text-xs">${log.action_type}</td><td class="py-4 px-6 text-gray-800 text-xs">${log.description}</td><td class="py-4 px-6 text-gray-600 text-xs">${log.actor||'System'}</td><td class="py-4 px-6 text-gray-500 text-xs">${new Date(log.created_at).toLocaleString()}</td>`;
+          tbody.appendChild(row);
+        });
+      } catch (err) {}
+    }
+
+    function updateDateFilter() {
+      startDateFilter = document.getElementById('startDateInput')?.value || '';
+      endDateFilter = document.getElementById('endDateInput')?.value || '';
+      loadAdminData(); loadOrdersTable();
+    }
+
+    function clearDateFilter() {
+      startDateFilter = ''; endDateFilter = '';
+      if(document.getElementById('startDateInput')) document.getElementById('startDateInput').value = '';
+      if(document.getElementById('endDateInput')) document.getElementById('endDateInput').value = '';
+      loadAdminData(); loadOrdersTable();
+    }
+
+    function reviewOrderModal(orderId) {
+      const order = currentOrders.find(o => o.id === orderId);
+      if (!order) return;
+      openModal(
+        `Review Order #${order.id.slice(0, 8)}`,
+        `<div class="space-y-2 text-xs">
+           <p><strong>Location:</strong> ${order.delivery_city || 'Zambia'}, ${order.delivery_province || 'National'}</p>
+           <p><strong>Total:</strong> K${Number(order.total_amount).toFixed(2)}</p>
+           <label class="block font-bold text-gray-700 mt-2">Update Status:</label>
+           <select id="newOrderStatus" class="w-full border p-2 text-xs">
+             <option value="Paid & Secured">Paid & Secured</option>
+             <option value="In Transit">In Transit</option>
+             <option value="Delivered & Completed">Delivered & Completed</option>
+             <option value="Cancelled / Refunded">Cancelled / Refunded</option>
+           </select>
+         </div>`,
+        async () => {
+          const status = document.getElementById('newOrderStatus').value;
+          const { error } = await supabaseClient.from('orders').update({ payment_status: status }).eq('id', orderId);
+          if (error) alert('Failed to update.');
+          else {
+            await logAuditAction('Order Updated', `Updated order #${orderId.slice(0, 8)} to ${status}`);
+            alert('Order updated!'); closeModal(); loadAdminData(); loadOrdersTable();
+          }
+        }
+      );
+    }
+
+    async function loadAdminData() {
+      try {
+        const { data, error } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        currentOrders = (data || []).filter(o => {
+          if (!o.created_at) return true;
+          const d = o.created_at.split('T')[0];
+          if (startDateFilter && d < startDateFilter) return false;
+          if (endDateFilter && d > endDateFilter) return false;
+          return true;
+        });
+
+        let pCount = 0, tCount = 0, cCount = 0;
+        const queue = document.getElementById('reviewQueueBody');
+        if (queue) {
+          if (currentOrders.length === 0) {
+            queue.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400">No pending orders.</td></tr>`;
+          } else {
+            queue.innerHTML = '';
+            currentOrders.forEach(o => {
+              const status = o.payment_status || 'Pending';
+              if (status.includes('Completed') || status.includes('Delivered')) cCount++;
+              else if (status.includes('Transit')) tCount++;
+              else pCount++;
+
+              const row = document.createElement('tr');
+              row.className = 'hover:bg-gray-50';
+              row.innerHTML = `<td class="py-3 px-4 font-mono font-semibold">${o.id.slice(0,8)}</td><td class="py-3 px-4"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[11px]">Nationwide Order</span></td><td class="py-3 px-4"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px]">${status}</span></td><td class="py-3 px-4 text-gray-500">${new Date(o.created_at).toLocaleString()}</td><td class="py-3 px-4 text-right"><button onclick="reviewOrderModal('${o.id}')" class="bg-white border hover:bg-gray-50 text-gray-700 font-semibold px-3 py-1 rounded">Review</button></td>`;
+              queue.appendChild(row);
+            });
+          }
+        }
+
+        if (document.getElementById('snapshotPending')) {
+          document.getElementById('snapshotPending').textContent = `${pCount} orders`;
+          document.getElementById('snapshotTransit').textContent = `${tCount} orders`;
+          document.getElementById('snapshotCompleted').textContent = `${cCount} orders`;
+          const total = currentOrders.length || 1;
+          document.getElementById('barPending').style.width = `${(pCount/total)*100}%`;
+          document.getElementById('barTransit').style.width = `${(tCount/total)*100}%`;
+          document.getElementById('barCompleted').style.width = `${(cCount/total)*100}%`;
+          document.getElementById('statOrdersReview').textContent = pCount;
+          document.getElementById('statPaymentReceipts').textContent = currentOrders.length;
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    async function loadOrdersTable() {
+      try {
+        const { data, error } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        currentOrders = (data || []).filter(o => {
+          if (!o.created_at) return true;
+          const d = o.created_at.split('T')[0];
+          if (startDateFilter && d < startDateFilter) return false;
+          if (endDateFilter && d > endDateFilter) return false;
+          return true;
+        });
+
+        const tbody = document.getElementById('fullOrdersTableBody');
+        if (!tbody) return;
+        if (currentOrders.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-gray-400">No orders found.</td></tr>`; return; }
+        tbody.innerHTML = '';
+        currentOrders.forEach(o => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50';
+          row.innerHTML = `<td class="py-4 px-6 font-mono text-xs font-semibold">${o.id.slice(0,8)}...</td><td class="py-4 px-6">${o.delivery_city||'Zambia'}, ${o.delivery_province||'Provincial'}</td><td class="py-4 px-6 font-bold text-emerald-700">K${Number(o.total_amount).toFixed(2)}</td><td class="py-4 px-6"><span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded text-xs font-semibold">${o.payment_status||'Pending'}</span></td><td class="py-4 px-6 text-gray-500 text-xs">${new Date(o.created_at).toLocaleDateString()}</td><td class="py-4 px-6 text-right"><button onclick="reviewOrderModal('${o.id}')" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-3 py-1.5 rounded text-xs">Manage</button></td>`;
+          tbody.appendChild(row);
+        });
+      } catch (err) { console.error(err); }
+    }
+
+    // RUN ON DOM READY TO PREVENT ANY BLANK SCREEN HANGS
+    document.addEventListener('DOMContentLoaded', () => {
+      switchView('overview');
+      supabaseClient.auth.getSession().then(({ data: { session } }) => {
+        if (!session) {
+          window.location.href = 'login.html';
+        } else if (session.user && session.user.email) {
+          currentUserEmail = session.user.email;
+        }
+      }).catch(err => console.warn(err));
+    });
+  </script>
+</body>
+</html>
