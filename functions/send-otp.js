@@ -19,9 +19,13 @@ export async function onRequestPost(context) {
       });
     }
 
-    // Base64 fallback to guarantee runtime execution without Cloudflare binding issues
-    const decodedKey = atob("cmVfN3AyVVExV25fRllOTU1CQ3EzR0R0ZGpoalpZMkNWelhn");
-    const apiKey = context.env.RESEND_API_KEY || decodedKey;
+    const apiKey = context.env.RESEND_API_KEY;
+    if (!apiKey) {
+      return new Response(JSON.stringify({ success: false, error: "Server API key not configured" }), {
+        headers: { "Content-Type": "application/json" },
+        status: 500
+      });
+    }
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -30,7 +34,7 @@ export async function onRequestPost(context) {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        from: "Yumilo Market <onboarding@resend.dev>",
+        from: "Yumilo Market <noreply@yumilomarket.store>",
         to: [email],
         subject: "Your Yumilo Market Verification Code",
         html: `<p>Mwapoleka ${name || 'Customer'},</p><p>Your verification code for Yumilo Market is: <strong style="font-size: 20px; color: #064e3b;">${passcode}</strong></p><p>Please enter this code to complete your registration.</p>`
