@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yumilo Market - Zambia's Verified Universal Marketplace</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <meta name="robots" content="noindex,nofollow">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>window.YUMILO_SUPABASE = {url:"https://ebsrbxvaajrabvspycyg.supabase.co", key:"sb_publishable_pN7Znx6127mAGYUbqM5p3Q_Uozj5AoJ"};</script>
   <style>
     body { background-color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -26,7 +26,7 @@
     <div class="max-w-6xl mx-auto px-6 py-3.5 flex justify-between items-center">
       <div class="flex items-center space-x-10">
         <a href="#" onclick="switchView('home'); return false;" class="flex items-center space-x-3 group cursor-pointer">
-          <img src="logo.png" alt="Yumilo Market Logo" class="h-10 w-auto object-contain" onerror="this.src='https://via.placeholder.com/40?text=YM'">
+          <img src="logo.jpg" alt="Yumilo Market Logo" class="h-10 w-auto object-contain" onerror="this.src='https://via.placeholder.com/40?text=YM'">
           <span class="font-black text-base tracking-wider text-[#064e3b]">YUMILOMARKET</span>
         </a>
         <nav class="hidden md:flex items-center space-x-7 text-xs font-semibold text-gray-600">
@@ -381,7 +381,7 @@
           </label>
         </div>
 
-        <button onclick="processSignUp()" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-extrabold py-3 rounded-xl transition shadow cursor-pointer mt-2">Send verification code</button>
+        <button onclick="processSignUp()" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-extrabold py-3 rounded-xl transition shadow cursor-pointer mt-2">Send Verification Code</button>
       </div>
       <p class="text-center text-xs text-gray-500 pt-1">Already have an account? <a href="#" onclick="switchAccountTab('signin'); return false;" class="text-emerald-700 font-bold underline">Sign In</a></p>
     </div>
@@ -412,7 +412,7 @@
     <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-xs">
       <div class="space-y-3">
         <div class="flex items-center space-x-2">
-          <img src="logo.png" alt="Logo" class="h-8 w-auto object-contain" onerror="this.src='https://via.placeholder.com/30?text=YM'">
+          <img src="logo.jpg" alt="Logo" class="h-8 w-auto object-contain" onerror="this.src='https://via.placeholder.com/30?text=YM'">
           <span class="font-bold text-white text-sm">YUMILOMARKET</span>
         </div>
         <p class="text-[11px] text-emerald-200 leading-relaxed">Zambia's verified universal marketplace. Operating nationwide across all 10 provinces with secure mobile money escrow.</p>
@@ -472,8 +472,8 @@
   <!-- SCRIPT LOGIC -->
   <script>
     let isLoggedIn = false;
-    const authClient = window.supabase.createClient('https://ebsrbxvaajrabvspycyg.supabase.co', 'sb_publishable_pN7Znx6127mAGYUbqM5p3Q_Uozj5AoJ', {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
-    let pendingEmail = null;
+    const supabaseAuth = window.supabase.createClient(window.YUMILO_SUPABASE.url, window.YUMILO_SUPABASE.key, {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
+    let signupEmailPending = null;
     let userName = localStorage.getItem('yumilo_user_name') || 'Henry Mwansa';
     let userLocation = localStorage.getItem('yumilo_user_location') || 'Mansa, Luapula';
     let userRole = localStorage.getItem('yumilo_user_role') || 'Customer';
@@ -494,8 +494,8 @@
 
     localStorage.removeItem('yumilo_logged_in');
     updateAuthUI();
-    authClient.auth.getSession().then(({data}) => applySession(data.session));
-    authClient.auth.onAuthStateChange((_event, session) => { setTimeout(() => applySession(session), 0); });
+    supabaseAuth.auth.getSession().then(({data}) => applySupabaseSession(data.session));
+    supabaseAuth.auth.onAuthStateChange((_event, session) => { setTimeout(() => applySupabaseSession(session), 0); });
 
     function showToast(msg) {
       let toast = document.getElementById('toastBanner');
@@ -518,52 +518,62 @@
     }
 
     function normalizeZambiaPhone(raw) {
-      let n = raw.replace(/[\s()-]/g, '');
-      if (/^09\d{8}$/.test(n)) n = '+260' + n.slice(1);
-      if (/^2609\d{8}$/.test(n)) n = '+' + n;
-      return /^\+2609\d{8}$/.test(n) ? n : null;
+      let value=raw.replace(/[\s()-]/g,'');
+      if (/^09\d{8}$/.test(value)) value='+260'+value.slice(1);
+      if (/^2609\d{8}$/.test(value)) value='+'+value;
+      return /^\+2609\d{8}$/.test(value) ? value : null;
     }
-    function registerDetails() {
-      const role = document.getElementById('signupRole').value;
-      const name = document.getElementById('signupName').value.trim();
-      const phone = normalizeZambiaPhone(document.getElementById('signupPhone').value.trim());
-      const email = document.getElementById('signupEmail').value.trim();
-      const province = document.getElementById('signupProvince').value;
-      const district = document.getElementById('signupDistrict').value;
-      const password = document.getElementById('signupPassword').value;
-      if (role !== 'Customer') throw new Error('Vendor and courier registration is unavailable until approval checks are ready.');
-      if (!name || !email || !province || !district || !password) throw new Error('Complete all registration fields first.');
-      if (!phone) throw new Error('Enter a valid Zambian mobile number.');
-      if (!document.getElementById('termsCheckbox').checked) throw new Error('Please accept the terms before registering.');
-      return {role, name, phone, email, province, district, password};
+    function collectSignupDetails() {
+      const role=document.getElementById('signupRole').value;
+      const name=document.getElementById('signupName').value.trim();
+      const phone=normalizeZambiaPhone(document.getElementById('signupPhone').value.trim());
+      const email=document.getElementById('signupEmail').value.trim().toLowerCase();
+      const province=document.getElementById('signupProvince').value;
+      const district=document.getElementById('signupDistrict').value;
+      const password=document.getElementById('signupPassword').value;
+      if (!name || !document.getElementById('signupPhone').value.trim() || !email || !province || !district || !password) throw new Error('Complete all registration fields first.');
+      if (!phone) throw new Error('Enter a valid Zambian number, e.g. 0970000000.');
+      if (password.length < 8) throw new Error('Use a password with at least 8 characters.');
+      if (role !== 'Customer') throw new Error('Vendor and courier sign-up is paused until their approval process is ready. Choose Customer or contact Yumilo.');
+      if (!document.getElementById('termsCheckbox').checked) throw new Error('Please accept the Terms of Service to register.');
+      return {role,name,phone,email,province,district,password};
     }
     async function sendRealEmailOtp() {
       let d;
-      try { d=registerDetails(); } catch (e) { return showToast(e.message); }
-      const btn=document.getElementById('sendOtpBtn'); btn.disabled=true;
+      try { d=collectSignupDetails(); } catch(e) { showToast(e.message); return; }
+      const button=document.getElementById('sendOtpBtn');
+      button.disabled=true;
       try {
-        let result = pendingEmail && pendingEmail === d.email
-          ? await authClient.auth.resend({type:'signup', email:d.email})
-          : await authClient.auth.signUp({email:d.email,password:d.password,options:{data:{full_name:d.name,phone:d.phone,role:d.role,province:d.province,district:d.district}}});
+        const result = signupEmailPending===d.email
+          ? await supabaseAuth.auth.resend({type:'signup',email:d.email})
+          : await supabaseAuth.auth.signUp({email:d.email,password:d.password,options:{data:{full_name:d.name,contact_phone:d.phone,account_type:d.role.toLowerCase(),province:d.province,city:d.district}}});
         if (result.error) throw result.error;
-        if (result.data?.session) { await authClient.auth.signOut(); throw new Error('Email confirmation is not enabled. Registration is unavailable.'); }
-        pendingEmail=d.email;
+        if (result.data?.session) {
+          await supabaseAuth.auth.signOut();
+          throw new Error('Email confirmation is not enabled; registration stopped for safety.');
+        }
+        signupEmailPending=d.email;
         document.getElementById('otpInputContainer').classList.remove('hidden');
-        document.getElementById('otpStatusText').textContent='If the address can be registered, a code has been sent. It expires in 10 minutes.';
-        showToast('Check your email for a six-digit code.');
-      } catch(e) { showToast(e.message || 'Unable to send verification code.'); }
-      finally { btn.disabled=false; }
+        document.getElementById('otpStatusText').textContent='A six-digit code was sent if this email can be registered. It expires in 10 minutes.';
+        showToast('Check your email for the six-digit verification code.');
+      } catch(e) { showToast(e.message || 'Could not send the verification code. Try again.'); }
+      finally { button.disabled=false; }
     }
     async function verifyEmailOtp() {
+      const email=document.getElementById('signupEmail').value.trim().toLowerCase();
       const token=document.getElementById('signupOtpInput').value.trim();
-      const email=document.getElementById('signupEmail').value.trim();
-      if (!pendingEmail || pendingEmail!==email) return showToast('Request a code for this email address first.');
-      if (!/^\d{6}$/.test(token)) return showToast('Enter the six-digit verification code.');
-      const {data,error}=await authClient.auth.verifyOtp({email,token,type:'signup'});
-      if (error) return showToast(error.message || 'Invalid or expired code.');
+      if (!signupEmailPending || signupEmailPending!==email) return showToast('Request a code for this email address first.');
+      if (!/^\d{6}$/.test(token)) return showToast('Enter the six-digit code from your email.');
+      const {data,error}=await supabaseAuth.auth.verifyOtp({email,token,type:'signup'});
+      if (error) {
+        document.getElementById('otpStatusText').textContent=error.message || 'Verification failed.';
+        return showToast(error.message || 'Invalid or expired code.');
+      }
       if (!data.session || !data.user?.email_confirmed_at) return showToast('Email verification was not confirmed.');
-      pendingEmail=null; showToast('Email verified. Your account is ready.');
-      applySession(data.session); switchView('home');
+      signupEmailPending=null;
+      applySupabaseSession(data.session);
+      showToast('Email verified and account created.');
+      switchView('home');
     }
 
     function switchView(viewId) {
@@ -617,32 +627,42 @@
       }
     }
 
-    function cleanProfile(value) { return String(value || '').replace(/[<>]/g, '').slice(0,100); }
-    function applySession(session) {
+    function applySupabaseSession(session) {
       const user=session?.user;
       isLoggedIn=!!(user && user.email_confirmed_at);
       if (isLoggedIn) {
-        const data=user.user_metadata || {};
-        userName=cleanProfile(data.full_name || user.email || 'Account');
-        userLocation=cleanProfile([data.district,data.province].filter(Boolean).join(', '));
-        userRole='Customer';
+        const meta=user.user_metadata||{};
+        userName=String(meta.full_name||user.email||'Customer').replace(/[<>]/g,'').slice(0,100);
+        userLocation=[meta.city,meta.province].filter(Boolean).join(', ') || 'Zambia';
+        userRole=meta.account_type ? meta.account_type[0].toUpperCase()+meta.account_type.slice(1) : 'Customer';
+        localStorage.setItem('yumilo_user_name',userName);
+        localStorage.setItem('yumilo_user_location',userLocation);
+        localStorage.setItem('yumilo_user_role',userRole);
+      } else {
+        localStorage.removeItem('yumilo_logged_in');
       }
       updateAuthUI();
     }
     async function processSignIn() {
-      const email=document.getElementById('signinIdentifier').value.trim();
+      const email=document.getElementById('signinIdentifier').value.trim().toLowerCase();
       const password=document.getElementById('signinPassword').value;
       if (!email.includes('@') || !password) return showToast('Enter your email address and password.');
-      const {data,error}=await authClient.auth.signInWithPassword({email,password});
+      const {data,error}=await supabaseAuth.auth.signInWithPassword({email,password});
       if (error) return showToast(error.message || 'Unable to sign in.');
-      if (!data.user?.email_confirmed_at) { await authClient.auth.signOut(); return showToast('Confirm your email before signing in.'); }
-      applySession(data.session); showToast('Signed in successfully.'); switchView('home');
+      if (!data.user?.email_confirmed_at) { await supabaseAuth.auth.signOut(); return showToast('Confirm your email before signing in.'); }
+      applySupabaseSession(data.session);
+      showToast('Signed in successfully.');
+      switchView('home');
     }
     async function processSignUp() { await sendRealEmailOtp(); }
     async function processSignOut() {
-      const {error}=await authClient.auth.signOut();
+      const {error}=await supabaseAuth.auth.signOut();
       if (error) return showToast('Unable to sign out.');
-      applySession(null); showToast('Signed out successfully.'); switchAccountTab('signin');
+      isLoggedIn=false;
+      localStorage.removeItem('yumilo_logged_in');
+      updateAuthUI();
+      showToast('Signed out successfully.');
+      switchAccountTab('signin');
     }
 
     function updateAuthUI() {
@@ -736,12 +756,14 @@
       }
     }
 
-    function checkoutCart() { showToast('Checkout is not available in this preview. No order or payment was made.'); }
-    function renderOrders() {
-      const el=document.getElementById('ordersListContainer');
-      if (el) el.textContent='Order history is unavailable in this preview.';
-    }
+    function checkoutCart() { showToast('Live checkout is not connected; no order or payment was made.'); }
 
+    function renderOrders() {
+      if (!isLoggedIn) return;
+      let container = document.getElementById('ordersListContainer');
+      if (container) container.innerHTML = "<p class='text-gray-500 py-6 text-center'>Live order history is not connected yet; no escrow or payment status is shown here.</p>";
+
+    }
   </script>
 </body>
 </html>
