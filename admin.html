@@ -68,7 +68,7 @@
 
     <div class="p-4 border-t border-emerald-900/50 text-[11px] text-emerald-300 space-y-1 bg-[#064e3b]">
       <p class="font-semibold text-white">Environment:</p>
-      <p>PRODUCTION • Nationwide Zambia • v2.3.3</p>
+      <p>PRODUCTION • Nationwide Zambia • v2.3.4</p>
     </div>
   </aside>
 
@@ -800,9 +800,28 @@
       } catch (err) { console.error(err); }
     }
 
+    // REALTIME SUBSCRIPTION LISTENER
+    function setupRealtimeSubscriptions() {
+      supabaseClient
+        .channel('public:orders')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, payload => {
+          console.log('Realtime order change received:', payload);
+          const activeTitle = document.getElementById('pageTitle')?.textContent;
+          if (activeTitle?.includes('Overview')) {
+            loadAdminData();
+            loadAuditLogsOverview();
+          } else if (activeTitle?.includes('Orders')) {
+            loadOrdersTable();
+          }
+        })
+        .subscribe();
+    }
+
     // RUN ON DOM READY TO PREVENT ANY BLANK SCREEN HANGS
     document.addEventListener('DOMContentLoaded', () => {
       switchView('overview');
+      setupRealtimeSubscriptions();
+
       supabaseClient.auth.getSession().then(({ data: { session } }) => {
         if (!session) {
           window.location.href = 'login.html';
