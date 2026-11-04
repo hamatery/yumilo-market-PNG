@@ -166,7 +166,7 @@
       }
     }
 
-    // Step 1: Request OTP Code via /send-otp
+    // Step 1: Request OTP Code via /send-otp (sent as 'passcode')
     async function handleRequestOtp(e) {
       e.preventDefault();
       tempUserData.name = document.getElementById('signupName').value.trim();
@@ -177,7 +177,6 @@
       btn.textContent = 'Sending verification code...';
       btn.disabled = true;
 
-      // Generate a random 6-digit code
       tempUserData.generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
 
       try {
@@ -186,7 +185,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: tempUserData.email,
-            code: tempUserData.generatedOtp
+            passcode: tempUserData.generatedOtp
           })
         });
 
@@ -195,7 +194,6 @@
           throw new Error(result.error || 'Failed to dispatch verification code.');
         }
 
-        // Hide signup form, show OTP verification form
         document.getElementById('signupForm').classList.add('hidden');
         document.getElementById('tabContainer').classList.add('hidden');
         document.getElementById('otpForm').classList.remove('hidden');
