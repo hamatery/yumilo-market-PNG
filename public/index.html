@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yumilo Market - Zambia's Verified Universal Marketplace</title>
+  <title>Yumilo Market - Preview Candidate</title>
+  <meta name="robots" content="noindex,nofollow">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>window.YUMILO_PUBLIC_CONFIG = { supabaseUrl: "https://ebsrbxvaajrabvspycyg.supabase.co", supabaseAnonKey: "" };</script>
   <style>
     body { background-color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -22,7 +25,7 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
       <!-- Logo -->
       <a href="#" onclick="switchView('home'); return false;" class="flex items-center space-x-2.5 group cursor-pointer flex-shrink-0">
-        <img src="logo.png" alt="Yumilo Logo" class="h-9 w-auto object-contain" onerror="this.src='https://via.placeholder.com/36?text=YM'">
+        <img src="logo.jpg" alt="Yumilo Logo" class="h-9 w-auto object-contain" >
         <span class="font-black text-sm sm:text-base tracking-wider text-[#064e3b]">YUMILOMARKET</span>
       </a>
 
@@ -80,7 +83,7 @@
         <div class="space-y-3.5 text-left max-w-lg">
           <span class="inline-block bg-emerald-800/90 text-emerald-300 text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full border border-emerald-700">Zambia • Quality at Every Step</span>
           <h1 class="text-3xl md:text-4xl font-black tracking-tight leading-tight">Good finds.<br>Right here.</h1>
-          <p class="text-xs md:text-sm text-emerald-100 font-normal leading-relaxed">Shop products from across Zambia. Verified vendors, secure mobile money escrow, and reliable nationwide delivery.</p>
+          <p class="text-xs md:text-sm text-emerald-100 font-normal leading-relaxed">Browse the Zambia-wide marketplace. Live approved listings will appear here when public catalogue access is enabled.</p>
           <div class="pt-2">
             <button onclick="switchView('catalog')" class="bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold px-6 py-3 rounded-xl text-xs transition shadow-lg cursor-pointer">Explore the market</button>
           </div>
@@ -122,52 +125,14 @@
       <div class="flex justify-between items-center mb-5">
         <div>
           <h3 class="text-base font-black text-gray-900 tracking-tight">Featured products</h3>
-          <p class="text-xs text-gray-500">Verified items ready for nationwide delivery</p>
+          <p class="text-xs text-gray-500">Approved product listings will appear when the live catalogue is connected.</p>
         </div>
         <button onclick="switchView('catalog')" class="text-xs font-bold text-[#064e3b] hover:underline">See catalog →</button>
       </div>
 
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <!-- Item 1 -->
-        <div class="bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
-          <div>
-            <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
-            <span class="text-[9px] text-[#064e3b] font-extrabold uppercase">Electronics</span>
-            <h4 class="font-bold text-xs sm:text-sm text-gray-900 mt-0.5 line-clamp-1">X-Series Smart Phone 128GB</h4>
-            <p class="text-[#064e3b] font-black text-xs sm:text-sm mt-1">K3,450.00</p>
-          </div>
-          <button onclick="addToCart('X-Series Smart Phone 128GB', 3450)" class="mt-4 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
-        </div>
-        <!-- Item 2 -->
-        <div class="bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
-          <div>
-            <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
-            <span class="text-[9px] text-[#064e3b] font-extrabold uppercase">Fashion</span>
-            <h4 class="font-bold text-xs sm:text-sm text-gray-900 mt-0.5 line-clamp-1">Premium Cotton Casual Tee</h4>
-            <p class="text-[#064e3b] font-black text-xs sm:text-sm mt-1">K180.00</p>
-          </div>
-          <button onclick="addToCart('Premium Cotton Casual Tee', 180)" class="mt-4 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
-        </div>
-        <!-- Item 3 -->
-        <div class="bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
-          <div>
-            <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
-            <span class="text-[9px] text-[#064e3b] font-extrabold uppercase">Groceries</span>
-            <h4 class="font-bold text-xs sm:text-sm text-gray-900 mt-0.5 line-clamp-1">Super Meal Roller Meal (25kg)</h4>
-            <p class="text-[#064e3b] font-black text-xs sm:text-sm mt-1">K240.00</p>
-          </div>
-          <button onclick="addToCart('Super Meal Roller Meal (25kg)', 240)" class="mt-4 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
-        </div>
-        <!-- Item 4 -->
-        <div class="bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
-          <div>
-            <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
-            <span class="text-[9px] text-[#064e3b] font-extrabold uppercase">Agriculture</span>
-            <h4 class="font-bold text-xs sm:text-sm text-gray-900 mt-0.5 line-clamp-1">Whole Broiler Chicken</h4>
-            <p class="text-[#064e3b] font-black text-xs sm:text-sm mt-1">K95.00</p>
-          </div>
-          <button onclick="addToCart('Whole Broiler Chicken', 95)" class="mt-4 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
-        </div>
+      <div class="bg-white p-6 rounded-3xl border border-emerald-100 text-center text-sm text-gray-600">
+        <p class="font-bold text-[#064e3b]">Live approved listings are not connected yet</p>
+        <p class="mt-2 text-xs">This preview does not show sample inventory or accept product orders.</p>
       </div>
     </section>
 
@@ -176,15 +141,15 @@
       <div class="bg-emerald-50 rounded-3xl p-6 border border-emerald-100 grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-gray-700">
         <div class="space-y-1.5">
           <h4 class="font-bold text-[#064e3b] text-sm">📦 How ordering works</h4>
-          <p>Browse verified catalogs across all 10 provinces of Zambia, add items to your secure escrow cart, and complete checkout instantly.</p>
+          <p>Browse approved marketplace listings from across Zambia. Catalogues are being connected; no orders can be placed in this preview.</p>
         </div>
         <div class="space-y-1.5">
           <h4 class="font-bold text-[#064e3b] text-sm">🔒 Manual payment checks</h4>
-          <p>All mobile money transactions undergo secure verification before vendor dispatch to ensure total buyer protection.</p>
+          <p>All mobile money transactions undergo secure verification before vendor dispatch to ensure manual review (not connected in this preview).</p>
         </div>
         <div class="space-y-1.5">
           <h4 class="font-bold text-[#064e3b] text-sm">🚚 Reliable delivery</h4>
-          <p>Coordinated nationwide logistics partners ensure your goods arrive safely right at your doorstep.</p>
+          <p>Delivery partners and parcel tracking are not connected in this preview.</p>
         </div>
       </div>
     </section>
@@ -195,7 +160,7 @@
     <div class="bg-[#064e3b] text-white p-6 rounded-3xl flex justify-between items-center shadow-md">
       <div>
         <h2 class="text-lg sm:text-xl font-black">Marketplace Categories</h2>
-        <p class="text-xs text-emerald-200 mt-0.5">Explore verified departments across Zambia</p>
+        <p class="text-xs text-emerald-200 mt-0.5">Browse marketplace departments across Zambia</p>
       </div>
       <button onclick="switchView('home')" class="bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl cursor-pointer">← Home</button>
     </div>
@@ -228,48 +193,14 @@
     <div class="bg-[#064e3b] text-white p-6 rounded-3xl flex justify-between items-center shadow-md">
       <div>
         <h2 class="text-lg sm:text-xl font-black">Live Catalog</h2>
-        <p class="text-xs text-emerald-200 mt-0.5">Browse all verified goods across Zambia</p>
+        <p class="text-xs text-emerald-200 mt-0.5">Approved listings will appear when the catalogue is connected.</p>
       </div>
       <button onclick="switchView('home')" class="bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl cursor-pointer">← Home</button>
     </div>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-      <div class="catalog-item bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between" data-category="Electronics">
-        <div>
-          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
-          <span class="text-[9px] text-[#064e3b] font-bold uppercase">Electronics</span>
-          <h4 class="font-bold text-xs sm:text-sm mt-1">X-Series Smart Phone 128GB</h4>
-          <p class="text-[#064e3b] font-black text-xs sm:text-sm mt-1">K3,450.00</p>
-        </div>
-        <button onclick="addToCart('X-Series Smart Phone 128GB', 3450)" class="mt-4 w-full bg-[#f59e0b] text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
-      </div>
-      <div class="catalog-item bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between" data-category="Fashion">
-        <div>
-          <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
-          <span class="text-[9px] text-[#064e3b] font-bold uppercase">Fashion</span>
-          <h4 class="font-bold text-xs sm:text-sm mt-1">Premium Cotton Casual Tee</h4>
-          <p class="text-[#064e3b] font-black text-xs sm:text-sm mt-1">K180.00</p>
-        </div>
-        <button onclick="addToCart('Premium Cotton Casual Tee', 180)" class="mt-4 w-full bg-[#f59e0b] text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
-      </div>
-      <div class="catalog-item bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between" data-category="Groceries">
-        <div>
-          <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
-          <span class="text-[9px] text-[#064e3b] font-bold uppercase">Groceries</span>
-          <h4 class="font-bold text-xs sm:text-sm mt-1">Super Meal Roller Meal (25kg)</h4>
-          <p class="text-[#064e3b] font-black text-xs sm:text-sm mt-1">K240.00</p>
-        </div>
-        <button onclick="addToCart('Super Meal Roller Meal (25kg)', 240)" class="mt-4 w-full bg-[#f59e0b] text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
-      </div>
-      <div class="catalog-item bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200 flex flex-col justify-between" data-category="Agriculture">
-        <div>
-          <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
-          <span class="text-[9px] text-[#064e3b] font-bold uppercase">Agriculture</span>
-          <h4 class="font-bold text-xs sm:text-sm mt-1">Whole Broiler Chicken</h4>
-          <p class="text-[#064e3b] font-black text-xs sm:text-sm mt-1">K95.00</p>
-        </div>
-        <button onclick="addToCart('Whole Broiler Chicken', 95)" class="mt-4 w-full bg-[#f59e0b] text-gray-900 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer">Add to Cart</button>
-      </div>
+    <div id="catalogStatus" class="bg-white p-6 rounded-3xl border border-emerald-100 text-center text-sm text-gray-600">
+      <p class="font-bold text-[#064e3b]">Live approved listings are not connected yet</p>
+      <p class="mt-2 text-xs">No sample or unverified products are offered for sale in this preview.</p>
     </div>
   </div>
 
@@ -278,15 +209,15 @@
     <div id="ordersLockedContainer" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 text-center space-y-4">
       <div class="w-14 h-14 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto text-xl font-bold">🔒</div>
       <h2 class="text-base font-bold text-gray-900">Sign in required to view orders</h2>
-      <p class="text-xs text-gray-500 max-w-sm mx-auto">Please <a href="#" onclick="switchAccountTab('signin'); return false;" class="text-[#064e3b] font-bold underline">Sign In</a> or <a href="#" onclick="switchAccountTab('signup'); return false;" class="text-[#064e3b] font-bold underline">Create an Account</a> to track escrow orders.</p>
+      <p class="text-xs text-gray-500 max-w-sm mx-auto">Please <a href="#" onclick="switchAccountTab('signin'); return false;" class="text-[#064e3b] font-bold underline">Sign In</a> or <a href="#" onclick="switchAccountTab('signup'); return false;" class="text-[#064e3b] font-bold underline">Create an Account</a> to view your orders.</p>
     </div>
     <div id="ordersUnlockedContainer" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
-        <h2 class="text-base font-bold text-gray-900">My Escrow Orders</h2>
-        <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-3 py-1 rounded-full">Secure Tracking</span>
+        <h2 class="text-base font-bold text-gray-900">My Orders</h2>
+        <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-3 py-1 rounded-full">Tracking not connected</span>
       </div>
       <div id="ordersListContainer" class="space-y-3 text-xs">
-        <p class="text-gray-500 py-6 text-center">You have no active escrow orders yet.</p>
+        <p class="text-gray-500 py-6 text-center">Orders will appear here once secure order access is implemented.</p>
       </div>
     </div>
   </div>
@@ -296,15 +227,9 @@
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="border-b pb-3">
         <h2 class="text-base font-bold text-gray-900">Customer Messages</h2>
-        <p class="text-xs text-gray-500">Chat with verified vendors & support</p>
+        <p class="text-xs text-gray-500">Private messages require secure backend access, which is not enabled in this preview.</p>
       </div>
-      <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 space-y-1">
-        <div class="flex justify-between text-[10px] text-emerald-800 font-bold">
-          <span>Yumilo Support Hub</span>
-          <span>Today</span>
-        </div>
-        <p class="text-xs text-gray-700">Mwapoleka! Welcome to Yumilo Market. All trade conversations with verified vendors appear here.</p>
-      </div>
+      <div id="messagesStatus" class="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900">Messages are unavailable until secure backend permissions are ready. No sample or private messages are shown.</div>
     </div>
   </div>
 
@@ -312,15 +237,15 @@
   <div id="cart-view" class="view-section max-w-3xl mx-auto px-6 py-8 space-y-6 pb-20">
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="border-b pb-3 flex justify-between items-center">
-        <h2 class="text-base font-bold text-gray-900">Secure Escrow Cart</h2>
+        <h2 class="text-base font-bold text-gray-900">Cart & Escrow</h2>
         <span class="text-xs font-bold text-[#064e3b]" id="cartCountBadgeText">0 Items</span>
       </div>
       <div id="cartItemsList" class="space-y-3 text-xs">
         <p class="text-gray-500">Your cart is empty. Add items from the catalog!</p>
       </div>
-      <div id="cartTotal" class="font-black text-[#064e3b] text-sm pt-3 border-t border-gray-100">Total Escrow Amount: K0.00</div>
+      <div id="cartTotal" class="font-black text-[#064e3b] text-sm pt-3 border-t border-gray-100">Cart total unavailable — live catalogue is not connected.</div>
       <div id="checkoutActionContainer">
-        <button onclick="checkoutCart()" class="w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold py-3 rounded-xl text-xs transition shadow cursor-pointer">Proceed to Mobile Money Escrow Checkout</button>
+        <p class="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900">Escrow is retained as part of the intended marketplace model. Escrow, checkout, payments and order creation are not implemented in this preview; no funds are held.</p>
       </div>
     </div>
   </div>
@@ -355,7 +280,7 @@
     <div id="signupFormContainer" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="text-center space-y-1">
         <h2 class="text-base font-bold text-gray-900">Create Account</h2>
-        <p class="text-xs text-gray-500">Join Zambia's trusted escrow marketplace</p>
+        <p class="text-xs text-gray-500">Create an account with verified email</p>
       </div>
       <div class="space-y-3 text-xs">
         <div>
@@ -415,7 +340,7 @@
           <label class="block font-bold text-gray-700 mb-1">Password</label>
           <input type="password" id="signupPassword" placeholder="••••••••" class="w-full bg-gray-100 rounded-xl px-3 py-2.5 focus:outline-none">
         </div>
-        <button onclick="processSignUp()" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-extrabold py-3 rounded-xl transition shadow cursor-pointer mt-2">Register Account</button>
+        <p class="text-[10px] text-gray-500">Request the code above, then confirm it to complete registration. Account creation requires the configured Supabase email OTP flow.</p>
       </div>
     </div>
 
@@ -457,14 +382,10 @@
   </nav>
 
   <!-- SCRIPT LOGIC -->
+  <!-- Preview logic: genuine Supabase Auth only; no local/mock sign-in, orders, or payments. -->
   <script>
-    let isLoggedIn = localStorage.getItem('yumilo_logged_in') === 'true';
-    let userName = localStorage.getItem('yumilo_user_name') || 'Henry Mwansa';
-    let userLocation = localStorage.getItem('yumilo_user_location') || 'Mansa, Luapula';
-    let userRole = localStorage.getItem('yumilo_user_role') || 'Customer';
-    let generatedOtp = null;
-    let isEmailVerified = false;
-
+    let authClient = null;
+    let currentSession = null;
     const zambiaDistricts = {
       "Lusaka": ["Lusaka", "Chongwe", "Kafue", "Luangwa"],
       "Copperbelt": ["Ndola", "Kitwe", "Mufulira", "Luanshya", "Chingola", "Chililabombwe", "Kalulushi"],
@@ -477,294 +398,131 @@
       "Western": ["Mongu", "Senanga", "Kaoma", "Sesheke", "Kalabo", "Lukulu"],
       "North-Western": ["Solwezi", "Kasempa", "Mwinilunga", "Zambezi", "Kafue", "Chifunabuli"]
     };
-
-    updateAuthUI();
-
     function showToast(msg) {
-      let toast = document.getElementById('toastBanner');
-      if (!toast) return;
-      document.getElementById('toastMessage').innerText = msg;
-      toast.classList.remove('hidden');
-      setTimeout(() => { toast.classList.add('hidden'); }, 3500);
+      const toast = document.getElementById('toastBanner'); if (!toast) return;
+      document.getElementById('toastMessage').textContent = msg;
+      toast.classList.remove('hidden'); setTimeout(() => toast.classList.add('hidden'), 4000);
     }
-
     function updateDistricts() {
-      let provinceSelect = document.getElementById('signupProvince').value;
-      let districtSelect = document.getElementById('signupDistrict');
-      if (!districtSelect) return;
-      districtSelect.innerHTML = '<option value="">Select District</option>';
-      if (zambiaDistricts[provinceSelect]) {
-        zambiaDistricts[provinceSelect].forEach(d => {
-          districtSelect.innerHTML += `<option value="${d}">${d}</option>`;
-        });
-      }
+      const province = document.getElementById('signupProvince').value;
+      const district = document.getElementById('signupDistrict');
+      district.innerHTML = '<option value="">Select District</option>';
+      (zambiaDistricts[province] || []).forEach(d => district.add(new Option(d, d)));
     }
-
-    async function sendRealEmailOtp() {
-      let email = document.getElementById('signupEmail').value.trim();
-      let name = document.getElementById('signupName').value.trim();
-      if (!email || !email.includes('@')) {
-        showToast("Please enter a valid email address first.");
-        return;
-      }
-
-      generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-      showToast("Sending real email via Resend to " + email + "...");
-
-      try {
-        let response = await fetch('/send-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email, passcode: generatedOtp, name: name })
-        });
-        let result = await response.json();
-        if (response.ok && result.success) {
-          showToast("Verification code successfully sent to " + email + "!");
-          document.getElementById('otpInputContainer').classList.remove('hidden');
-          document.getElementById('otpStatusText').innerText = "Check your email inbox for the 6-digit code.";
-        } else {
-          showToast("Error sending email via serverless function.");
-        }
-      } catch (err) {
-        showToast("Network error communicating with server.");
-      }
-    }
-
-    function verifyEmailOtp() {
-      let enteredOtp = document.getElementById('signupOtpInput').value.trim();
-      let statusText = document.getElementById('otpStatusText');
-      if (enteredOtp === generatedOtp) {
-        isEmailVerified = true;
-        statusText.innerText = "✓ Email verified successfully!";
-        showToast("Email verified successfully!");
-      } else {
-        isEmailVerified = false;
-        statusText.innerText = "✗ Invalid code. Please try again.";
-      }
-    }
-
     function switchView(viewId) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-      let targetView = document.getElementById(viewId + '-view');
-      if (targetView) targetView.classList.add('active');
-
-      ['home', 'categories', 'orders', 'messages', 'cart', 'account'].forEach(id => {
-        let navBtn = document.getElementById('nav-' + id);
-        if (navBtn) {
-          if (id === viewId || (viewId === 'catalog' && id === 'categories')) {
-            navBtn.className = "flex flex-col items-center text-[#064e3b] cursor-pointer font-bold";
-          } else {
-            navBtn.className = "flex flex-col items-center text-gray-400 hover:text-[#064e3b] transition cursor-pointer font-normal";
-          }
-        }
+      const target = document.getElementById(viewId + '-view'); if (target) target.classList.add('active');
+      ['home','categories','orders','messages','cart','account'].forEach(id => {
+        const button=document.getElementById('nav-'+id); if (!button) return;
+        button.className = id===viewId ? 'flex flex-col items-center text-[#064e3b] cursor-pointer font-bold' : 'flex flex-col items-center text-gray-400 hover:text-[#064e3b] transition cursor-pointer font-normal';
       });
-      window.scrollTo(0, 0);
-      if (viewId === 'cart') renderCart();
-      if (viewId === 'orders') renderOrders();
+      window.scrollTo(0,0);
+      if (viewId==='orders') renderOrders();
+      if (viewId==='cart') renderCart();
+      if (viewId==='messages' && !currentSession) { switchAccountTab('signin'); showToast('Sign in to access private messages.'); }
     }
-
     function switchAccountTab(tab) {
       switchView('account');
-      let signinForm = document.getElementById('signinFormContainer');
-      let signupForm = document.getElementById('signupFormContainer');
-      let profileCard = document.getElementById('profileCard');
-      let tabsContainer = document.getElementById('authSwitchTabs');
-
-      if (isLoggedIn) {
-        tabsContainer.classList.add('hidden');
-        signinForm.classList.add('hidden');
-        signupForm.classList.add('hidden');
-        profileCard.classList.remove('hidden');
-        return;
-      }
-
-      tabsContainer.classList.remove('hidden');
-      profileCard.classList.add('hidden');
-
-      if (tab === 'signin') {
-        signinForm.classList.remove('hidden');
-        signupForm.classList.add('hidden');
-        document.getElementById('tabSigninBtn').className = "flex-1 py-2 rounded-xl bg-white text-[#064e3b] shadow-sm transition cursor-pointer";
-        document.getElementById('tabSignupBtn').className = "flex-1 py-2 rounded-xl text-gray-600 transition cursor-pointer";
-      } else {
-        signinForm.classList.add('hidden');
-        signupForm.classList.remove('hidden');
-        document.getElementById('tabSignupBtn').className = "flex-1 py-2 rounded-xl bg-white text-[#064e3b] shadow-sm transition cursor-pointer";
-        document.getElementById('tabSigninBtn').className = "flex-1 py-2 rounded-xl text-gray-600 transition cursor-pointer";
-      }
+      const signedIn=!!currentSession;
+      document.getElementById('authSwitchTabs').classList.toggle('hidden', signedIn);
+      document.getElementById('signinFormContainer').classList.toggle('hidden', signedIn || tab!=='signin');
+      document.getElementById('signupFormContainer').classList.toggle('hidden', signedIn || tab!=='signup');
+      document.getElementById('profileCard').classList.toggle('hidden', !signedIn);
     }
-
-    function processSignIn() {
-      let val = document.getElementById('signinIdentifier').value.trim();
-      if (!val) {
-        showToast("Please enter your mobile number or email.");
-        return;
-      }
-      isLoggedIn = true;
-      localStorage.setItem('yumilo_logged_in', 'true');
-      updateAuthUI();
-      showToast("Successfully signed in!");
-      switchView('home');
-    }
-
-    function processSignUp() {
-      let role = document.getElementById('signupRole').value;
-      let name = document.getElementById('signupName').value.trim();
-      let phone = document.getElementById('signupPhone').value.trim();
-      let email = document.getElementById('signupEmail').value.trim();
-      let province = document.getElementById('signupProvince').value;
-      let district = document.getElementById('signupDistrict').value;
-      let pass = document.getElementById('signupPassword').value.trim();
-
-      if (!name || !phone || !email || !province || !district || !pass) {
-        showToast("Please fill in all registration fields.");
-        return;
-      }
-      if (!isEmailVerified) {
-        showToast("Please verify your email address first.");
-        return;
-      }
-
-      userName = name;
-      userLocation = `${district}, ${province}`;
-      userRole = role;
-      localStorage.setItem('yumilo_user_name', name);
-      localStorage.setItem('yumilo_user_location', userLocation);
-      localStorage.setItem('yumilo_user_role', userRole);
-      localStorage.setItem('yumilo_logged_in', 'true');
-      isLoggedIn = true;
-      updateAuthUI();
-      showToast(`Account created successfully as ${role}!`);
-      switchView('home');
-    }
-
-    function processSignOut() {
-      localStorage.removeItem('yumilo_logged_in');
-      localStorage.removeItem('yumilo_user_role');
-      isLoggedIn = false;
-      userRole = 'Customer';
-      updateAuthUI();
-      showToast("Signed out successfully.");
-      switchAccountTab('signin');
-    }
-
+    function escapeText(value) { const d=document.createElement('div'); d.textContent=value||''; return d.innerHTML; }
     function updateAuthUI() {
-      let locked = document.getElementById('ordersLockedContainer');
-      let unlocked = document.getElementById('ordersUnlockedContainer');
-      let profileName = document.getElementById('profileNameDisplay');
-      let profileRoleLocation = document.getElementById('profileRoleLocationDisplay');
-
-      if (profileName) profileName.innerText = userName;
-      if (profileRoleLocation) profileRoleLocation.innerText = `${userRole} • ${userLocation}`;
-
-      if (isLoggedIn) {
-        if (locked) locked.classList.add('hidden');
-        if (unlocked) unlocked.classList.remove('hidden');
-      } else {
-        if (locked) locked.classList.remove('hidden');
-        if (unlocked) unlocked.classList.add('hidden');
-      }
+      const signedIn=!!currentSession, meta=currentSession?.user?.user_metadata||{};
+      const fullName=meta.full_name||currentSession?.user?.email||'Account';
+      const location=[meta.district,meta.province].filter(Boolean).join(', ')||'Zambia';
+      document.getElementById('profileNameDisplay').textContent=fullName;
+      document.getElementById('profileRoleLocationDisplay').textContent=(meta.role||'Customer')+' • '+location;
+      document.getElementById('ordersLockedContainer').classList.toggle('hidden',signedIn);
+      document.getElementById('ordersUnlockedContainer').classList.toggle('hidden',!signedIn);
+      const accountTab=signedIn?'signin':'signin';
+      document.getElementById('authSwitchTabs').classList.toggle('hidden',signedIn);
+      document.getElementById('signinFormContainer').classList.toggle('hidden',signedIn);
+      document.getElementById('signupFormContainer').classList.add('hidden');
+      document.getElementById('profileCard').classList.toggle('hidden',!signedIn);
     }
-
     function filterCategory(cat) { filterCatalog(cat); }
-    function filterCatalog(category) {
-      const items = document.querySelectorAll('.catalog-item');
-      items.forEach(item => {
-        if (category === 'All' || item.getAttribute('data-category') === category) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
-        }
-      });
+    function filterCatalog(cat) { showToast('Live approved catalogue is not connected yet.'); }
+    async function processSignIn() {
+      const email=document.getElementById('signinIdentifier').value.trim();
+      const password=document.getElementById('signinPassword').value;
+      if (!authClient) return showToast('Preview authentication is not configured; no sign-in was attempted.');
+      if (!email || !password) return showToast('Enter your email address and password.');
+      const button=document.querySelector('#signinFormContainer button[onclick="processSignIn()"]'); button.disabled=true;
+      try { const {error}=await authClient.auth.signInWithPassword({email,password}); if(error) throw error; showToast('Signed in with Supabase Auth.'); switchView('home'); }
+      catch(e) { showToast(e.message||'Sign-in failed.'); } finally { button.disabled=false; }
     }
-
-    function addToCart(name, price) {
-      let cart = JSON.parse(localStorage.getItem('yumilo_cart')) || [];
-      cart.push({ name, price });
-      localStorage.setItem('yumilo_cart', JSON.stringify(cart));
-      updateCartBadge();
-      showToast(`Added ${name} to Cart!`);
+    function normalizePhone(raw) {
+      const digits=raw.replace(/\D/g,'');
+      if (digits.startsWith('260') && digits.length===12) return '+'+digits;
+      if (digits.length===10 && digits.startsWith('0')) return '+260'+digits.slice(1);
+      return '';
     }
-
-    function updateCartBadge() {
-      let cart = JSON.parse(localStorage.getItem('yumilo_cart')) || [];
-      let badge = document.getElementById('cartBadgeCount');
-      if (badge) badge.innerText = cart.length;
+    async function sendRealEmailOtp() {
+      const email=document.getElementById('signupEmail').value.trim();
+      const name=document.getElementById('signupName').value.trim();
+      const phone=normalizePhone(document.getElementById('signupPhone').value.trim());
+      const role=document.getElementById('signupRole').value;
+      const province=document.getElementById('signupProvince').value;
+      const district=document.getElementById('signupDistrict').value;
+      const password=document.getElementById('signupPassword').value;
+      if (!authClient) return showToast('Preview authentication is not configured; no code was generated or sent.');
+      if (!name || !phone || !email || !province || !district || !password) return showToast('Complete all required registration fields first.');
+      if (!/^\+2609\d{8}$/.test(phone)) return showToast('Use a valid Zambian mobile number, for example +260 97 123 4567.');
+      if (password.length<8) return showToast('Password must be at least 8 characters.');
+      const button=document.querySelector('#signupFormContainer button[onclick="sendRealEmailOtp()"]'); button.disabled=true;
+      try {
+        const {error}=await authClient.auth.signUp({email,password,options:{data:{full_name:name,phone,role,province,district}}});
+        if(error) throw error;
+        document.getElementById('otpInputContainer').classList.remove('hidden');
+        document.getElementById('otpStatusText').textContent='If email confirmation is enabled, enter the 6-digit code sent by Supabase Auth. No client-generated code is accepted.';
+        showToast('Supabase Auth signup requested. Check the registered email for a real verification code.');
+      } catch(e) { showToast(e.message||'Supabase Auth signup failed.'); }
+      finally { button.disabled=false; }
     }
-    updateCartBadge();
-
+    async function verifyEmailOtp() {
+      if (!authClient) return showToast('Preview authentication is not configured; verification is unavailable.');
+      const email=document.getElementById('signupEmail').value.trim();
+      const token=document.getElementById('signupOtpInput').value.trim();
+      if (!/^\d{6}$/.test(token)) return showToast('Enter the six-digit code from your email.');
+      try {
+        const {error}=await authClient.auth.verifyOtp({email,token,type:'signup'});
+        if(error) throw error;
+        document.getElementById('otpStatusText').textContent='Email confirmed by Supabase Auth.';
+        showToast('Email verified by Supabase Auth.'); switchView('home');
+      } catch(e) { document.getElementById('otpStatusText').textContent=e.message||'Verification failed.'; showToast(e.message||'Verification failed.'); }
+    }
+    async function processSignOut() {
+      if (!authClient) return;
+      const {error}=await authClient.auth.signOut(); if(error) showToast(error.message); else showToast('Signed out.');
+    }
+    function addToCart() { showToast('Live approved products are unavailable; cart ordering is disabled in this preview.'); }
+    function updateCartBadge() { document.getElementById('cartBadgeCount').textContent='0'; }
     function renderCart() {
-      let cart = JSON.parse(localStorage.getItem('yumilo_cart')) || [];
-      let listEl = document.getElementById('cartItemsList');
-      let totalEl = document.getElementById('cartTotal');
-      let countBadgeText = document.getElementById('cartCountBadgeText');
-      let checkoutContainer = document.getElementById('checkoutActionContainer');
-      if (countBadgeText) countBadgeText.innerText = cart.length + " Items";
-
-      if (!listEl || !totalEl) return;
-
-      if (cart.length === 0) {
-        listEl.innerHTML = "<p class='text-gray-500'>Your cart is empty. Add items from the catalog!</p>";
-        totalEl.innerHTML = "Total Escrow Amount: K0.00";
-        if (checkoutContainer) checkoutContainer.innerHTML = "";
-      } else {
-        let total = 0;
-        listEl.innerHTML = cart.map((item) => {
-          total += item.price;
-          return `<div class='flex justify-between items-center border-b pb-2'><span>${item.name}</span><span class='font-bold text-[#064e3b]'>K${item.price.toLocaleString()}</span></div>`;
-        }).join('');
-        totalEl.innerHTML = `Total Escrow Amount: K${total.toLocaleString()}`;
-        if (checkoutContainer) {
-          checkoutContainer.innerHTML = `<button onclick="checkoutCart()" class="w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold py-3 rounded-xl text-xs transition shadow cursor-pointer">Proceed to Mobile Money Escrow Checkout</button>`;
-        }
-      }
+      document.getElementById('cartCountBadgeText').textContent='0 Items';
+      document.getElementById('cartItemsList').innerHTML='<p class="text-gray-600">No live approved catalogue is connected.</p>';
+      document.getElementById('cartTotal').textContent='No checkout or payment is available in this preview.';
+      document.getElementById('checkoutActionContainer').innerHTML='<p class="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900">Escrow remains part of the intended marketplace model, but escrow, checkout, payments, and order creation are not implemented here. No funds are held.</p>';
     }
-
-    function checkoutCart() {
-      let cart = JSON.parse(localStorage.getItem('yumilo_cart')) || [];
-      if (cart.length === 0) return;
-      if (!isLoggedIn) {
-        switchAccountTab('signin');
-        return;
-      }
-      let orders = JSON.parse(localStorage.getItem('yumilo_orders')) || [];
-      let newOrder = {
-        id: 'YM-' + Math.floor(1000 + Math.random() * 9000),
-        items: cart,
-        date: new Date().toLocaleDateString(),
-        status: 'Escrow Held / Processing'
-      };
-      orders.unshift(newOrder);
-      localStorage.setItem('yumilo_orders', JSON.stringify(orders));
-      localStorage.removeItem('yumilo_cart');
-      updateCartBadge();
-      showToast("Order placed successfully! Escrow secured.");
-      switchView('orders');
-    }
-
     function renderOrders() {
-      if (!isLoggedIn) return;
-      let orders = JSON.parse(localStorage.getItem('yumilo_orders')) || [];
-      let container = document.getElementById('ordersListContainer');
-      if (!container) return;
-
-      if (orders.length === 0) {
-        container.innerHTML = "<p class='text-gray-500 py-6 text-center'>You have no active escrow orders yet.</p>";
+      const c=document.getElementById('ordersListContainer');
+      c.innerHTML='<p class="text-gray-600 py-6 text-center">Order history is unavailable until secure backend permissions and order services are completed. This preview never creates orders.</p>';
+    }
+    async function initializePreview() {
+      const config=window.YUMILO_PUBLIC_CONFIG||{};
+      if (config.supabaseAnonKey && window.supabase?.createClient) {
+        authClient=window.supabase.createClient(config.supabaseUrl,config.supabaseAnonKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+        const {data}=await authClient.auth.getSession(); currentSession=data.session; updateAuthUI();
+        authClient.auth.onAuthStateChange((_event,session)=>{currentSession=session;updateAuthUI();});
       } else {
-        container.innerHTML = orders.map(order => `
-          <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-gray-900">Order #${order.id}</span>
-              <span class="bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full text-[10px]">${order.status}</span>
-            </div>
-            <p class="text-[11px] text-gray-500">Date: ${order.date}</p>
-            <div class="pt-2 border-t border-gray-200">
-              ${order.items.map(i => `<div class='flex justify-between text-gray-700'><span>${i.name}</span><span class='font-semibold'>K${i.price.toLocaleString()}</span></div>`).join('')}
-            </div>
-          </div>
-        `).join('');
+        document.getElementById('otpStatusText').textContent='Preview is fail-closed: public Supabase Auth configuration is not supplied.';
+        updateAuthUI();
       }
     }
+    initializePreview();
   </script>
 </body>
 </html>
