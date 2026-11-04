@@ -3,71 +3,170 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yumilo Market - Admin Sign In</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Yumilo Market - Customer Login & Signup</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Supabase JS Client v2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>body { background-color: #fcfbf9; }</style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<body class="min-h-screen flex items-center justify-center p-6 text-gray-800">
 
-  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md border border-gray-200">
-    <div class="text-center mb-6">
-      <h1 class="text-2xl font-bold text-emerald-800">Yumilo Admin</h1>
-      <p class="text-sm text-gray-500 mt-1">Sign in to your command center</p>
+  <div class="max-w-md w-full bg-white rounded-2xl border border-gray-200 shadow-xl overflow-hidden p-8 space-y-6">
+    
+    <!-- BRANDING -->
+    <div class="text-center space-y-1">
+      <h1 class="text-2xl font-black text-[#064e3b]">Yumilo Market</h1>
+      <p class="text-xs text-gray-500">Secure Nationwide Shopping Across Zambia</p>
     </div>
 
-    <!-- Login Form -->
+    <!-- TAB SWITCHER -->
+    <div class="flex bg-gray-100 p-1 rounded-xl text-xs font-semibold">
+      <button onclick="switchTab('login')" id="tabLogin" class="flex-1 py-2.5 rounded-lg bg-white text-gray-900 shadow-sm transition cursor-pointer">Sign In</button>
+      <button onclick="switchTab('signup')" id="tabSignup" class="flex-1 py-2.5 rounded-lg text-gray-500 transition cursor-pointer">Create Account</button>
+    </div>
+
+    <!-- ERROR / SUCCESS ALERTS -->
+    <div id="authAlert" class="hidden p-3 rounded-lg text-xs font-medium"></div>
+
+    <!-- SIGN IN FORM -->
     <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
       <div>
-        <label class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">Email Address</label>
-        <input type="email" id="email" required value="henrymwansa16@gmail.com" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Email Address</label>
+        <input type="email" id="loginEmail" required placeholder="you@example.com" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
       </div>
       <div>
-        <label class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">Password</label>
-        <input type="password" id="password" required placeholder="Enter your password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Password</label>
+        <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
       </div>
-      <button type="submit" id="submitBtn" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 rounded transition text-sm cursor-pointer">
-        Sign In
+      <button type="submit" id="loginBtn" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
+        Sign In to Account
       </button>
-      <div id="errorMsg" class="text-red-500 text-xs text-center font-medium mt-3"></div>
     </form>
+
+    <!-- SIGN UP FORM (Hidden by default) -->
+    <form id="signupForm" onsubmit="handleSignup(event)" class="space-y-4 hidden">
+      <div>
+        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Full Name</label>
+        <input type="text" id="signupName" required placeholder="John Banda" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Email Address</label>
+        <input type="email" id="signupEmail" required placeholder="you@example.com" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Create Password</label>
+        <input type="password" id="signupPassword" required placeholder="Min 6 characters" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+      </div>
+      <button type="submit" id="signupBtn" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
+        Create Customer Account
+      </button>
+    </form>
+
+    <div class="text-center pt-2 border-t border-gray-100">
+      <a href="index.html" class="text-xs text-emerald-700 hover:underline font-semibold">← Return to Store Homepage</a>
+    </div>
+
   </div>
 
-  <!-- Application Logic -->
   <script>
     const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let supabaseClient;
-    try {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch (err) {
-      console.error("Supabase initialization failed:", err);
+    function switchTab(tab) {
+      const loginForm = document.getElementById('loginForm');
+      const signupForm = document.getElementById('signupForm');
+      const tabLogin = document.getElementById('tabLogin');
+      const tabSignup = document.getElementById('tabSignup');
+      const alertBox = document.getElementById('authAlert');
+      alertBox.classList.add('hidden');
+
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        signupForm.classList.add('hidden');
+        tabLogin.className = 'flex-1 py-2.5 rounded-lg bg-white text-gray-900 shadow-sm transition cursor-pointer';
+        tabSignup.className = 'flex-1 py-2.5 rounded-lg text-gray-500 transition cursor-pointer';
+      } else {
+        signupForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+        tabSignup.className = 'flex-1 py-2.5 rounded-lg bg-white text-gray-900 shadow-sm transition cursor-pointer';
+        tabLogin.className = 'flex-1 py-2.5 rounded-lg text-gray-500 transition cursor-pointer';
+      }
+    }
+
+    function showAlert(message, isError = true) {
+      const alertBox = document.getElementById('authAlert');
+      alertBox.textContent = message;
+      alertBox.className = `p-3 rounded-lg text-xs font-medium ${isError ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'}`;
+      alertBox.classList.remove('hidden');
     }
 
     async function handleLogin(e) {
       e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const errorMsg = document.getElementById('errorMsg');
-      const submitBtn = document.getElementById('submitBtn');
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('loginBtn');
 
-      errorMsg.textContent = '';
-      submitBtn.textContent = 'Signing in...';
-      submitBtn.disabled = true;
+      btn.textContent = 'Signing in...';
+      btn.disabled = true;
 
       try {
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        
-        // Successfully signed in, jump straight to the admin command center
-        window.location.href = 'admin.html';
+
+        showAlert('Login successful! Redirecting...', false);
+        setTimeout(() => {
+          // Check if admin or regular customer and route appropriately
+          if (email.includes('admin') || email === 'henrymwansa16@gmail.com') {
+            window.location.href = 'admin.html';
+          } else {
+            window.location.href = 'dashboard.html';
+          }
+        }, 1000);
+
       } catch (err) {
-        console.error("Login error caught:", err);
-        errorMsg.textContent = err.message || 'Login failed. Check your password.';
-        submitBtn.textContent = 'Sign In';
-        submitBtn.disabled = false;
+        showAlert(err.message || 'Failed to sign in. Check your credentials.');
+        btn.textContent = 'Sign In to Account';
+        btn.disabled = false;
+      }
+    }
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      const name = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      const btn = document.getElementById('signupBtn');
+
+      btn.textContent = 'Creating account...';
+      btn.disabled = true;
+
+      try {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: { data: { full_name: name } }
+        });
+
+        if (error) throw error;
+
+        // Also save to profiles table if it exists
+        if (data.user) {
+          await supabaseClient.from('profiles').upsert({
+            id: data.user.id,
+            full_name: name,
+            role: 'customer'
+          });
+        }
+
+        showAlert('Account created successfully! You are now logged in.', false);
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1200);
+
+      } catch (err) {
+        showAlert(err.message || 'Failed to create account.');
+        btn.textContent = 'Create Customer Account';
+        btn.disabled = false;
       }
     }
   </script>
