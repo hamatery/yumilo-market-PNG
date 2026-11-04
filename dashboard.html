@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yumilo Market - Customer Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>body { background-color: #fcfbf9; }</style>
+</head>
+<body class="min-h-screen flex flex-col text-gray-800">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="bg-[#064e3b] text-white px-8 py-4 flex flex-wrap justify-between items-center shadow-md">
+    <div class="flex items-center space-x-3">
+      <h1 class="text-xl font-bold tracking-tight">Yumilo Market</h1>
+      <span class="text-xs bg-emerald-700 px-2.5 py-1 rounded-full text-emerald-100">Customer Portal</span>
+    </div>
+    <div class="flex items-center space-x-4">
+      <span id="userEmailDisplay" class="text-sm font-medium text-emerald-100">Loading account...</span>
+      <button onclick="handleLogout()" class="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition cursor-pointer">Logout</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-6xl w-full mx-auto p-6 md:p-8 space-y-8 flex-1">
+    
+    <!-- WELCOME BANNER -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div class="space-y-1">
+        <h2 class="text-2xl font-extrabold text-gray-900">Welcome back, Shopper!</h2>
+        <p class="text-xs text-gray-500">Track your nationwide orders, view purchase history, and manage your account details.</p>
+      </div>
+      <a href="index.html" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow transition cursor-pointer">
+        🛍️ Continue Shopping
+      </a>
+    </div>
+
+    <!-- STATS SUMMARY -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2">
+        <span class="text-xs font-semibold text-gray-500">Total Orders Placed</span>
+        <p id="statTotalOrders" class="text-3xl font-extrabold text-gray-900">0</p>
+      </div>
+      <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2">
+        <span class="text-xs font-semibold text-gray-500">Active Deliveries</span>
+        <p id="statActiveDeliveries" class="text-3xl font-extrabold text-emerald-700">0</p>
+      </div>
+      <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-2">
+        <span class="text-xs font-semibold text-gray-500">Completed Orders</span>
+        <p id="statCompletedOrders" class="text-3xl font-extrabold text-gray-900">0</p>
+      </div>
+    </div>
+
+    <!-- ORDER HISTORY SECTION -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden space-y-4">
+      <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900">My Order History</h3>
+          <p class="text-xs text-gray-500">Live status updates for your purchases across Zambia.</p>
+        </div>
+        <button onclick="loadCustomerOrders()" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg font-semibold text-gray-700 cursor-pointer">Refresh</button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-gray-50 text-gray-500 font-bold uppercase border-b text-xs">
+              <th class="py-3 px-6">Order ID</th>
+              <th class="py-3 px-6">Delivery Location</th>
+              <th class="py-3 px-6">Total Amount</th>
+              <th class="py-3 px-6">Status</th>
+              <th class="py-3 px-6">Date</th>
+              <th class="py-3 px-6 text-right">Details</th>
+            </tr>
+          </thead>
+          <tbody id="customerOrdersTable" class="divide-y divide-gray-200 text-gray-700">
+            <tr>
+              <td colspan="6" class="text-center py-12 text-gray-400">Loading your orders...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-gray-200 px-8 py-6 text-center text-xs text-gray-500">
+    <p>&copy; 2026 Yumilo Market. All rights reserved. Secure Nationwide Delivery.</p>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let loggedInUserEmail = '';
+
+    async function handleLogout() {
+      try { await supabaseClient.auth.signOut(); } catch (err) {}
+      localStorage.clear(); sessionStorage.clear();
+      window.location.href = 'login.html';
+    }
+
+    async function loadCustomerOrders() {
+      try {
+        const { data: { session }, error: sessionErr } = await supabaseClient.auth.getSession();
+        if (sessionErr || !session) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        loggedInUserEmail = session.user.email;
+        document.getElementById('userEmailDisplay').textContent = loggedInUserEmail;
+
+        // Fetch orders belonging to this customer (by email or user_id)
+        const { data: orders, error } = await supabaseClient
+          .from('orders')
+          .select('*')
+          .or(`user_email.eq.${loggedInUserEmail},customer_email.eq.${loggedInUserEmail}`)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        const tbody = document.getElementById('customerOrdersTable');
+        if (!orders || orders.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-gray-400">You haven't placed any orders yet.</td></tr>`;
+          return;
+        }
+
+        let activeCount = 0, completedCount = 0;
+        tbody.innerHTML = '';
+
+        orders.forEach(o => {
+          const status = o.payment_status || o.status || 'Pending';
+          if (status.includes('Completed') || status.includes('Delivered')) {
+            completedCount++;
+          } else {
+            activeCount++;
+          }
+
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50';
+          row.innerHTML = `
+            <td class="py-4 px-6 font-mono text-xs font-semibold">#${o.id.slice(0,8)}</td>
+            <td class="py-4 px-6 text-xs">${o.delivery_city || 'Zambia'}, ${o.delivery_province || 'National'}</td>
+            <td class="py-4 px-6 font-bold text-emerald-700">K${Number(o.total_amount || 0).toFixed(2)}</td>
+            <td class="py-4 px-6"><span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded text-xs font-semibold">${status}</span></td>
+            <td class="py-4 px-6 text-gray-500 text-xs">${o.created_at ? new Date(o.created_at).toLocaleDateString() : 'N/A'}</td>
+            <td class="py-4 px-6 text-right">
+              <span class="text-xs text-emerald-700 font-semibold">Viewed</span>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Update stats
+        document.getElementById('statTotalOrders').textContent = orders.length;
+        document.getElementById('statActiveDeliveries').textContent = activeCount;
+        document.getElementById('statCompletedOrders').textContent = completedCount;
+
+      } catch (err) {
+        console.error("Error loading customer orders:", err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadCustomerOrders);
+  </script>
+</body>
+</html>
