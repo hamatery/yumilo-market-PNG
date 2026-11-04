@@ -37,7 +37,19 @@ export async function onRequestPost(context) {
         from: "Yumilo Market <noreply@yumilomarket.store>",
         to: [email],
         subject: "Your Yumilo Market Verification Code",
-        html: `<p>Mwapoleka ${name || 'Customer'},</p><p>Your verification code for Yumilo Market is: <strong style="font-size: 20px; color: #064e3b;">${passcode}</strong></p><p>Please enter this code to complete your registration.</p>`
+        html: `
+          <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #064e3b;">Yumilo Market</h2>
+            <p>Dear ${name || 'Customer'},</p>
+            <p>Your verification code for Yumilo Market is:</p>
+            <div style="background-color: #f3f4f6; padding: 12px 20px; font-size: 24px; font-weight: bold; color: #064e3b; letter-spacing: 3px; display: inline-block; border-radius: 6px; margin: 10px 0;">
+              ${passcode}
+            </div>
+            <p>Please enter this code on the website to complete your verification.</p>
+            <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
+            <p style="font-size: 12px; color: #6b7280;">If you did not request this verification code, please ignore this email.</p>
+          </div>
+        `
       })
     });
 
