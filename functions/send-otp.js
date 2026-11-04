@@ -47,6 +47,9 @@ export async function onRequestPost(context) {
             </div>
             <p>Please enter this code on the website to complete your verification.</p>
             <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
+            <p style="font-size: 12px; color: #6b7280; line-height: 1.5;">
+              <strong>Security Notice:</strong> Yumilo Market will never ask for your password, and all payments must be completed securely on our official website.
+            </p>
             <p style="font-size: 12px; color: #6b7280;">If you did not request this verification code, please ignore this email.</p>
           </div>
         `
