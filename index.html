@@ -17,12 +17,11 @@
 </head>
 <body class="text-gray-800 antialiased selection:bg-emerald-600 selection:text-white flex flex-col min-h-screen pb-20 md:pb-0">
 
-  <!-- TOP HEADER (Desktop & Mobile Optimized) -->
+  <!-- TOP HEADER -->
   <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
       <!-- Logo -->
       <a href="#" onclick="switchView('home'); return false;" class="flex items-center space-x-2.5 group cursor-pointer flex-shrink-0">
-        <img src="logo.png" alt="Yumilo Logo" class="h-9 w-auto object-contain" onerror="this.src='https://via.placeholder.com/36?text=YM'">
         <span class="font-black text-sm sm:text-base tracking-wider text-[#064e3b]">YUMILOMARKET</span>
       </a>
 
@@ -32,7 +31,7 @@
         <input type="text" placeholder="Search products across Zambia..." class="w-full ml-2 text-xs text-gray-700 bg-transparent focus:outline-none" onkeypress="if(event.key==='Enter')switchView('catalog')">
       </div>
 
-      <!-- Header Actions (Account & Cart) -->
+      <!-- Header Actions -->
       <div class="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
         <a href="#" onclick="switchAccountTab('signin'); return false;" class="hidden md:block text-xs font-bold text-gray-700 hover:text-[#064e3b] px-3 py-2 transition">Sign In</a>
         <a href="#" onclick="switchView('account'); return false;" class="text-xs font-bold text-gray-700 hover:text-[#064e3b] px-2.5 py-2 rounded-xl flex items-center gap-1 bg-gray-50 border border-gray-200">
@@ -54,7 +53,7 @@
       </div>
     </div>
 
-    <!-- Category Bar Just Below Top Bar (Sideways scrolling on mobile) -->
+    <!-- Category Bar -->
     <div class="bg-gray-50 border-t border-gray-100 px-4 py-2.5">
       <div class="max-w-6xl mx-auto flex items-center gap-2 overflow-x-auto hide-scrollbar text-xs font-bold text-gray-600">
         <button onclick="filterCatalog('All'); switchView('catalog');" class="bg-[#064e3b] text-white px-3.5 py-1.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer">All</button>
@@ -73,8 +72,6 @@
 
   <!-- ================= VIEW 1: HOME ================= -->
   <div id="home-view" class="view-section active pb-20 space-y-8">
-    
-    <!-- Hero Area -->
     <section class="bg-[#064e3b] text-white pt-8 pb-12 px-6">
       <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
         <div class="space-y-3.5 text-left max-w-lg">
@@ -117,7 +114,7 @@
       </div>
     </section>
 
-    <!-- Featured Products (Tidy 4-column grid on desktop, 2-column on mobile) -->
+    <!-- Featured Products -->
     <section class="max-w-5xl mx-auto px-6">
       <div class="flex justify-between items-center mb-5">
         <div>
@@ -128,7 +125,6 @@
       </div>
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <!-- Item 1 -->
         <div class="bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
           <div>
             <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
@@ -138,7 +134,6 @@
           </div>
           <button onclick="addToCart('X-Series Smart Phone 128GB', 3450)" class="mt-4 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
         </div>
-        <!-- Item 2 -->
         <div class="bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
           <div>
             <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
@@ -148,7 +143,6 @@
           </div>
           <button onclick="addToCart('Premium Cotton Casual Tee', 180)" class="mt-4 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
         </div>
-        <!-- Item 3 -->
         <div class="bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
           <div>
             <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
@@ -158,7 +152,6 @@
           </div>
           <button onclick="addToCart('Super Meal Roller Meal (25kg)', 240)" class="mt-4 w-full bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-extrabold text-xs py-2.5 rounded-xl transition shadow cursor-pointer">Add to Cart</button>
         </div>
-        <!-- Item 4 -->
         <div class="bg-white p-3.5 rounded-3xl shadow-sm border border-gray-200/80 flex flex-col justify-between hover:shadow-md transition">
           <div>
             <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=400&q=80" class="w-full h-36 sm:h-44 object-cover rounded-2xl mb-3">
@@ -171,7 +164,7 @@
       </div>
     </section>
 
-    <!-- Trust & Ordering Workflow Section -->
+    <!-- Trust Section -->
     <section class="max-w-5xl mx-auto px-6 py-4">
       <div class="bg-emerald-50 rounded-3xl p-6 border border-emerald-100 grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-gray-700">
         <div class="space-y-1.5">
@@ -351,7 +344,7 @@
       </div>
     </div>
 
-    <!-- Sign Up Form -->
+    <!-- Sign Up Form (Using Resend Serverless Function /send-otp) -->
     <div id="signupFormContainer" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="text-center space-y-1">
         <h2 class="text-base font-bold text-gray-900">Create Account</h2>
@@ -509,7 +502,7 @@
       }
 
       generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-      showToast("Sending real email via Resend to " + email + "...");
+      showToast("Sending verification code via Resend...");
 
       try {
         let response = await fetch('/send-otp', {
@@ -666,7 +659,6 @@
       }
     }
 
-    function filterCategory(cat) { filterCatalog(cat); }
     function filterCatalog(category) {
       const items = document.querySelectorAll('.catalog-item');
       items.forEach(item => {
