@@ -81,7 +81,7 @@
       <div class="flex justify-between items-center mb-6">
         <div>
           <h3 class="text-lg font-bold text-gray-900 tracking-tight">Featured Zambian Marketplace Catalog</h3>
-          <p class="text-xs text-gray-500">Escrow-protected goods ready for nationwide delivery</p>
+          <p class="text-xs text-gray-500">Browse marketplace products across Zambia</p>
         </div>
         <button onclick="switchView('catalog')" class="text-xs font-bold bg-emerald-100 text-emerald-800 px-3.5 py-1.5 rounded-full hover:bg-emerald-200 cursor-pointer">View All Catalog →</button>
       </div>
@@ -415,7 +415,7 @@
           <img src="logo.jpg" alt="Logo" class="h-8 w-auto object-contain" onerror="this.src='https://via.placeholder.com/30?text=YM'">
           <span class="font-bold text-white text-sm">YUMILOMARKET</span>
         </div>
-        <p class="text-[11px] text-emerald-200 leading-relaxed">Zambia's verified universal marketplace. Operating nationwide across all 10 provinces with secure mobile money escrow.</p>
+        <p class="text-[11px] text-emerald-200 leading-relaxed">Zambia's universal marketplace. Escrow is a planned feature and is not currently available.</p>
       </div>
       <div>
         <p class="font-bold text-white uppercase tracking-wider text-[11px] mb-3">Legal & Compliance</p>
@@ -633,8 +633,9 @@
       if (isLoggedIn) {
         const meta=user.user_metadata||{};
         userName=String(meta.full_name||user.email||'Customer').replace(/[<>]/g,'').slice(0,100);
-        userLocation=[meta.city,meta.province].filter(Boolean).join(', ') || 'Zambia';
-        userRole=meta.account_type ? meta.account_type[0].toUpperCase()+meta.account_type.slice(1) : 'Customer';
+        userLocation=String([meta.city,meta.province].filter(Boolean).join(', ') || 'Zambia').replace(/[<>]/g,'').slice(0,160);
+        // User-editable metadata is never a source of authorization.
+        userRole='Customer';
         localStorage.setItem('yumilo_user_name',userName);
         localStorage.setItem('yumilo_user_location',userLocation);
         localStorage.setItem('yumilo_user_role',userRole);
