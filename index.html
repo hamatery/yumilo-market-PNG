@@ -20,18 +20,15 @@
   <!-- TOP HEADER -->
   <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
-      <!-- Logo -->
       <a href="#" onclick="switchView('home'); return false;" class="flex items-center space-x-2.5 group cursor-pointer flex-shrink-0">
         <span class="font-black text-sm sm:text-base tracking-wider text-[#064e3b]">YUMILOMARKET</span>
       </a>
 
-      <!-- Prominent Search Bar -->
       <div class="flex-1 max-w-xl mx-2 hidden sm:flex items-center bg-gray-100 rounded-2xl px-3.5 py-2 border border-gray-200 focus-within:border-emerald-600 focus-within:bg-white transition">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         <input type="text" placeholder="Search products across Zambia..." class="w-full ml-2 text-xs text-gray-700 bg-transparent focus:outline-none" onkeypress="if(event.key==='Enter')switchView('catalog')">
       </div>
 
-      <!-- Header Actions -->
       <div class="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
         <a href="#" onclick="switchAccountTab('signin'); return false;" class="hidden md:block text-xs font-bold text-gray-700 hover:text-[#064e3b] px-3 py-2 transition">Sign In</a>
         <a href="#" onclick="switchView('account'); return false;" class="text-xs font-bold text-gray-700 hover:text-[#064e3b] px-2.5 py-2 rounded-xl flex items-center gap-1 bg-gray-50 border border-gray-200">
@@ -45,7 +42,6 @@
       </div>
     </div>
 
-    <!-- Mobile Search Bar Row -->
     <div class="px-4 pb-3 sm:hidden">
       <div class="flex items-center bg-gray-100 rounded-xl px-3 py-2 border border-gray-200">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -53,7 +49,6 @@
       </div>
     </div>
 
-    <!-- Category Bar -->
     <div class="bg-gray-50 border-t border-gray-100 px-4 py-2.5">
       <div class="max-w-6xl mx-auto flex items-center gap-2 overflow-x-auto hide-scrollbar text-xs font-bold text-gray-600">
         <button onclick="filterCatalog('All'); switchView('catalog');" class="bg-[#064e3b] text-white px-3.5 py-1.5 rounded-full shadow-sm whitespace-nowrap cursor-pointer">All</button>
@@ -65,12 +60,11 @@
     </div>
   </header>
 
-  <!-- FLOATING NOTIFICATION TOAST -->
   <div id="toastBanner" class="fixed top-24 right-6 z-50 hidden bg-[#064e3b] text-white text-xs font-bold px-5 py-3 rounded-2xl shadow-2xl border border-emerald-600 transition-all duration-300 pointer-events-none">
     <span id="toastMessage">Notification</span>
   </div>
 
-  <!-- ================= VIEW 1: HOME ================= -->
+  <!-- HOME VIEW -->
   <div id="home-view" class="view-section active pb-20 space-y-8">
     <section class="bg-[#064e3b] text-white pt-8 pb-12 px-6">
       <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
@@ -88,7 +82,6 @@
       </div>
     </section>
 
-    <!-- Popular Categories Quick Links -->
     <section class="max-w-5xl mx-auto px-6">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-sm font-bold text-gray-900">Popular categories</h3>
@@ -114,7 +107,6 @@
       </div>
     </section>
 
-    <!-- Featured Products -->
     <section class="max-w-5xl mx-auto px-6">
       <div class="flex justify-between items-center mb-5">
         <div>
@@ -163,27 +155,9 @@
         </div>
       </div>
     </section>
-
-    <!-- Trust Section -->
-    <section class="max-w-5xl mx-auto px-6 py-4">
-      <div class="bg-emerald-50 rounded-3xl p-6 border border-emerald-100 grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-gray-700">
-        <div class="space-y-1.5">
-          <h4 class="font-bold text-[#064e3b] text-sm">📦 How ordering works</h4>
-          <p>Browse verified catalogs across all 10 provinces of Zambia, add items to your secure escrow cart, and complete checkout instantly.</p>
-        </div>
-        <div class="space-y-1.5">
-          <h4 class="font-bold text-[#064e3b] text-sm">🔒 Manual payment checks</h4>
-          <p>All mobile money transactions undergo secure verification before vendor dispatch to ensure total buyer protection.</p>
-        </div>
-        <div class="space-y-1.5">
-          <h4 class="font-bold text-[#064e3b] text-sm">🚚 Reliable delivery</h4>
-          <p>Coordinated nationwide logistics partners ensure your goods arrive safely right at your doorstep.</p>
-        </div>
-      </div>
-    </section>
   </div>
 
-  <!-- ================= VIEW 2: CATEGORIES ================= -->
+  <!-- CATEGORIES VIEW -->
   <div id="categories-view" class="view-section max-w-5xl mx-auto px-6 py-8 space-y-6 pb-20">
     <div class="bg-[#064e3b] text-white p-6 rounded-3xl flex justify-between items-center shadow-md">
       <div>
@@ -216,7 +190,7 @@
     </div>
   </div>
 
-  <!-- ================= VIEW 3: LIVE CATALOG ================= -->
+  <!-- CATALOG VIEW -->
   <div id="catalog-view" class="view-section max-w-5xl mx-auto px-6 py-8 space-y-6 pb-20">
     <div class="bg-[#064e3b] text-white p-6 rounded-3xl flex justify-between items-center shadow-md">
       <div>
@@ -266,7 +240,7 @@
     </div>
   </div>
 
-  <!-- ================= VIEW 4: ORDERS ================= -->
+  <!-- ORDERS VIEW -->
   <div id="orders-view" class="view-section max-w-3xl mx-auto px-6 py-8 space-y-6 pb-20">
     <div id="ordersLockedContainer" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 text-center space-y-4">
       <div class="w-14 h-14 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto text-xl font-bold">🔒</div>
@@ -284,7 +258,7 @@
     </div>
   </div>
 
-  <!-- ================= VIEW 5: MESSAGES ================= -->
+  <!-- MESSAGES VIEW -->
   <div id="messages-view" class="view-section max-w-3xl mx-auto px-6 py-8 space-y-6 pb-20">
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="border-b pb-3">
@@ -301,7 +275,7 @@
     </div>
   </div>
 
-  <!-- ================= VIEW 6: CART ================= -->
+  <!-- CART VIEW -->
   <div id="cart-view" class="view-section max-w-3xl mx-auto px-6 py-8 space-y-6 pb-20">
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="border-b pb-3 flex justify-between items-center">
@@ -318,14 +292,13 @@
     </div>
   </div>
 
-  <!-- ================= VIEW 7: ACCOUNT ================= -->
+  <!-- ACCOUNT VIEW -->
   <div id="account-view" class="view-section max-w-md mx-auto px-6 py-8 space-y-6 pb-20">
     <div id="authSwitchTabs" class="flex bg-gray-200 p-1 rounded-2xl text-xs font-bold text-center">
       <button onclick="switchAccountTab('signin')" id="tabSigninBtn" class="flex-1 py-2 rounded-xl bg-white text-[#064e3b] shadow-sm transition cursor-pointer">Sign In</button>
       <button onclick="switchAccountTab('signup')" id="tabSignupBtn" class="flex-1 py-2 rounded-xl text-gray-600 transition cursor-pointer">Create Account</button>
     </div>
 
-    <!-- Sign In Form -->
     <div id="signinFormContainer" class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="text-center space-y-1">
         <h2 class="text-base font-bold text-gray-900">Welcome Back</h2>
@@ -344,7 +317,6 @@
       </div>
     </div>
 
-    <!-- Sign Up Form (Using Resend Serverless Function /send-otp) -->
     <div id="signupFormContainer" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="text-center space-y-1">
         <h2 class="text-base font-bold text-gray-900">Create Account</h2>
@@ -412,7 +384,6 @@
       </div>
     </div>
 
-    <!-- Profile Dashboard -->
     <div id="profileCard" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
       <div class="flex items-center space-x-4 border-b pb-4">
         <div class="w-12 h-12 rounded-full bg-[#064e3b] text-white flex items-center justify-center font-black text-lg">HM</div>
@@ -425,7 +396,6 @@
     </div>
   </div>
 
-  <!-- FIXED MOBILE BOTTOM NAVIGATION BAR -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 py-2.5 px-4 flex justify-around items-center z-40 shadow-2xl">
     <button onclick="switchView('home')" id="nav-home" class="flex flex-col items-center text-[#064e3b] cursor-pointer font-bold">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -443,16 +413,15 @@
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
       <span class="text-[10px] font-medium mt-0.5">Messages</span>
     </button>
-    <button onclick="switchView('cart')" id="nav-cart" class="flex flex-col items-center text-gray-400 hover:text-[#064e3b] transition cursor-pointer">
+    <button onclick="switchValue('cart')" id="nav-cart" class="flex flex-col items-center text-gray-400 hover:text-[#064e3b] transition cursor-pointer">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
       <span class="text-[10px] font-medium mt-0.5">Cart</span>
     </button>
   </nav>
 
-  <!-- SCRIPT LOGIC -->
   <script>
     let isLoggedIn = localStorage.getItem('yumilo_logged_in') === 'true';
-    let userName = localStorage.getItem('yumilo_user_name') || 'Henry Mwansa';
+    let userName = localStorage.googleapis || 'Henry Mwansa';
     let userLocation = localStorage.getItem('yumilo_user_location') || 'Mansa, Luapula';
     let userRole = localStorage.getItem('yumilo_user_role') || 'Customer';
     let generatedOtp = null;
@@ -662,7 +631,7 @@
     function filterCatalog(category) {
       const items = document.querySelectorAll('.catalog-item');
       items.forEach(item => {
-        if (category === 'All' || item.getAttribute('data-category') === category) {
+        if (category === 'All' || item.googleapis === category) {
           item.style.display = 'flex';
         } else {
           item.style.display = 'none';
@@ -738,6 +707,7 @@
       if (!isLoggedIn) return;
       let orders = JSON.parse(localStorage.getItem('yumilo_orders')) || [];
       let container = document.getElementById('ordersListContainer');
+      let countBadgeText = document.getElementById('cartCountBadgeText');
       if (!container) return;
 
       if (orders.length === 0) {
