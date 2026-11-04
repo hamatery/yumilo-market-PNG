@@ -29,7 +29,7 @@
     <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="space-y-1">
         <h2 class="text-2xl font-extrabold text-gray-900">Welcome back, Shopper!</h2>
-        <p class="text-xs text-gray-500">Track your nationwide orders, view purchase history, and manage your account details.</p>
+        <p class="text-xs text-gray-500">Track your nationwide orders, view purchase history, and manage your account details across Zambia.</p>
       </div>
       <a href="index.html" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow transition cursor-pointer">
         🛍️ Continue Shopping
@@ -93,21 +93,27 @@
   <script>
     const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    });
 
     let loggedInUserEmail = '';
 
     async function handleLogout() {
       try { await supabaseClient.auth.signOut(); } catch (err) {}
       localStorage.clear(); sessionStorage.clear();
-      window.location.href = 'login.html';
+      window.location.replace('login.html');
     }
 
     async function loadCustomerOrders() {
       try {
         const { data: { session }, error: sessionErr } = await supabaseClient.auth.getSession();
         if (sessionErr || !session) {
-          window.location.href = 'login.html';
+          window.location.replace('login.html');
           return;
         }
 
@@ -149,7 +155,7 @@
             <td class="py-4 px-6"><span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded text-xs font-semibold">${status}</span></td>
             <td class="py-4 px-6 text-gray-500 text-xs">${o.created_at ? new Date(o.created_at).toLocaleDateString() : 'N/A'}</td>
             <td class="py-4 px-6 text-right">
-              <span class="text-xs text-emerald-700 font-semibold">Viewed</span>
+              <span class="text-xs text-emerald-700 font-semibold">Active</span>
             </td>
           `;
           tbody.appendChild(row);
