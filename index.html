@@ -98,7 +98,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- PRODUCT 1 -->
         <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between">
-          <div class="p-4 bg-gray-50 h-40 flex items-center justify-center text-4xl">📱</div>
+          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&q=80" alt="Smartphone" class="w-full h-40 object-cover">
           <div class="p-4 space-y-2">
             <span class="text-[10px] font-bold text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded">Electronics</span>
             <h4 class="text-xs font-bold text-gray-900">X-Series Smart Phone 128GB</h4>
@@ -111,7 +111,7 @@
 
         <!-- PRODUCT 2 -->
         <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between">
-          <div class="p-4 bg-gray-50 h-40 flex items-center justify-center text-4xl">👕</div>
+          <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=400&q=80" alt="Casual Tee" class="w-full h-40 object-cover">
           <div class="p-4 space-y-2">
             <span class="text-[10px] font-bold text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded">Fashion</span>
             <h4 class="text-xs font-bold text-gray-900">Premium Cotton Casual Tee</h4>
@@ -124,7 +124,7 @@
 
         <!-- PRODUCT 3 -->
         <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between">
-          <div class="p-4 bg-gray-50 h-40 flex items-center justify-center text-4xl">🌾</div>
+          <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&q=80" alt="Roller Meal" class="w-full h-40 object-cover">
           <div class="p-4 space-y-2">
             <span class="text-[10px] font-bold text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded">Groceries</span>
             <h4 class="text-xs font-bold text-gray-900">Super Meal Roller Meal (25kg)</h4>
@@ -137,7 +137,7 @@
 
         <!-- PRODUCT 4 -->
         <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between">
-          <div class="p-4 bg-gray-50 h-40 flex items-center justify-center text-4xl">🐓</div>
+          <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=400&q=80" alt="Broiler Chicken" class="w-full h-40 object-cover">
           <div class="p-4 space-y-2">
             <span class="text-[10px] font-bold text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded">Agriculture</span>
             <h4 class="text-xs font-bold text-gray-900">Whole Broiler Chicken (Zamhatch)</h4>
@@ -181,7 +181,6 @@
       alert(`Added "${name}" to your cart!`);
     }
 
-    // Check if user is logged in and update the Sign In button to Dashboard
     document.addEventListener('DOMContentLoaded', async () => {
       try {
         const { data: { session } } = await supabaseClient.auth.getSession();
@@ -192,9 +191,7 @@
             authBtn.href = 'dashboard.html';
           }
         }
-      } catch (err) {
-        console.warn("Session check error:", err);
-      }
+      } catch (err) {}
     });
   </script>
 </body>
