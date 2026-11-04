@@ -70,7 +70,21 @@
   <script>
     const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    });
+
+    // If already logged in, redirect immediately to prevent login loops
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session && session.user) {
+        redirectToDashboard(session.user.email);
+      }
+    });
 
     function switchTab(tab) {
       const loginForm = document.getElementById('loginForm');
@@ -100,6 +114,14 @@
       alertBox.classList.remove('hidden');
     }
 
+    function redirectToDashboard(email) {
+      if (email.includes('admin') || email === 'henrymwansa16@gmail.com') {
+        window.location.replace('admin.html');
+      } else {
+        window.location.replace('dashboard.html');
+      }
+    }
+
     async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
@@ -114,14 +136,10 @@
         if (error) throw error;
 
         showAlert('Login successful! Redirecting...', false);
+        
         setTimeout(() => {
-          // Check if admin or regular customer and route appropriately
-          if (email.includes('admin') || email === 'henrymwansa16@gmail.com') {
-            window.location.href = 'admin.html';
-          } else {
-            window.location.href = 'dashboard.html';
-          }
-        }, 1000);
+          redirectToDashboard(email);
+        }, 800);
 
       } catch (err) {
         showAlert(err.message || 'Failed to sign in. Check your credentials.');
@@ -149,7 +167,6 @@
 
         if (error) throw error;
 
-        // Also save to profiles table if it exists
         if (data.user) {
           await supabaseClient.from('profiles').upsert({
             id: data.user.id,
@@ -158,10 +175,10 @@
           });
         }
 
-        showAlert('Account created successfully! You are now logged in.', false);
+        showAlert('Account created successfully! Redirecting...', false);
         setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 1200);
+          redirectToDashboard(email);
+        }, 1000);
 
       } catch (err) {
         showAlert(err.message || 'Failed to create account.');
