@@ -143,6 +143,7 @@
       }
     }
 
+    // Login via serverless /login endpoint (avoids adblockers)
     async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
@@ -153,8 +154,22 @@
       btn.disabled = true;
 
       try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || 'Failed to sign in.');
+        }
+
+        // Set session in Supabase client storage
+        await supabaseClient.auth.setSession({
+          access_token: result.session.access_token,
+          refresh_token: result.session.refresh_token
+        });
 
         showAlert('Login successful! Redirecting...', false);
         setTimeout(() => redirectToDashboard(email), 800);
@@ -215,7 +230,7 @@
       document.getElementById('authAlert').classList.add('hidden');
     }
 
-    // Verify Code and Create Account directly via Supabase Auth Client
+    // Verify Code and Call Cloudflare /signup Endpoint
     async function handleVerifyAndRegister(e) {
       e.preventDefault();
       const enteredCode = document.getElementById('otpCode').value.trim();
@@ -230,15 +245,34 @@
       btn.disabled = true;
 
       try {
-        const { data, error } = await supabaseClient.auth.signUp({
-          email: tempUserData.email,
-          password: tempUserData.password,
-          options: {
-            data: { full_name: tempUserData.name }
-          }
+        const response = await fetch('/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: tempUserData.email,
+            password: tempUserData.password,
+            fullName: tempUserData.name
+          })
         });
 
-        if (error) throw error;
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || 'Failed to complete registration.');
+        }
+
+        // Automatically log them in after successful registration
+        const loginRes = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: tempUserData.email, password: tempUserData.password })
+        });
+        const loginResult = await loginRes.json();
+        if (loginResult.success) {
+          await supabaseClient.auth.setSession({
+            access_token: loginResult.session.access_token,
+            refresh_token: loginResult.session.refresh_token
+          });
+        }
 
         showAlert('Account verified and created successfully! Redirecting...', false);
         setTimeout(() => redirectToDashboard(tempUserData.email), 1200);
