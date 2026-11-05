@@ -80,7 +80,7 @@ export async function onRequestPost(context) {
       });
     }
 
-    // ACTION 2: SIGNUP USER IN SUPABASE
+    // ACTION 2: SIGNUP USER IN SUPABASE (WITH EXPLICIT ERROR TRAPPING)
     if (action === 'signup') {
       if (!email || !password) {
         return new Response(JSON.stringify({ success: false, error: "Missing email or password" }), {
@@ -89,36 +89,44 @@ export async function onRequestPost(context) {
         });
       }
 
-      const supRes = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          data: { full_name: fullName || 'Customer' }
-        })
-      });
+      try {
+        const supRes = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            email,
+            password,
+            data: { full_name: fullName || 'Customer' }
+          })
+        });
 
-      const supData = await supRes.json();
+        const supData = await supRes.json();
 
-      if (!supRes.ok) {
-        return new Response(JSON.stringify({ 
-          success: false, 
-          error: supData.msg || supData.error_description || supData.message || "Registration failed" 
-        }), {
+        if (!supRes.ok) {
+          return new Response(JSON.stringify({ 
+            success: false, 
+            error: supData.msg || supData.error_description || supData.message || "Registration failed" 
+          }), {
+            headers: { "Content-Type": "application/json" },
+            status: 400
+          });
+        }
+
+        return new Response(JSON.stringify({ success: true, data: supData }), {
           headers: { "Content-Type": "application/json" },
-          status: 400
+          status: 200
+        });
+
+      } catch (fetchErr) {
+        return new Response(JSON.stringify({ success: false, error: "Supabase connection failed: " + fetchErr.message }), {
+          headers: { "Content-Type": "application/json" },
+          status: 500
         });
       }
-
-      return new Response(JSON.stringify({ success: true, data: supData }), {
-        headers: { "Content-Type": "application/json" },
-        status: 200
-      });
     }
 
     return new Response(JSON.stringify({ success: false, error: "Invalid action" }), {
