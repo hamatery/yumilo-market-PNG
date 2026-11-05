@@ -157,6 +157,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            action: 'send-otp',
             email: tempUserData.email,
             passcode: tempUserData.generatedOtp
           })
@@ -202,11 +203,12 @@
       btn.disabled = true;
 
       try {
-        // Calls the Cloudflare serverless function (/signup) instead of direct browser fetch
-        const response = await fetch('/signup', {
+        // Calls the verified /send-otp function with action: 'signup'
+        const response = await fetch('/send-otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            action: 'signup',
             email: tempUserData.email,
             password: tempUserData.password,
             fullName: tempUserData.name
