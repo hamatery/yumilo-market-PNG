@@ -1,247 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yumilo Market - Customer Portal</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>body { background-color: #fcfbf9; }</style>
-</head>
-<body class="min-h-screen text-gray-800 flex flex-col">
-
-  <!-- TOP HEADER -->
-  <header class="bg-[#064e3b] text-white shadow-md">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <h1 class="text-xl font-black tracking-wide">YUMILO MARKET</h1>
-        <span class="text-xs bg-emerald-800 px-2.5 py-1 rounded-full font-medium">Customer Portal</span>
-      </div>
-      <div class="flex items-center space-x-4">
-        <span id="userEmailDisplay" class="text-xs font-mono bg-emerald-900/60 px-3 py-1.5 rounded-lg">Loading...</span>
-        <button onclick="handleLogout()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition cursor-pointer">Logout</button>
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN CONTAINER -->
-  <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full space-y-6">
-
-    <!-- TAB NAVIGATION -->
-    <div class="flex flex-wrap gap-2 bg-white p-1.5 rounded-2xl border border-gray-200 shadow-sm">
-      <button onclick="switchTab('overview')" id="tabBtnOverview" class="flex-1 py-2.5 px-4 rounded-xl bg-[#064e3b] text-white text-xs font-bold transition cursor-pointer shadow-sm">Overview</button>
-      <button onclick="switchTab('orders')" id="tabBtnOrders" class="flex-1 py-2.5 px-4 rounded-xl text-gray-600 hover:bg-gray-100 text-xs font-bold transition cursor-pointer">My Orders</button>
-      <button onclick="switchTab('address')" id="tabBtnAddress" class="flex-1 py-2.5 px-4 rounded-xl text-gray-600 hover:bg-gray-100 text-xs font-bold transition cursor-pointer">Delivery Address</button>
-      <button onclick="switchTab('messages')" id="tabBtnMessages" class="flex-1 py-2.5 px-4 rounded-xl text-gray-600 hover:bg-gray-100 text-xs font-bold transition cursor-pointer">Messages & Inbox</button>
-    </div>
-
-    <!-- ALERT BANNER -->
-    <div id="portalAlert" class="hidden p-3 rounded-xl text-xs font-medium"></div>
-
-    <!-- TAB 1: OVERVIEW -->
-    <div id="tabOverview" class="space-y-6">
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="space-y-2 text-center md:text-left">
-          <h2 class="text-2xl font-extrabold text-[#064e3b]">Welcome back, Shopper!</h2>
-          <p class="text-xs text-gray-500 max-w-lg">Manage your nationwide orders across Zambia, update your delivery addresses, and chat with verified vendors all in one secure place.</p>
-        </div>
-      </div>
-
-      <!-- STATS GRID -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-1">
-          <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Orders Placed</p>
-          <p id="statTotalOrders" class="text-3xl font-black text-[#064e3b]">0</p>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-1">
-          <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Active Deliveries</p>
-          <p id="statActiveDeliveries" class="text-3xl font-black text-emerald-600">0</p>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-1">
-          <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Completed Orders</p>
-          <p id="statCompletedOrders" class="text-3xl font-black text-gray-800">0</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 2: MY ORDERS -->
-    <div id="tabOrders" class="space-y-6 hidden">
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden p-6 space-y-4">
-        <div class="flex justify-between items-center">
-          <div>
-            <h3 class="text-base font-bold text-[#064e3b]">Order History & Tracking</h3>
-            <p class="text-xs text-gray-500">Live status updates for your purchases across Zambia.</p>
-          </div>
-          <button onclick="loadUserOrders()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold px-3 py-2 rounded-xl transition cursor-pointer">Refresh Orders</button>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-gray-100 text-[11px] text-gray-400 uppercase font-bold">
-                <th class="py-3 px-4">Order ID</th>
-                <th class="py-3 px-4">Delivery Location</th>
-                <th class="py-3 px-4">Total Amount</th>
-                <th class="py-3 px-4">Status</th>
-                <th class="py-3 px-4">Date</th>
-              </tr>
-            </thead>
-            <tbody id="ordersTableBody" class="text-xs divide-y divide-gray-50">
-              <tr>
-                <td colspan="5" class="py-6 text-center text-gray-400">No orders placed yet.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 3: DELIVERY ADDRESS -->
-    <div id="tabAddress" class="space-y-6 hidden">
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 max-w-xl mx-auto space-y-6">
-        <div>
-          <h3 class="text-lg font-bold text-[#064e3b]">Saved Delivery Address</h3>
-          <p class="text-xs text-gray-500">Set your preferred drop-off location for fast nationwide dispatches.</p>
-        </div>
-
-        <form onsubmit="saveAddress(event)" class="space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Full Name</label>
-            <input type="text" id="addrName" required placeholder="John Banda" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Phone Number (MTN / Airtel / Zamtel)</label>
-            <input type="text" id="addrPhone" required placeholder="097XXXXXXX" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">City / Province</label>
-            <select id="addrCity" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none bg-white">
-              <option value="Mansa">Mansa (Luapula)</option>
-              <option value="Lusaka">Lusaka</option>
-              <option value="Kitwe">Kitwe (Copperbelt)</option>
-              <option value="Ndola">Ndola (Copperbelt)</option>
-              <option value="Livingstone">Livingstone (Southern)</option>
-              <option value="Kasama">Kasama (Northern)</option>
-              <option value="Chipata">Chipata (Eastern)</option>
-              <option value="Solwezi">Solwezi (North-Western)</option>
-              <option value="Kabwe">Kabwe (Central)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Street Address / Landmark</label>
-            <textarea id="addrStreet" rows="3" required placeholder="House number, street name, or prominent landmark..." class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none"></textarea>
-          </div>
-          <button type="submit" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
-            Save Address Details
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- TAB 4: MESSAGES & NOTIFICATIONS -->
-    <div id="tabMessages" class="space-y-6 hidden">
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-4 max-w-2xl mx-auto">
-        <div>
-          <h3 class="text-base font-bold text-[#064e3b]">Vendor Messages & Yumilo Broadcasts</h3>
-          <p class="text-xs text-gray-500">Direct notifications and order updates from verified vendors and Yumilo support.</p>
-        </div>
-
-        <div class="space-y-3" id="messagesInbox">
-          <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1">
-            <div class="flex justify-between items-center text-[11px] text-emerald-800 font-bold">
-              <span>Yumilo Market System</span>
-              <span>Today</span>
-            </div>
-            <p class="text-xs text-gray-700">Welcome to Yumilo Market! Your account is active and verified securely. Shop with confidence across Zambia.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="text-center py-6 text-xs text-gray-400 border-t border-gray-100 mt-auto">
-    &copy; 2026 Yumilo Market. All rights reserved. Secure Nationwide Delivery.
-  </footer>
-
-  <script>
-    const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-    });
-
-    let currentUser = null;
-
-    async function checkAuth() {
-      const { data: { session }, error } = await supabaseClient.auth.getSession();
-      if (!session) {
-        window.location.replace('login.html');
-        return;
-      }
-      currentUser = session.user;
-      document.getElementById('userEmailDisplay').textContent = currentUser.email;
-      loadSavedAddress();
-    }
-
-    function switchTab(tab) {
-      const tabs = ['overview', 'orders', 'address', 'messages'];
-      tabs.forEach(t => {
-        document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.toggle('hidden', t !== tab);
-        const btn = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
-        if (t === tab) {
-          btn.className = 'flex-1 py-2.5 px-4 rounded-xl bg-[#064e3b] text-white text-xs font-bold transition cursor-pointer shadow-sm';
-        } else {
-          btn.className = 'flex-1 py-2.5 px-4 rounded-xl text-gray-600 hover:bg-gray-100 text-xs font-bold transition cursor-pointer';
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yumilo Market - Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
         }
-      });
-    }
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
 
-    function showPortalAlert(message, isError = false) {
-      const alertBox = document.getElementById('portalAlert');
-      alertBox.textContent = message;
-      alertBox.className = `p-3 rounded-xl text-xs font-medium ${isError ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'}`;
-      alertBox.classList.remove('hidden');
-      setTimeout(() => alertBox.classList.add('hidden'), 4000);
-    }
+        /* Header Styles */
+        .yumilo-header-wrapper {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .yumilo-main-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 20px;
+        }
+        .header-logo .logo-text {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
+            text-decoration: none;
+        }
+        .header-logo .logo-highlight {
+            color: #ff6600;
+        }
+        .header-search-container {
+            flex: 1;
+            max-width: 650px;
+        }
+        .search-input-wrapper {
+            display: flex;
+            border: 2px solid #ff6600;
+            border-radius: 24px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .search-input-wrapper input {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+        .search-btn {
+            background: #ff6600;
+            color: white;
+            border: none;
+            padding: 0 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .search-btn:hover {
+            background: #e65c00;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: #334155;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+        .action-item:hover {
+            background: #f8fafc;
+            color: #ff6600;
+        }
+        .action-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        .action-text small {
+            font-size: 10px;
+            color: #64748b;
+        }
+        .icon-badge-wrapper {
+            position: relative;
+        }
+        .badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 10px;
+        }
+        .action-item .label {
+            font-size: 12px;
+            font-weight: 500;
+        }
 
-    async function handleLogout() {
-      await supabaseClient.auth.signOut();
-      window.location.replace('login.html');
-    }
+        /* Sub-Navigation Bar */
+        .yumilo-sub-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+            border-top: 1px solid #f1f5f9;
+        }
+        .sub-nav-left, .sub-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #1e293b;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 4px;
+            transition: color 0.2s;
+        }
+        .nav-link:hover {
+            color: #ff6600;
+        }
+        .categories-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            background: #ff6600;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 4px 4px 0 0;
+        }
+        .categories-btn:hover {
+            color: white;
+            background: #e65c00;
+        }
 
-    function saveAddress(e) {
-      e.preventDefault();
-      const addressData = {
-        name: document.getElementById('addrName').value,
-        phone: document.getElementById('addrPhone').value,
-        city: document.getElementById('addrCity').value,
-        street: document.getElementById('addrStreet').value
-      };
-      localStorage.setItem('yumilo_user_address', JSON.stringify(addressData));
-      showPortalAlert('Delivery address saved successfully!', false);
-    }
+        /* Main Dashboard Content Layout */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 24px auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 24px;
+        }
 
-    function loadSavedAddress() {
-      const saved = localStorage.getItem('yumilo_user_address');
-      if (saved) {
-        try {
-          const data = JSON.parse(saved);
-          document.getElementById('addrName').value = data.name || '';
-          document.getElementById('addrPhone').value = data.phone || '';
-          document.getElementById('addrCity').value = data.city || 'Mansa';
-          document.getElementById('addrStreet').value = data.street || '';
-        } catch (e) {}
-      }
-    }
+        /* Sidebar Categories */
+        .sidebar-categories {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .sidebar-categories h3 {
+            font-size: 15px;
+            margin-bottom: 12px;
+            color: #1e293b;
+        }
+        .sidebar-categories ul {
+            list-style: none;
+        }
+        .sidebar-categories li a {
+            display: block;
+            padding: 8px 10px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 4px;
+            transition: background 0.1s, color 0.1s;
+        }
+        .sidebar-categories li a:hover {
+            background: #fff7ed;
+            color: #ff6600;
+        }
 
-    function loadUserOrders() {
-      // Future hook for loading orders from Supabase database
-      showPortalAlert('Order list is up to date.', false);
-    }
+        /* Hero & Feed Content */
+        .main-content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .banner-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .promo-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .promo-card h4 {
+            font-size: 14px;
+            color: #1e293b;
+        }
+        .promo-card .price-tag {
+            font-weight: 700;
+            color: #ff6600;
+            font-size: 16px;
+        }
 
-    checkAuth();
-  </script>
+        @media (max-width: 900px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            .header-actions .label, .action-text {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Wrapper -->
+    <header class="yumilo-header-wrapper">
+        <div class="yumilo-main-header">
+            <!-- Logo -->
+            <div class="header-logo">
+                <a href="dashboard.html">
+                    <span class="logo-text">Yumilo<span class="logo-highlight">Market</span></span>
+                </a>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="header-search-container">
+                <div class="search-input-wrapper">
+                    <input type="text" placeholder="Search poultry, fast food, bulk supplies..." id="main-search-input" />
+                    <button class="search-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        Search
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="header-actions">
+                <div class="action-item location-selector">
+                    <span class="flag">🇿🇲</span>
+                    <div class="action-text">
+                        <small>Deliver to:</small>
+                        <span>ZM</span>
+                    </div>
+                </div>
+
+                <div class="action-item lang-currency">
+                    <span>English-ZMW</span>
+                </div>
+
+                <a href="cart.html" class="action-item icon-badge-wrapper">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    <span class="badge">2</span>
+                    <span class="label">Cart</span>
+                </a>
+
+                <a href="messages.html" class="action-item icon-badge-wrapper">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span class="badge">1</span>
+                    <span class="label">Messages</span>
+                </a>
+
+                <a href="orders.html" class="action-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                    <span class="label">Orders</span>
+                </a>
+
+                <div class="action-item profile-dropdown">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span class="label">Account</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sub-Navigation Category Bar -->
+        <nav class="yumilo-sub-header">
+            <div class="sub-nav-left">
+                <a href="#" class="nav-link categories-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    All Categories
+                </a>
+                <a href="#" class="nav-link">Verified Suppliers</a>
+                <a href="#" class="nav-link">Poultry & Broilers</a>
+                <a href="#" class="nav-link">Fast Foods</a>
+            </div>
+            <div class="sub-nav-right">
+                <a href="#" class="nav-link">Help Center</a>
+                <a href="#" class="nav-link">Sell on Yumilo</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Dashboard Body Grid -->
+    <div class="dashboard-container">
+        <!-- Sidebar Categories -->
+        <aside class="sidebar-categories">
+            <h3>Categories for you</h3>
+            <ul>
+                <li><a href="#">Poultry & Farming Supplies</a></li>
+                <li><a href="#">Fast Food & Catering</a></li>
+                <li><a href="#">Packaging & Boxes</a></li>
+                <li><a href="#">Electronics & Gadgets</a></li>
+                <li><a href="#">Wholesale Goods</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Feed -->
+        <main class="main-content-area">
+            <div class="banner-grid">
+                <div class="promo-card">
+                    <h4>Ross 308 Broiler Batch</h4>
+                    <div class="price-tag">K 18.50 / chick</div>
+                    <p style="font-size: 12px; color: #64748b;">Verified Local Hatchery Supply</p>
+                </div>
+                <div class="promo-card">
+                    <h4>Disposable Lunch Boxes</h4>
+                    <div class="price-tag">K 0.92 / pc</div>
+                    <p style="font-size: 12px; color: #64748b;">Eco-friendly Bagasse Containers</p>
+                </div>
+                <div class="promo-card">
+                    <h4>Yumilo Fast Food Combo</h4>
+                    <div class="price-tag">K 120.00</div>
+                    <p style="font-size: 12px; color: #64748b;">Special Daily Enterprise Menu</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
 </body>
 </html>
