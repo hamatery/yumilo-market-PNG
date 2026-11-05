@@ -19,38 +19,20 @@
 </head>
 <body class="min-h-screen text-gray-800 flex flex-col pb-28">
 
-  <!-- PROFESSIONAL ALIBABA-STYLE TOP UTILITY BAR -->
-  <div class="bg-gray-100 border-b border-gray-200 text-[11px] text-gray-600 px-8 py-1.5 hidden md:flex justify-between items-center w-full z-50">
-    <div class="flex items-center space-x-6">
-      <div class="flex items-center space-x-1 font-medium cursor-pointer hover:text-[#064e3b]" onclick="openDeliveryModal()">
-        <span>📍 Deliver to:</span>
-        <span id="selectedLocationLabel" class="font-bold text-[#064e3b]">Zambia (All Provinces)</span>
-      </div>
-      <div class="flex items-center space-x-1 font-medium cursor-pointer hover:text-[#064e3b]">
-        <span>🌐 English - ZMW</span>
-      </div>
-    </div>
-    <div class="flex items-center space-x-6 font-medium">
-      <a href="#" onclick="switchNavTab('orders'); return false;" class="hover:text-[#064e3b]">Buyer Central</a>
-      <a href="#" onclick="alert('Yumilo Market Help Center: Contact support at support@yumilomarket.store or call our Lusaka/Mansa desks.'); return false;" class="hover:text-[#064e3b]">Help Center</a>
-      <a href="#" onclick="alert('About Yumilo Market: Zambia premier nationwide wholesale marketplace connecting farmers, manufacturers, and buyers.'); return false;" class="hover:text-[#064e3b]">About Yumarket</a>
-      <a href="#" onclick="alert('Sell on Yumarket: Register as a vendor to list your products across all Zambian provinces.'); return false;" class="text-[#064e3b] font-bold hover:underline">Sell on Yumarket</a>
-    </div>
-  </div>
-
-  <!-- MAIN HEADER -->
+  <!-- UNIFIED PROFESSIONAL HEADER (ALIBABA STYLE) -->
   <header class="bg-[#064e3b] text-white sticky top-0 z-50 shadow-md w-full">
-    <!-- Top Bar -->
-    <div class="w-full px-8 py-3.5 flex justify-between items-center border-b border-emerald-800/60">
+    <!-- Top Utility & Navigation Row -->
+    <div class="w-full px-8 py-3 flex justify-between items-center border-b border-emerald-800/65 text-xs">
+      <!-- Left: Logo & Core Nav -->
       <div class="flex items-center space-x-6">
         <a href="index.html" class="flex items-center space-x-2.5 cursor-pointer">
-          <div class="w-10 h-10 rounded-xl bg-[#f59e0b] flex items-center justify-center text-lg shadow">🌿</div>
+          <div class="w-9 h-9 rounded-xl bg-[#f59e0b] flex items-center justify-center text-base shadow">🌿</div>
           <div>
             <h1 class="text-base font-black tracking-tight leading-none text-white">Yumilo</h1>
             <h1 class="text-base font-black tracking-tight leading-none text-white">Market</h1>
           </div>
         </a>
-        <nav class="hidden md:flex items-center space-x-5 text-xs font-bold text-emerald-100">
+        <nav class="hidden lg:flex items-center space-x-4 font-bold text-emerald-100">
           <button class="text-white border-b-2 border-[#f59e0b] pb-0.5">Products</button>
           <button onclick="switchNavTab('categories')" class="hover:text-white transition cursor-pointer">Categories</button>
           <button onclick="switchNavTab('orders')" class="hover:text-white transition cursor-pointer">Wholesale & Bulk</button>
@@ -58,25 +40,38 @@
         </nav>
       </div>
 
-      <!-- HEADER RIGHT SLOT (DYNAMIC AUTH / CART / ACCOUNT) -->
-      <div class="flex items-center space-x-4" id="headerRightSlot">
-        <!-- Injected dynamically -->
+      <!-- Right: Utility Links & Account -->
+      <div class="flex items-center space-x-5 text-[11px] font-medium text-emerald-100">
+        <div class="hidden xl:flex items-center space-x-1 cursor-pointer hover:text-white" onclick="openDeliveryModal()" title="Select province & district">
+          <span>📍 Deliver to:</span>
+          <span id="selectedLocationLabel" class="font-bold text-white">Zambia</span>
+        </div>
+        <span class="hidden xl:inline text-emerald-600">|</span>
+        <span class="hidden xl:inline cursor-pointer hover:text-white">English - ZMW</span>
+        <span class="hidden xl:inline text-emerald-600">|</span>
+        <a href="#" onclick="alert('Help Center: Contact support at support@yumilomarket.store or call our Lusaka/Mansa desks.'); return false;" class="hover:text-white hidden md:inline">Help Center</a>
+        <a href="#" onclick="alert('Sell on Yumarket: Register as a vendor to list your products across all Zambian provinces.'); return false;" class="text-[#f59e0b] font-bold hover:underline hidden md:inline">Sell on Yumarket</a>
+        
+        <!-- Cart & Auth Slot -->
+        <div class="flex items-center space-x-3 pl-2" id="headerRightSlot">
+          <!-- Injected dynamically -->
+        </div>
       </div>
     </div>
 
-    <!-- SEARCH & CAMERA IMAGE SEARCH BAR -->
+    <!-- Search Bar Row with Camera Image Search -->
     <div class="w-full px-8 py-3 bg-[#064e3b]">
-      <div class="max-w-4xl mx-auto flex items-center bg-white rounded-2xl p-1.5 shadow-md border border-emerald-700">
-        <div class="pl-4 pr-2 text-gray-400 text-lg">🔍</div>
-        <input type="text" id="searchInput" oninput="handleSearch(event)" placeholder="Search products, agricultural supplies, electronics, shops..." class="w-full py-2 px-2 text-xs text-gray-800 focus:outline-none bg-transparent">
+      <div class="max-w-4xl mx-auto flex items-center bg-white rounded-2xl p-1 shadow-md border border-emerald-700">
+        <div class="pl-4 pr-2 text-gray-400 text-base">🔍</div>
+        <input type="text" id="searchInput" oninput="handleSearch(event)" placeholder="Search products, agricultural supplies, electronics, shops..." class="w-full py-2.5 px-2 text-xs text-gray-800 focus:outline-none bg-transparent">
         
-        <!-- CAMERA IMAGE SEARCH BUTTON -->
-        <label for="imageSearchInput" class="px-3 py-2 text-gray-500 hover:text-[#064e3b] cursor-pointer text-lg transition" title="Search by capturing or uploading photo">
+        <!-- Camera Image Search Button -->
+        <label for="imageSearchInput" class="px-3 py-2 text-gray-500 hover:text-[#064e3b] cursor-pointer text-base transition" title="Search by capturing or uploading photo">
           📷
           <input type="file" id="imageSearchInput" accept="image/*" class="hidden" onchange="handleImageSearch(event)">
         </label>
 
-        <button onclick="applySearchAndFilter()" class="bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-bold px-7 py-2.5 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow-xs">
+        <button onclick="applySearchAndFilter()" class="bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow-xs">
           Search
         </button>
       </div>
@@ -377,14 +372,14 @@
       if (currentUser) {
         slot.innerHTML = `
           <button onclick="switchNavTab('orders')" class="flex items-center space-x-1 text-emerald-100 hover:text-white transition cursor-pointer text-xs font-bold" title="Cart & Orders">
-            <span class="text-xl">🛒</span>
+            <span class="text-base">🛒</span>
             <span class="hidden sm:inline">Cart</span>
           </button>
-          <button onclick="switchNavTab('messages')" class="relative p-2 text-white hover:bg-emerald-800 rounded-xl transition cursor-pointer" title="Notifications">
-            <span class="text-xl">🔔</span>
-            <span class="absolute top-0.5 right-0.5 w-2.5 h-2.5 bg-[#f59e0b] rounded-full ring-2 ring-[#064e3b]"></span>
+          <button onclick="switchNavTab('messages')" class="relative p-1.5 text-white hover:bg-emerald-800 rounded-xl transition cursor-pointer" title="Notifications">
+            <span class="text-base">🔔</span>
+            <span class="absolute top-0 right-0 w-2 h-2 bg-[#f59e0b] rounded-full ring-2 ring-[#064e3b]"></span>
           </button>
-          <button onclick="switchNavTab('account')" class="flex items-center space-x-1.5 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition cursor-pointer">
+          <button onclick="switchNavTab('account')" class="flex items-center space-x-1 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition cursor-pointer">
             <span>👤</span>
             <span class="hidden sm:inline">Account</span>
           </button>
@@ -393,560 +388,14 @@
         slot.innerHTML = `
           <div class="flex items-center space-x-3">
             <button onclick="switchNavTab('orders')" class="flex items-center space-x-1 text-emerald-100 hover:text-white transition cursor-pointer text-xs font-bold">
-              <span class="text-xl">🛒</span>
+              <span class="text-base">🛒</span>
               <span class="hidden sm:inline">Cart</span>
             </button>
             <a href="login.html" class="flex items-center space-x-1 text-emerald-100 hover:text-white text-xs font-bold transition cursor-pointer">
               <span>👤</span>
               <span>Sign in</span>
             </a>
-            <a href="login.html" class="bg-[#f59e0b] hover:bg-amber-600 text-gray-900 text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs">Create account</a>
-          </div>
-        `;
-      }
-    }
-
-    function renderProducts(products) {
-      const grid = document.getElementById('productGrid');
-      const countEl = document.getElementById('productCount');
-      countEl.textContent = `Showing ${products.length} items`;
-
-      if (products.length === 0) {
-        grid.innerHTML = `<p class="col-span-full text-center text-xs text-gray-500 py-10">No products found matching your search.</p>`;
-        return;
-      }
-      grid.innerHTML = products.map(p => `
-        <div class="bg-white rounded-2xl border border-gray-200/80 shadow-xs p-3.5 flex flex-col justify-between space-y-3 hover:shadow-md transition">
-          <div class="h-32 bg-[#faf8f5] rounded-xl overflow-hidden flex items-center justify-center p-2 relative">
-            <img src="${p.img}" alt="${p.name}" class="h-full object-contain">
-            ${p.verified ? '<span class="absolute top-2 left-2 bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded-md">Verified</span>' : ''}
-          </div>
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-emerald-700 uppercase">${p.category}</span>
-            <h4 class="text-xs font-bold text-gray-800 line-clamp-1">${p.name}</h4>
-            <p class="text-sm font-black text-[#064e3b]">K${p.price.toFixed(2)}</p>
-            <p class="text-[10px] text-gray-500">Min. order: ${p.minOrder}</p>
-          </div>
-          <button onclick="viewProduct('${p.name}', ${p.price})" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-2 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow-xs">
-            View
-          </button>
-        </div>
-      `).join('');
-    }
-
-    function filterCategory(cat) {
-      currentCategory = cat;
-      applySearchAndFilter();
-      window.scrollTo({ top: 300, behavior: 'smooth' });
-    }
-
-    function handleSearch(e) {
-      applySearchAndFilter();
-    }
-
-    function handleImageSearch(e) {
-      const file = e.target.files[0];
-      if (file) {
-        alert(`Image captured/uploaded: "${file.name}". Scanning product database across Zambian suppliers...`);
-      }
-    }
-
-    function applySearchAndFilter() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      let filtered = mockProducts;
-
-      if (currentCategory !== 'All') {
-        filtered = filtered.filter(p => p.category === currentCategory);
-      }
-
-      if (query.trim() !== '') {
-        filtered = filtered.filter(p => p.name.toLowerCase().includes(query));
-      }
-
-      renderProducts(filtered);
-    }
-
-    function switchNavTab(tabName) {
-      ['home', 'categories', 'messages', 'orders', 'account'].forEach(t => {
-        document.getElementById(`view${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.toggle('hidden', t !== tabName);
-      });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function openDeliveryModal() {
-      document.getElementById('deliveryModal').classList.remove('hidden');
-    }
-
-    function closeDeliveryModal() {
-      document.getElementById('deliveryModal').classList.add('hidden');
-    }
-
-    function saveDeliveryLocation() {
-      const province = document.getElementById('provinceSelect').value;
-      const district = document.getElementById('districtInput').value.trim();
-      const label = district ? `${district}, ${province}` : province;
-      document.getElementById('selectedLocationLabel').textContent = label;
-      closeDeliveryModal();
-      alert(`Delivery location updated to: ${label}`);
-    }
-
-    function renderAccountView() {
-      const container = document.getElementById('accountContent');
-      if (!currentUser) {
-        container.innerHTML = `
-          <div class="text-center space-y-3 py-6">
-            <p class="text-xs text-gray-500 font-medium">You are not signed in.</p>
-            <a href="login.html" class="inline-block bg-[#064e3b] text-white font-bold px-6 py-3 rounded-xl text-xs uppercase shadow-xs">Sign In or Register</a>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = `
-        <div class="space-y-4 text-xs">
-          <div class="p-4 bg-emerald-50 rounded-xl space-y-1 border border-emerald-100">
-            <p class="font-bold text-emerald-900">Signed in account:</p>
-            <p class="font-mono text-emerald-700">${currentUser.email}</p>
-          </div>
-          <div>
-            <label class="block font-bold text-gray-700 uppercase mb-1">Delivery Address & Province</label>
-            <input type="text" id="userAddressInput" placeholder="District, Province, Street Landmark" class="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
-          </div>
-          <button onclick="saveUserSettings()" class="w-full bg-[#064e3b] text-white font-bold py-3 rounded-xl uppercase transition cursor-pointer shadow-xs">Save Address Settings</button>
-          <button onclick="handleLogout()" class="w-full bg-red-50 hover:bg-red-100 text-red-700 font-bold py-3 rounded-xl uppercase transition cursor-pointer border border-red-200">Sign Out</button>
-        </div>
-      `;
-    }
-
-    function viewProduct(name, price) {
-      if (!currentUser) {
-        if (confirm(`You selected ${name} (K${price.toFixed(2)}). Sign in to proceed with secure checkout.`)) {
-          window.location.href = 'login.html';
-        }
-        return;
-      }
-      alert(`Proceeding to secure checkout for ${name} (K${price.toFixed(2)}). Orders are finalized only after payment confirmation.`);
-    }
-
-    function saveUserSettings() {
-      alert('Delivery address settings updated successfully!');
-    }
-
-    async function handleLogout() {
-      await supabaseClient.auth.signOut();
-      window.location.reload();
-    }
-
-    function loadOrders() {
-      alert('Orders are up to date.');
-    }
-
-    initApp();
-  </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yumilo Market - Nationwide Marketplace Across Zambia</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    body { background-color: #f4efe6; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in { animation: fadeIn 0.3s ease-in-out forwards; }
-  </style>
-</head>
-<body class="min-h-screen text-gray-800 flex flex-col pb-28">
-
-  <!-- PROFESSIONAL ALIBABA-STYLE TOP UTILITY BAR -->
-  <div class="bg-gray-100 border-b border-gray-200 text-[11px] text-gray-600 px-8 py-1.5 hidden md:flex justify-between items-center w-full z-50">
-    <div class="flex items-center space-x-6">
-      <div class="flex items-center space-x-1 font-medium cursor-pointer hover:text-[#064e3b]" onclick="openDeliveryModal()">
-        <span>📍 Deliver to:</span>
-        <span id="selectedLocationLabel" class="font-bold text-[#064e3b]">Zambia (All Provinces)</span>
-      </div>
-      <div class="flex items-center space-x-1 font-medium cursor-pointer hover:text-[#064e3b]">
-        <span>🌐 English - ZMW</span>
-      </div>
-    </div>
-    <div class="flex items-center space-x-6 font-medium">
-      <a href="#" onclick="switchNavTab('orders'); return false;" class="hover:text-[#064e3b]">Buyer Central</a>
-      <a href="#" onclick="alert('Yumilo Market Help Center: Contact support at support@yumilomarket.store or call our Lusaka/Mansa desks.'); return false;" class="hover:text-[#064e3b]">Help Center</a>
-      <a href="#" onclick="alert('About Yumilo Market: Zambia premier nationwide wholesale marketplace connecting farmers, manufacturers, and buyers.'); return false;" class="hover:text-[#064e3b]">About Yumarket</a>
-      <a href="#" onclick="alert('Sell on Yumarket: Register as a vendor to list your products across all Zambian provinces.'); return false;" class="text-[#064e3b] font-bold hover:underline">Sell on Yumarket</a>
-    </div>
-  </div>
-
-  <!-- MAIN HEADER -->
-  <header class="bg-[#064e3b] text-white sticky top-0 z-50 shadow-md w-full">
-    <!-- Top Bar -->
-    <div class="w-full px-8 py-3.5 flex justify-between items-center border-b border-emerald-800/60">
-      <div class="flex items-center space-x-6">
-        <a href="index.html" class="flex items-center space-x-2.5 cursor-pointer">
-          <div class="w-10 h-10 rounded-xl bg-[#f59e0b] flex items-center justify-center text-lg shadow">🌿</div>
-          <div>
-            <h1 class="text-base font-black tracking-tight leading-none text-white">Yumilo</h1>
-            <h1 class="text-base font-black tracking-tight leading-none text-white">Market</h1>
-          </div>
-        </a>
-        <nav class="hidden md:flex items-center space-x-5 text-xs font-bold text-emerald-100">
-          <button class="text-white border-b-2 border-[#f59e0b] pb-0.5">Products</button>
-          <button onclick="switchNavTab('categories')" class="hover:text-white transition cursor-pointer">Categories</button>
-          <button onclick="switchNavTab('orders')" class="hover:text-white transition cursor-pointer">Wholesale & Bulk</button>
-          <button onclick="switchNavTab('messages')" class="hover:text-white transition cursor-pointer">Supplier Support</button>
-        </nav>
-      </div>
-
-      <!-- HEADER RIGHT SLOT (DYNAMIC AUTH / CART / ACCOUNT) -->
-      <div class="flex items-center space-x-4" id="headerRightSlot">
-        <!-- Injected dynamically -->
-      </div>
-    </div>
-
-    <!-- SEARCH & CAMERA IMAGE SEARCH BAR -->
-    <div class="w-full px-8 py-3 bg-[#064e3b]">
-      <div class="max-w-4xl mx-auto flex items-center bg-white rounded-2xl p-1.5 shadow-md border border-emerald-700">
-        <div class="pl-4 pr-2 text-gray-400 text-lg">🔍</div>
-        <input type="text" id="searchInput" oninput="handleSearch(event)" placeholder="Search products, agricultural supplies, electronics, shops..." class="w-full py-2 px-2 text-xs text-gray-800 focus:outline-none bg-transparent">
-        
-        <!-- CAMERA IMAGE SEARCH BUTTON -->
-        <label for="imageSearchInput" class="px-3 py-2 text-gray-500 hover:text-[#064e3b] cursor-pointer text-lg transition" title="Search by capturing or uploading photo">
-          📷
-          <input type="file" id="imageSearchInput" accept="image/*" class="hidden" onchange="handleImageSearch(event)">
-        </label>
-
-        <button onclick="applySearchAndFilter()" class="bg-[#f59e0b] hover:bg-amber-600 text-gray-900 font-bold px-7 py-2.5 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow-xs">
-          Search
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN DESKTOP CONTAINER (ALIBABA SPLIT LAYOUT) -->
-  <main class="w-full px-8 py-6 flex-1 space-y-6">
-
-    <!-- VIEW 1: HOME -->
-    <div id="viewHome" class="space-y-6 fade-in">
-      
-      <!-- HERO GRID: LEFT SIDEBAR CATEGORIES + CENTER/RIGHT PROMOS -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        
-        <!-- LEFT SIDEBAR CATEGORIES -->
-        <div class="lg:col-span-3 bg-white rounded-2xl border border-gray-200/80 shadow-xs p-4 space-y-2 hidden lg:block">
-          <h3 class="text-xs font-black text-[#064e3b] uppercase tracking-wider px-2 pb-2 border-b border-gray-100">Categories for you</h3>
-          <div class="space-y-1 text-xs">
-            <button onclick="filterCategory('Food')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
-              <span>🌾</span><span>Food & Groceries</span>
-            </button>
-            <button onclick="filterCategory('Agriculture')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
-              <span>🐣</span><span>Agriculture & Poultry</span>
-            </button>
-            <button onclick="filterCategory('Home')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
-              <span>🫖</span><span>Home & Kitchen</span>
-            </button>
-            <button onclick="filterCategory('Fashion')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
-              <span>🎒</span><span>Fashion & Apparel</span>
-            </button>
-            <button onclick="filterCategory('Electronics')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
-              <span>📱</span><span>Electronics & Gadgets</span>
-            </button>
-            <button onclick="filterCategory('Services')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
-              <span>⚡</span><span>Services & SMS Broadcast</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- CENTER & RIGHT FEATURED PROMOS -->
-        <div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-4">
-          
-          <!-- Featured Card 1 -->
-          <div onclick="filterCategory('Agriculture')" class="bg-white rounded-2xl border border-gray-200/80 shadow-xs p-4 flex flex-col justify-between cursor-pointer hover:border-[#064e3b] transition">
-            <div class="flex justify-between items-start">
-              <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-md">Frequently searched</span>
-              <span class="text-xs text-gray-400">#1</span>
-            </div>
-            <div class="py-3 flex justify-center">
-              <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=300&q=80" alt="Poultry" class="h-24 object-contain">
-            </div>
-            <div>
-              <h4 class="text-xs font-bold text-gray-800">Broiler Feed & Chicks</h4>
-              <p class="text-[10px] text-gray-500">Zamhatch & Ross 308 breeds</p>
-            </div>
-          </div>
-
-          <!-- Featured Card 2 -->
-          <div onclick="filterCategory('Electronics')" class="bg-white rounded-2xl border border-gray-200/80 shadow-xs p-4 flex flex-col justify-between cursor-pointer hover:border-[#064e3b] transition">
-            <div class="flex justify-between items-start">
-              <span class="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-md">Frequently searched</span>
-              <span class="text-xs text-gray-400">#2</span>
-            </div>
-            <div class="py-3 flex justify-center">
-              <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=300&q=80" alt="Electronics" class="h-24 object-contain">
-            </div>
-            <div>
-              <h4 class="text-xs font-bold text-gray-800">Smartphones & Audio</h4>
-              <p class="text-[10px] text-gray-500">Direct wholesale prices</p>
-            </div>
-          </div>
-
-          <!-- Banner Card 3 -->
-          <div class="bg-gradient-to-br from-[#064e3b] to-emerald-800 text-white rounded-2xl p-5 flex flex-col justify-between shadow-sm relative overflow-hidden">
-            <div class="space-y-1 relative z-10">
-              <span class="text-[10px] font-bold bg-[#f59e0b] text-gray-900 px-2 py-0.5 rounded-md">Zambia Express</span>
-              <h4 class="text-sm font-black tracking-tight pt-1">Stock up, save up to 20%</h4>
-              <p class="text-[11px] text-emerald-200">Quality at every step across all provinces.</p>
-            </div>
-            <div class="pt-4 relative z-10">
-              <button onclick="switchNavTab('home')" class="w-full bg-white text-[#064e3b] font-bold py-2 rounded-xl text-xs uppercase shadow-xs hover:bg-emerald-50 transition cursor-pointer">Shop Now</button>
-            </div>
-            <div class="absolute -right-4 -bottom-4 text-6xl opacity-20">🇿🇲</div>
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- PRODUCT CATALOG SECTION -->
-      <div class="space-y-4 pt-2">
-        <div class="flex justify-between items-center">
-          <h3 class="text-base font-black text-[#064e3b]">Top Picks & Wholesale Catalog</h3>
-          <span class="text-xs text-gray-500 font-medium" id="productCount">Showing all items</span>
-        </div>
-        
-        <!-- DENSE MULTI-COLUMN PRODUCT GRID (6 COLUMNS ON LAPTOP) -->
-        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          <!-- Populated dynamically -->
-        </div>
-      </div>
-    </div>
-
-    <!-- VIEW 2: CATEGORIES -->
-    <div id="viewCategories" class="space-y-6 hidden fade-in">
-      <h3 class="text-2xl font-black text-[#064e3b]">Market Categories</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-        <div onclick="filterCategory('Food'); switchNavTab('home')" class="bg-white p-8 rounded-2xl border border-gray-200 shadow-xs text-center cursor-pointer hover:border-[#064e3b] transition">
-          <span class="text-4xl">🌾</span>
-          <h4 class="font-bold text-sm mt-3 text-[#064e3b]">Food & Groceries</h4>
-        </div>
-        <div onclick="filterCategory('Agriculture'); switchNavTab('home')" class="bg-white p-8 rounded-2xl border border-gray-200 shadow-xs text-center cursor-pointer hover:border-[#064e3b] transition">
-          <span class="text-4xl">🐣</span>
-          <h4 class="font-bold text-sm mt-3 text-[#064e3b]">Agriculture & Poultry</h4>
-        </div>
-        <div onclick="filterCategory('Home'); switchNavTab('home')" class="bg-white p-8 rounded-2xl border border-gray-200 shadow-xs text-center cursor-pointer hover:border-[#064e3b] transition">
-          <span class="text-4xl">🫖</span>
-          <h4 class="font-bold text-sm mt-3 text-[#064e3b]">Home & Kitchen</h4>
-        </div>
-        <div onclick="filterCategory('Fashion'); switchNavTab('home')" class="bg-white p-8 rounded-2xl border border-gray-200 shadow-xs text-center cursor-pointer hover:border-[#064e3b] transition">
-          <span class="text-4xl">🎒</span>
-          <h4 class="font-bold text-sm mt-3 text-[#064e3b]">Fashion & Apparel</h4>
-        </div>
-        <div onclick="filterCategory('Electronics'); switchNavTab('home')" class="bg-white p-8 rounded-2xl border border-gray-200 shadow-xs text-center cursor-pointer hover:border-[#064e3b] transition">
-          <span class="text-4xl">📱</span>
-          <h4 class="font-bold text-sm mt-3 text-[#064e3b]">Electronics</h4>
-        </div>
-      </div>
-    </div>
-
-    <!-- VIEW 3: MESSAGES -->
-    <div id="viewMessages" class="space-y-6 hidden max-w-4xl mx-auto fade-in">
-      <div class="flex justify-between items-center">
-        <h3 class="text-2xl font-black text-[#064e3b]">Messages & Supplier Support</h3>
-        <span class="text-xs text-gray-400">Vendor & Yumilo Broadcasts</span>
-      </div>
-      <div class="space-y-3" id="messagesInbox">
-        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-1">
-          <div class="flex justify-between text-xs font-bold text-[#064e3b]">
-            <span>Yumilo Market System</span>
-            <span>Today</span>
-          </div>
-          <p class="text-xs text-gray-700">Welcome to Yumilo Market! Your account is active and verified securely across Zambia.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- VIEW 4: MY ORDERS -->
-    <div id="viewOrders" class="space-y-6 hidden max-w-4xl mx-auto fade-in">
-      <div class="flex justify-between items-center">
-        <h3 class="text-2xl font-black text-[#064e3b]">My Orders & Tracking</h3>
-        <button onclick="loadOrders()" class="text-xs bg-gray-100 px-4 py-2 rounded-xl font-bold text-gray-700 cursor-pointer">Refresh</button>
-      </div>
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-xs p-10 text-center space-y-3">
-        <p class="text-5xl">📦</p>
-        <p class="text-xs text-gray-500 font-medium">No active orders placed yet.</p>
-      </div>
-    </div>
-
-    <!-- VIEW 5: ACCOUNT -->
-    <div id="viewAccount" class="space-y-6 hidden max-w-xl mx-auto fade-in">
-      <h3 class="text-2xl font-black text-[#064e3b]">Account Settings</h3>
-      <div id="accountContent" class="bg-white rounded-2xl border border-gray-200 shadow-xs p-8 space-y-5">
-        <!-- Injected dynamically -->
-      </div>
-    </div>
-
-    <!-- PROFESSIONAL FOOTER SECTION -->
-    <footer class="w-full pt-10 pb-6 border-t border-gray-300/60 mt-16 space-y-6 text-xs text-gray-600">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div class="space-y-3">
-          <div class="flex items-center space-x-2">
-            <div class="w-7 h-7 rounded-xl bg-[#f59e0b] flex items-center justify-center text-xs shadow">🌿</div>
-            <span class="font-black text-sm text-[#064e3b]">Yumilo Market</span>
-          </div>
-          <p class="text-gray-500 leading-relaxed">Zambia's premier nationwide marketplace connecting trusted vendors, farmers, and shoppers across all provinces.</p>
-        </div>
-        <div>
-          <h4 class="font-bold text-gray-800 uppercase tracking-wider mb-3">Quick Links</h4>
-          <ul class="space-y-2">
-            <li><a href="#" onclick="switchNavTab('home'); return false;" class="hover:text-[#064e3b]">Store Home</a></li>
-            <li><a href="#" onclick="switchNavTab('categories'); return false;" class="hover:text-[#064e3b]">Browse Categories</a></li>
-            <li><a href="#" onclick="switchNavTab('orders'); return false;" class="hover:text-[#064e3b]">Track My Orders</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-bold text-gray-800 uppercase tracking-wider mb-3">Policies & Trust</h4>
-          <ul class="space-y-2">
-            <li><a href="#" onclick="alert('Yumilo Market Privacy Policy: All customer and payment data is secured using industry-standard encryption.'); return false;" class="hover:text-[#064e3b]">Privacy Policy</a></li>
-            <li><a href="#" onclick="alert('Yumilo Market Terms of Service: Secure transactions, verified vendors, and guaranteed nationwide dispatch across Zambia.'); return false;" class="hover:text-[#064e3b]">Terms of Service</a></li>
-            <li><a href="#" onclick="alert('Secure Payment Guardrails: Orders are finalized only after payment confirmation via MTN, Airtel, Zamtel or cards.'); return false;" class="hover:text-[#064e3b]">Secure Payments</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-bold text-gray-800 uppercase tracking-wider mb-3">Nationwide Support</h4>
-          <p class="text-gray-500 leading-relaxed">Operating across Lusaka, Copperbelt, Northern, and all Zambian provinces.</p>
-          <p class="font-bold text-[#064e3b] mt-2">support@yumilomarket.store</p>
-        </div>
-      </div>
-      <div class="border-t border-gray-300/40 pt-6 flex flex-col sm:flex-row justify-between items-center text-gray-500">
-        <p>&copy; 2026 Yumilo Market. All rights reserved.</p>
-        <p class="mt-2 sm:mt-0 font-medium text-emerald-800">Quality at Every Step. 🇿🇲</p>
-      </div>
-    </footer>
-
-  </main>
-
-  <!-- BOTTOM APP NAVIGATION BAR (MOBILE) -->
-  <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow-2xl z-50 py-3 px-8 w-full md:hidden">
-    <div class="w-full flex justify-between items-center max-w-7xl mx-auto">
-      <button onclick="switchNavTab('home')" id="navHome" class="flex flex-col items-center text-[#064e3b] cursor-pointer space-y-1 flex-1">
-        <span class="text-xl">🏠</span>
-        <span class="text-[11px] font-bold">Home</span>
-      </button>
-      <button onclick="switchNavTab('categories')" id="navCategories" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1 flex-1">
-        <span class="text-xl">📂</span>
-        <span class="text-[11px] font-bold">Categories</span>
-      </button>
-      <button onclick="switchNavTab('messages')" id="navMessages" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1 flex-1">
-        <span class="text-xl">💬</span>
-        <span class="text-[11px] font-bold">Messages</span>
-      </button>
-      <button onclick="switchNavTab('orders')" id="navOrders" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1 flex-1">
-        <span class="text-xl">📦</span>
-        <span class="text-[11px] font-bold">My Orders</span>
-      </button>
-      <button onclick="switchNavTab('account')" id="navAccount" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1 flex-1">
-        <span class="text-xl">👤</span>
-        <span class="text-[11px] font-bold">Account</span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- DELIVERY LOCATION MODAL -->
-  <div id="deliveryModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="font-black text-[#064e3b] text-base">Select Delivery Location in Zambia</h3>
-        <button onclick="closeDeliveryModal()" class="text-gray-400 hover:text-gray-600 text-lg font-bold">&times;</button>
-      </div>
-      <div class="space-y-3 text-xs">
-        <p class="text-gray-600">Choose your province and district for accurate shipping calculation:</p>
-        <select id="provinceSelect" class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
-          <option value="All Provinces">Zambia (All Provinces)</option>
-          <option value="Lusaka Province">Lusaka Province (Lusaka, Chongwe, Kafue...)</option>
-          <option value="Northern Province">Northern Province (Mansa, Kasama, Mbala...)</option>
-          <option value="Copperbelt Province">Copperbelt Province (Kitwe, Ndola, Chingola...)</option>
-          <option value="Southern Province">Southern Province (Livingstone, Mazabuka, Choma...)</option>
-          <option value="Eastern Province">Eastern Province (Chipata, Petauke...)</option>
-          <option value="Central Province">Central Province (Kabwe, Kapiri Mposhi...)</option>
-        </select>
-        <input type="text" id="districtInput" placeholder="Enter specific district or town (e.g. Mansa, Lusaka)" class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
-      </div>
-      <div class="flex space-x-3 pt-2">
-        <button onclick="saveDeliveryLocation()" class="flex-1 bg-[#064e3b] text-white font-bold py-2.5 rounded-xl text-xs uppercase shadow-xs">Confirm Location</button>
-        <button onclick="closeDeliveryModal()" class="px-4 bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl text-xs uppercase">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCRIPT -->
-  <script>
-    const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-    });
-
-    let currentUser = null;
-    let currentCategory = 'All';
-
-    const mockProducts = [
-      { id: 1, name: 'Rice - 5kg', category: 'Food', price: 85.00, minOrder: '1 piece', verified: true, img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80' },
-      { id: 2, name: 'Cooking Oil - 1L', category: 'Food', price: 120.00, minOrder: '2 pieces', verified: true, img: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=400&q=80' },
-      { id: 3, name: 'Zamhatch Broiler Feed', category: 'Agriculture', price: 380.00, minOrder: '5 bags', verified: true, img: 'https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=400&q=80' },
-      { id: 4, name: 'School Backpack', category: 'Fashion', price: 450.00, minOrder: '1 piece', verified: false, img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=400&q=80' },
-      { id: 5, name: 'Kitchen Kettle', category: 'Home', price: 680.00, minOrder: '1 piece', verified: true, img: 'https://images.unsplash.com/photo-1594213813735-86d1b73e351d?auto=format&fit=crop&w=400&q=80' },
-      { id: 6, name: 'Smart LED TV 32"', category: 'Electronics', price: 2850.00, minOrder: '1 piece', verified: true, img: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=400&q=80' },
-      { id: 7, name: 'Day-Old Ross 308 Chicks (Box)', category: 'Agriculture', price: 950.00, minOrder: '1 box (50 pcs)', verified: true, img: 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=400&q=80' },
-      { id: 8, name: 'Maize Meal - 25kg', category: 'Food', price: 210.00, minOrder: '1 bag', verified: true, img: 'https://images.unsplash.com/photo-1606787366850-de63301c7bfc?auto=format&fit=crop&w=400&q=80' },
-      { id: 9, name: 'Wireless Bluetooth Earbuds', category: 'Electronics', price: 350.00, minOrder: '2 pieces', verified: false, img: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=400&q=80' },
-      { id: 10, name: 'Executive Office Chair', category: 'Home', price: 1450.00, minOrder: '1 piece', verified: true, img: 'https://images.unsplash.com/photo-1580481077494-e3299ac25e94?auto=format&fit=crop&w=400&q=80' },
-      { id: 11, name: 'Men Casual Sneakers', category: 'Fashion', price: 550.00, minOrder: '1 pair', verified: false, img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80' },
-      { id: 12, name: 'Yumilo SMS Broadcast Package', category: 'Services', price: 150.00, minOrder: '1 package', verified: true, img: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=400&q=80' }
-    ];
-
-    async function initApp() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      currentUser = session ? session.user : null;
-      renderHeader();
-      renderProducts(mockProducts);
-      renderAccountView();
-    }
-
-    function renderHeader() {
-      const slot = document.getElementById('headerRightSlot');
-      if (currentUser) {
-        slot.innerHTML = `
-          <button onclick="switchNavTab('orders')" class="flex items-center space-x-1 text-emerald-100 hover:text-white transition cursor-pointer text-xs font-bold" title="Cart & Orders">
-            <span class="text-xl">🛒</span>
-            <span class="hidden sm:inline">Cart</span>
-          </button>
-          <button onclick="switchNavTab('messages')" class="relative p-2 text-white hover:bg-emerald-800 rounded-xl transition cursor-pointer" title="Notifications">
-            <span class="text-xl">🔔</span>
-            <span class="absolute top-0.5 right-0.5 w-2.5 h-2.5 bg-[#f59e0b] rounded-full ring-2 ring-[#064e3b]"></span>
-          </button>
-          <button onclick="switchNavTab('account')" class="flex items-center space-x-1.5 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition cursor-pointer">
-            <span>👤</span>
-            <span class="hidden sm:inline">Account</span>
-          </button>
-        `;
-      } else {
-        slot.innerHTML = `
-          <div class="flex items-center space-x-3">
-            <button onclick="switchNavTab('orders')" class="flex items-center space-x-1 text-emerald-100 hover:text-white transition cursor-pointer text-xs font-bold">
-              <span class="text-xl">🛒</span>
-              <span class="hidden sm:inline">Cart</span>
-            </button>
-            <a href="login.html" class="flex items-center space-x-1 text-emerald-100 hover:text-white text-xs font-bold transition cursor-pointer">
-              <span>👤</span>
-              <span>Sign in</span>
-            </a>
-            <a href="login.html" class="bg-[#f59e0b] hover:bg-amber-600 text-gray-900 text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs">Create account</a>
+            <a href="login.html" class="bg-[#f59e0b] hover:bg-amber-600 text-gray-900 text-xs font-bold px-3.5 py-1.5 rounded-xl transition shadow-xs">Create account</a>
           </div>
         `;
       }
