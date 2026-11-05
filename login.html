@@ -42,7 +42,7 @@
       </button>
     </form>
 
-    <!-- SIGN UP FORM (Step 1: Details) -->
+    <!-- SIGN UP FORM (Step 1) -->
     <form id="signupForm" onsubmit="handleRequestOtp(event)" class="space-y-4 hidden">
       <div>
         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Full Name</label>
@@ -64,7 +64,7 @@
     <!-- OTP VERIFICATION FORM (Step 2) -->
     <form id="otpForm" onsubmit="handleVerifyAndRegister(event)" class="space-y-4 hidden">
       <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-xs text-emerald-800 text-center">
-        We have sent a 6-digit verification code to <span id="displayOtpEmail" class="font-bold"></span>. Please enter it below.
+        We have sent your branded verification code to <span id="displayOtpEmail" class="font-bold"></span>. Enter it below.
       </div>
       <div>
         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">6-Digit Verification Code</label>
@@ -93,39 +93,15 @@
 
     let tempUserData = { name: '', email: '', password: '', generatedOtp: '' };
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (session && session.user) {
-          redirectToDashboard(session.user.email);
-        }
-      } catch (err) {}
-    });
-
     function switchTab(tab) {
-      const loginForm = document.getElementById('loginForm');
-      const signupForm = document.getElementById('signupForm');
-      const otpForm = document.getElementById('otpForm');
-      const tabLogin = document.getElementById('tabLogin');
-      const tabSignup = document.getElementById('tabSignup');
-      const tabContainer = document.getElementById('tabContainer');
-      const alertBox = document.getElementById('authAlert');
-      alertBox.classList.add('hidden');
-      otpForm.classList.add('hidden');
+      document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+      document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+      document.getElementById('otpForm').classList.add('hidden');
+      document.getElementById('tabContainer').classList.remove('hidden');
+      document.getElementById('authAlert').classList.add('hidden');
 
-      if (tab === 'login') {
-        loginForm.classList.remove('hidden');
-        signupForm.classList.add('hidden');
-        tabContainer.classList.remove('hidden');
-        tabLogin.className = 'flex-1 py-2.5 rounded-lg bg-white text-gray-900 shadow-sm transition cursor-pointer';
-        tabSignup.className = 'flex-1 py-2.5 rounded-lg text-gray-500 transition cursor-pointer';
-      } else {
-        signupForm.classList.remove('hidden');
-        loginForm.classList.add('hidden');
-        tabContainer.classList.remove('hidden');
-        tabSignup.className = 'flex-1 py-2.5 rounded-lg bg-white text-gray-900 shadow-sm transition cursor-pointer';
-        tabLogin.className = 'flex-1 py-2.5 rounded-lg text-gray-500 transition cursor-pointer';
-      }
+      document.getElementById('tabLogin').className = tab === 'login' ? 'flex-1 py-2.5 rounded-lg bg-white text-gray-900 shadow-sm transition cursor-pointer' : 'flex-1 py-2.5 rounded-lg text-gray-500 transition cursor-pointer';
+      document.getElementById('tabSignup').className = tab === 'signup' ? 'flex-1 py-2.5 rounded-lg bg-white text-gray-900 shadow-sm transition cursor-pointer' : 'flex-1 py-2.5 rounded-lg text-gray-500 transition cursor-pointer';
     }
 
     function showAlert(message, isError = true) {
@@ -155,12 +131,10 @@
       try {
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (error) throw error;
-
         showAlert('Login successful! Redirecting...', false);
         setTimeout(() => redirectToDashboard(email), 800);
-
       } catch (err) {
-        showAlert(err.message || 'Failed to sign in. Check your credentials.');
+        showAlert(err.message || 'Failed to sign in.');
         btn.textContent = 'Sign In to Account';
         btn.disabled = false;
       }
@@ -173,7 +147,7 @@
       tempUserData.password = document.getElementById('signupPassword').value;
       const btn = document.getElementById('signupBtn');
 
-      btn.textContent = 'Sending verification code...';
+      btn.textContent = 'Sending branded email...';
       btn.disabled = true;
 
       tempUserData.generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -197,10 +171,9 @@
         document.getElementById('tabContainer').classList.add('hidden');
         document.getElementById('otpForm').classList.remove('hidden');
         document.getElementById('displayOtpEmail').textContent = tempUserData.email;
-        showAlert('Verification code sent! Check your inbox.', false);
-
+        showAlert('Verification code sent successfully!', false);
       } catch (err) {
-        showAlert(err.message || 'Error sending verification code.');
+        showAlert(err.message || 'Failed to send OTP.');
         btn.textContent = 'Send Verification Code';
         btn.disabled = false;
       }
@@ -215,14 +188,13 @@
       document.getElementById('authAlert').classList.add('hidden');
     }
 
-    // Verify Code and Call Cloudflare /signup Endpoint
     async function handleVerifyAndRegister(e) {
       e.preventDefault();
       const enteredCode = document.getElementById('otpCode').value.trim();
       const btn = document.getElementById('verifyBtn');
 
       if (enteredCode !== tempUserData.generatedOtp) {
-        showAlert('Invalid verification code. Please check your email and try again.');
+        showAlert('Invalid verification code. Please check your email.');
         return;
       }
 
@@ -230,6 +202,7 @@
       btn.disabled = true;
 
       try {
+        // Calls the Cloudflare serverless function (/signup) instead of direct browser fetch
         const response = await fetch('/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -251,11 +224,10 @@
           password: tempUserData.password
         });
 
-        showAlert('Account verified and created successfully! Redirecting...', false);
+        showAlert('Account created successfully! Redirecting...', false);
         setTimeout(() => redirectToDashboard(tempUserData.email), 1200);
-
       } catch (err) {
-        showAlert(err.message || 'Failed to complete registration.');
+        showAlert(err.message || 'Failed to create user account.');
         btn.textContent = 'Verify Code & Create Account';
         btn.disabled = false;
       }
