@@ -14,7 +14,7 @@
 </head>
 <body class="min-h-screen text-gray-800 flex flex-col pb-32">
 
-  <!-- STICKY TOP HERO CONTAINER (Stays pinned at top while scrolling) -->
+  <!-- STICKY TOP HERO CONTAINER -->
   <div class="sticky top-0 z-40 bg-[#f4efe6] shadow-sm w-full">
     
     <!-- MAIN HEADER -->
@@ -33,14 +33,28 @@
       </div>
     </header>
 
-    <!-- STICKY SUB-HEADER CONTENT: Greeting, Search, Categories, Banner -->
-    <div class="w-full px-6 pt-4 pb-3 space-y-4 bg-[#f4efe6]">
+    <!-- PROMOTIONAL BANNER (AT THE TOP) -->
+    <div class="w-full px-6 pt-4">
+      <div class="relative rounded-3xl overflow-hidden shadow-md h-36 flex items-center px-8 bg-cover bg-center w-full" style="background-image: url('https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=1600&q=80');">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#064e3b] via-[#064e3b]/95 to-transparent"></div>
+        <div class="relative z-10 space-y-1 max-w-md text-white">
+          <h3 class="text-xl md:text-2xl font-black tracking-tight leading-snug">Shop across Zambia</h3>
+          <p class="text-xs text-emerald-200 font-medium">Quality at Every Step.</p>
+        </div>
+        <div class="absolute right-8 bg-[#064e3b]/90 border border-emerald-500/40 p-3 rounded-2xl text-2xl z-10 shadow-lg text-emerald-300">
+          🗺️
+        </div>
+      </div>
+    </div>
+
+    <!-- GREETING, SEARCH & CATEGORY PILLS (BELOW BANNER) -->
+    <div class="w-full px-6 py-4 space-y-4 bg-[#f4efe6]">
       <div class="space-y-1">
         <h2 id="greetingText" class="text-2xl md:text-3xl font-black text-[#064e3b]">Welcome to Yumilo Market</h2>
       </div>
 
       <!-- SEARCH BAR -->
-      <div class="relative max-w-full">
+      <div class="relative w-full">
         <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">🔍</span>
         <input type="text" id="searchInput" oninput="handleSearch(event)" placeholder="Search products, shops..." class="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white border border-gray-200 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#064e3b] shadow-xs">
       </div>
@@ -53,22 +67,10 @@
         <button onclick="filterCategory('Fashion')" id="catBtnFashion" class="px-7 py-2.5 rounded-full text-xs font-bold bg-[#ebe3d0] text-gray-800 hover:bg-[#e2d7c0] transition cursor-pointer shrink-0">Fashion</button>
         <button onclick="filterCategory('Electronics')" id="catBtnElectronics" class="px-7 py-2.5 rounded-full text-xs font-bold bg-[#ebe3d0] text-gray-800 hover:bg-[#e2d7c0] transition cursor-pointer shrink-0">Electronics</button>
       </div>
-
-      <!-- PROMOTIONAL BANNER -->
-      <div class="relative rounded-3xl overflow-hidden shadow-md h-36 flex items-center px-8 bg-cover bg-center w-full" style="background-image: url('https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=1600&q=80');">
-        <div class="absolute inset-0 bg-gradient-to-r from-[#064e3b] via-[#064e3b]/95 to-transparent"></div>
-        <div class="relative z-10 space-y-1 max-w-md text-white">
-          <h3 class="text-xl md:text-2xl font-black tracking-tight leading-snug">Shop across Zambia</h3>
-          <p class="text-xs text-emerald-200 font-medium">Quality at Every Step.</p>
-        </div>
-        <div class="absolute right-8 bg-[#064e3b]/90 border border-emerald-500/40 p-3 rounded-2xl text-2xl z-10 shadow-lg text-emerald-300">
-          🗺️
-        </div>
-      </div>
     </div>
   </div>
 
-  <!-- SCROLLABLE CONTENT AREA (Product Grid, Categories, Messages, Orders, Account) -->
+  <!-- SCROLLABLE CONTENT AREA -->
   <main class="w-full px-6 py-6 flex-1 space-y-6">
 
     <!-- VIEW 1: HOME -->
@@ -143,26 +145,26 @@
 
   </main>
 
-  <!-- BOTTOM APP NAVIGATION BAR -->
-  <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow-2xl z-50 py-3 px-8 w-full">
-    <div class="w-full flex justify-around items-center max-w-4xl mx-auto">
-      <button onclick="switchNavTab('home')" id="navHome" class="flex flex-col items-center text-[#064e3b] cursor-pointer space-y-1">
+  <!-- BOTTOM APP NAVIGATION BAR (CORNER-TO-CORNER FOOTER) -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow-2xl z-50 py-3 px-6 w-full">
+    <div class="w-full flex justify-between items-center max-w-6xl mx-auto">
+      <button onclick="switchNavTab('home')" id="navHome" class="flex flex-col items-center text-[#064e3b] cursor-pointer space-y-1 flex-1">
         <span class="text-xl">🏠</span>
         <span class="text-[11px] font-bold">Home</span>
       </button>
-      <button onclick="switchNavTab('categories')" id="navCategories" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1">
+      <button onclick="switchNavTab('categories')" id="navCategories" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1 flex-1">
         <span class="text-xl">📂</span>
         <span class="text-[11px] font-bold">Categories</span>
       </button>
-      <button onclick="switchNavTab('messages')" id="navMessages" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1">
+      <button onclick="switchNavTab('messages')" id="navMessages" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1 flex-1">
         <span class="text-xl">💬</span>
         <span class="text-[11px] font-bold">Messages</span>
       </button>
-      <button onclick="switchNavTab('orders')" id="navOrders" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1">
+      <button onclick="switchNavTab('orders')" id="navOrders" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1 flex-1">
         <span class="text-xl">📦</span>
         <span class="text-[11px] font-bold">My Orders</span>
       </button>
-      <button onclick="switchNavTab('account')" id="navAccount" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1">
+      <button onclick="switchNavTab('account')" id="navAccount" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1 flex-1">
         <span class="text-xl">👤</span>
         <span class="text-[11px] font-bold">Account</span>
       </button>
@@ -290,9 +292,9 @@
         document.getElementById(`view${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.toggle('hidden', t !== tabName);
         const navBtn = document.getElementById(`nav${t.charAt(0).toUpperCase() + t.slice(1)}`);
         if (t === tabName) {
-          navBtn.className = 'flex flex-col items-center text-[#064e3b] cursor-pointer space-y-1';
+          navBtn.className = 'flex flex-col items-center text-[#064e3b] cursor-pointer space-y-1 flex-1';
         } else {
-          navBtn.className = 'flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1';
+          navBtn.className = 'flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1 flex-1';
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
