@@ -8,40 +8,39 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { background-color: #fcfbf9; }
-    /* Hide scrollbar for category pills */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="min-h-screen text-gray-800 flex flex-col pb-20">
+<body class="min-h-screen text-gray-800 flex flex-col pb-24">
 
   <!-- TOP HEADER -->
   <header class="bg-[#064e3b] text-white sticky top-0 z-45 shadow-md">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
       
       <!-- LOGO -->
-      <a href="index.html" class="flex items-center space-x-2.5">
-        <div class="w-10 h-10 rounded-xl bg-[#f59e0b] flex items-center justify-center text-xl shadow">🌿</div>
+      <a href="index.html" class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-2xl bg-[#f59e0b] flex items-center justify-center text-xl shadow-sm">🌿</div>
         <div>
-          <h1 class="text-lg font-black tracking-tight leading-none">Yumilo</h1>
-          <h1 class="text-lg font-black tracking-tight leading-none">Market</h1>
+          <h1 class="text-base font-black tracking-tight leading-none text-white">Yumilo</h1>
+          <h1 class="text-base font-black tracking-tight leading-none text-white">Market</h1>
         </div>
       </a>
 
       <!-- HEADER RIGHT (DYNAMIC: Logged Out vs Logged In) -->
-      <div class="flex items-center space-x-4" id="headerRightSlot">
-        <!-- Rendered dynamically by script -->
+      <div class="flex items-center space-x-3" id="headerRightSlot">
+        <!-- Injected dynamically -->
       </div>
     </div>
   </header>
 
-  <!-- MAIN VIEW CONTAINER (Single Page Hub) -->
+  <!-- MAIN VIEW CONTAINER -->
   <main class="max-w-4xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
 
-    <!-- VIEW 1: HOME FEED -->
+    <!-- VIEW 1: HOME -->
     <div id="viewHome" class="space-y-6">
       
-      <!-- DYNAMIC GREETING -->
+      <!-- GREETING -->
       <div class="space-y-1">
         <h2 id="greetingText" class="text-2xl md:text-3xl font-black text-[#064e3b]">Welcome to Yumilo Market</h2>
       </div>
@@ -49,12 +48,12 @@
       <!-- SEARCH BAR -->
       <div class="relative">
         <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">🔍</span>
-        <input type="text" id="searchInput" placeholder="Search products, shops..." class="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white border border-gray-200 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#064e3b] shadow-sm">
+        <input type="text" id="searchInput" placeholder="Search products, shops..." class="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white border border-gray-200 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#064e3b] shadow-xs">
       </div>
 
       <!-- CATEGORY PILLS -->
       <div class="flex space-x-3 overflow-x-auto no-scrollbar py-1">
-        <button onclick="filterCategory('All')" id="catBtnAll" class="px-6 py-2.5 rounded-full text-xs font-bold bg-[#f59e0b] text-gray-900 shadow-sm transition cursor-pointer shrink-0">All</button>
+        <button onclick="filterCategory('All')" id="catBtnAll" class="px-6 py-2.5 rounded-full text-xs font-bold bg-[#f59e0b] text-gray-900 shadow-xs transition cursor-pointer shrink-0">All</button>
         <button onclick="filterCategory('Food')" id="catBtnFood" class="px-6 py-2.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer shrink-0">Food</button>
         <button onclick="filterCategory('Home')" id="catBtnHome" class="px-6 py-2.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer shrink-0">Home</button>
         <button onclick="filterCategory('Fashion')" id="catBtnFashion" class="px-6 py-2.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer shrink-0">Fashion</button>
@@ -63,56 +62,56 @@
 
       <!-- PROMOTIONAL BANNER -->
       <div class="bg-[#064e3b] text-white rounded-3xl p-6 shadow-md flex justify-between items-center relative overflow-hidden">
-        <div class="space-y-1.5 z-10 max-w-[260px]">
-          <h3 class="text-xl font-black tracking-tight">Shop across Zambia</h3>
-          <p class="text-xs text-emerald-200">Quality at Every Step.</p>
+        <div class="space-y-1 z-10 max-w-[240px]">
+          <h3 class="text-xl font-black tracking-tight leading-snug">Shop across Zambia</h3>
+          <p class="text-xs text-emerald-200 font-medium">Quality at Every Step.</p>
         </div>
-        <div class="bg-emerald-800/80 p-3 rounded-2xl border border-emerald-600/50 text-2xl z-10 shadow-inner">
+        <div class="bg-emerald-800/80 p-3.5 rounded-2xl border border-emerald-600/50 text-2xl z-10 shadow-inner">
           🗺️
         </div>
       </div>
 
-      <!-- AVAILABLE NOW SECTION -->
+      <!-- AVAILABLE NOW -->
       <div class="space-y-4">
         <h3 class="text-lg font-black text-[#064e3b]">Available now</h3>
         
         <div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <!-- Populated by JavaScript -->
+          <!-- Populated dynamically -->
         </div>
       </div>
     </div>
 
-    <!-- VIEW 2: CATEGORIES (Loaded via Bottom Nav) -->
+    <!-- VIEW 2: CATEGORIES -->
     <div id="viewCategories" class="space-y-6 hidden">
       <h3 class="text-xl font-black text-[#064e3b]">Market Categories</h3>
       <div class="grid grid-cols-2 gap-4">
-        <div onclick="filterCategory('Food'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm text-center cursor-pointer hover:border-[#064e3b] transition">
+        <div onclick="filterCategory('Food'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-xs text-center cursor-pointer hover:border-[#064e3b] transition">
           <span class="text-3xl">🌾</span>
           <h4 class="font-bold text-sm mt-2 text-[#064e3b]">Food & Groceries</h4>
         </div>
-        <div onclick="filterCategory('Home'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm text-center cursor-pointer hover:border-[#064e3b] transition">
+        <div onclick="filterCategory('Home'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-xs text-center cursor-pointer hover:border-[#064e3b] transition">
           <span class="text-3xl">🫖</span>
           <h4 class="font-bold text-sm mt-2 text-[#064e3b]">Home & Kitchen</h4>
         </div>
-        <div onclick="filterCategory('Fashion'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm text-center cursor-pointer hover:border-[#064e3b] transition">
+        <div onclick="filterCategory('Fashion'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-xs text-center cursor-pointer hover:border-[#064e3b] transition">
           <span class="text-3xl">🎒</span>
           <h4 class="font-bold text-sm mt-2 text-[#064e3b]">Fashion & Apparel</h4>
         </div>
-        <div onclick="filterCategory('Electronics'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm text-center cursor-pointer hover:border-[#064e3b] transition">
+        <div onclick="filterCategory('Electronics'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-xs text-center cursor-pointer hover:border-[#064e3b] transition">
           <span class="text-3xl">📱</span>
           <h4 class="font-bold text-sm mt-2 text-[#064e3b]">Electronics</h4>
         </div>
       </div>
     </div>
 
-    <!-- VIEW 3: MESSAGES & INBOX -->
+    <!-- VIEW 3: MESSAGES -->
     <div id="viewMessages" class="space-y-6 hidden">
       <div class="flex justify-between items-center">
         <h3 class="text-xl font-black text-[#064e3b]">Messages & Inbox</h3>
         <span class="text-xs text-gray-400">Vendor & Yumilo Broadcasts</span>
       </div>
       <div class="space-y-3">
-        <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm space-y-1">
+        <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs space-y-1">
           <div class="flex justify-between text-[11px] font-bold text-[#064e3b]">
             <span>Yumilo Market System</span>
             <span>Today</span>
@@ -128,42 +127,42 @@
         <h3 class="text-xl font-black text-[#064e3b]">My Orders & Tracking</h3>
         <button onclick="loadOrders()" class="text-xs bg-gray-100 px-3 py-1.5 rounded-xl font-bold text-gray-700">Refresh</button>
       </div>
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 text-center space-y-3">
-        <p class="text-3xl">📦</p>
-        <p class="text-xs text-gray-500">No active orders placed yet.</p>
+      <div class="bg-white rounded-2xl border border-gray-200 shadow-xs p-8 text-center space-y-3">
+        <p class="text-4xl">📦</p>
+        <p class="text-xs text-gray-500 font-medium">No active orders placed yet.</p>
       </div>
     </div>
 
-    <!-- VIEW 5: ACCOUNT & SETTINGS -->
+    <!-- VIEW 5: ACCOUNT -->
     <div id="viewAccount" class="space-y-6 hidden">
       <h3 class="text-xl font-black text-[#064e3b]">Account Settings</h3>
-      <div id="accountContent" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-4">
-        <!-- Populated dynamically based on auth status -->
+      <div id="accountContent" class="bg-white rounded-2xl border border-gray-200 shadow-xs p-6 space-y-4">
+        <!-- Injected dynamically -->
       </div>
     </div>
 
   </main>
 
-  <!-- BOTTOM APP NAVIGATION BAR (Mockup Style Footer) -->
-  <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow-lg z-50 py-2 px-6">
+  <!-- BOTTOM APP NAVIGATION BAR -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow-lg z-50 py-2.5 px-6">
     <div class="max-w-md mx-auto flex justify-between items-center">
-      <button onclick="switchNavTab('home')" id="navHome" class="flex flex-col items-center text-[#064e3b] cursor-pointer space-y-0.5">
+      <button onclick="switchNavTab('home')" id="navHome" class="flex flex-col items-center text-[#064e3b] cursor-pointer space-y-1">
         <span class="text-lg">🏠</span>
         <span class="text-[10px] font-bold">Home</span>
       </button>
-      <button onclick="switchNavTab('categories')" id="navCategories" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-0.5">
+      <button onclick="switchNavTab('categories')" id="navCategories" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1">
         <span class="text-lg">📂</span>
         <span class="text-[10px] font-bold">Categories</span>
       </button>
-      <button onclick="switchNavTab('messages')" id="navMessages" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-0.5">
+      <button onclick="switchNavTab('messages')" id="navMessages" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1">
         <span class="text-lg">💬</span>
         <span class="text-[10px] font-bold">Messages</span>
       </button>
-      <button onclick="switchNavTab('orders')" id="navOrders" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-0.5">
+      <button onclick="switchNavTab('orders')" id="navOrders" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1">
         <span class="text-lg">📦</span>
         <span class="text-[10px] font-bold">My Orders</span>
       </button>
-      <button onclick="switchNavTab('account')" id="navAccount" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-0.5">
+      <button onclick="switchNavTab('account')" id="navAccount" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1">
         <span class="text-lg">👤</span>
         <span class="text-[10px] font-bold">Account</span>
       </button>
@@ -199,19 +198,19 @@
     function renderHeader() {
       const slot = document.getElementById('headerRightSlot');
       if (currentUser) {
-        // Logged In: Notification Bell
+        // Logged In: Notification Bell matching mockup
         slot.innerHTML = `
           <button onclick="switchNavTab('messages')" class="relative p-2 text-white hover:bg-emerald-800 rounded-xl transition cursor-pointer">
             <span class="text-xl">🔔</span>
-            <span class="absolute top-1 right-1 w-2 h-2 bg-[#f59e0b] rounded-full"></span>
+            <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-[#f59e0b] rounded-full ring-2 ring-[#064e3b]"></span>
           </button>
         `;
       } else {
-        // Logged Out: Sign in & Create account buttons
+        // Logged Out: Sign in & Create account buttons matching mockup
         slot.innerHTML = `
           <div class="flex items-center space-x-2">
-            <a href="login.html" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3 py-2 rounded-xl transition">Sign in</a>
-            <a href="login.html" class="bg-[#f59e0b] hover:bg-amber-600 text-gray-900 text-xs font-bold px-3 py-2 rounded-xl transition shadow">Create account</a>
+            <a href="login.html" class="bg-transparent hover:bg-emerald-800 text-white text-xs font-bold px-3.5 py-2 rounded-xl border border-emerald-600 transition">Sign in</a>
+            <a href="login.html" class="bg-white hover:bg-emerald-50 text-[#064e3b] text-xs font-bold px-3.5 py-2 rounded-xl transition shadow-xs">Create account</a>
           </div>
         `;
       }
@@ -231,13 +230,13 @@
     function renderProducts(products) {
       const grid = document.getElementById('productGrid');
       grid.innerHTML = products.map(p => `
-        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 flex flex-col justify-between space-y-3">
-          <div class="text-4xl text-center py-6 bg-gray-50 rounded-xl">${p.emoji}</div>
+        <div class="bg-white rounded-2xl border border-gray-200/80 shadow-xs p-3.5 flex flex-col justify-between space-y-3">
+          <div class="text-4xl text-center py-5 bg-gray-50/80 rounded-xl">${p.emoji}</div>
           <div class="space-y-0.5">
             <h4 class="text-xs font-bold text-gray-800 line-clamp-1">${p.name}</h4>
             <p class="text-sm font-black text-[#064e3b]">K${p.price.toFixed(2)}</p>
           </div>
-          <button onclick="viewProduct('${p.name}', ${p.price})" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-2 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
+          <button onclick="viewProduct('${p.name}', ${p.price})" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-2 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow-xs">
             View
           </button>
         </div>
@@ -249,7 +248,7 @@
         const btn = document.getElementById(`catBtn${c}`);
         if (btn) {
           if (c === cat) {
-            btn.className = 'px-6 py-2.5 rounded-full text-xs font-bold bg-[#f59e0b] text-gray-900 shadow-sm transition cursor-pointer shrink-0';
+            btn.className = 'px-6 py-2.5 rounded-full text-xs font-bold bg-[#f59e0b] text-gray-900 shadow-xs transition cursor-pointer shrink-0';
           } else {
             btn.className = 'px-6 py-2.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer shrink-0';
           }
@@ -268,9 +267,9 @@
         document.getElementById(`view${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.toggle('hidden', t !== tabName);
         const navBtn = document.getElementById(`nav${t.charAt(0).toUpperCase() + t.slice(1)}`);
         if (t === tabName) {
-          navBtn.className = 'flex flex-col items-center text-[#064e3b] cursor-pointer space-y-0.5';
+          navBtn.className = 'flex flex-col items-center text-[#064e3b] cursor-pointer space-y-1';
         } else {
-          navBtn.className = 'flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-0.5';
+          navBtn.className = 'flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1';
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -281,8 +280,8 @@
       if (!currentUser) {
         container.innerHTML = `
           <div class="text-center space-y-3 py-6">
-            <p class="text-xs text-gray-500">You are not signed in.</p>
-            <a href="login.html" class="inline-block bg-[#064e3b] text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase">Sign In or Register</a>
+            <p class="text-xs text-gray-500 font-medium">You are not signed in.</p>
+            <a href="login.html" class="inline-block bg-[#064e3b] text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase shadow-xs">Sign In or Register</a>
           </div>
         `;
         return;
@@ -290,16 +289,16 @@
 
       container.innerHTML = `
         <div class="space-y-4 text-xs">
-          <div class="p-3 bg-emerald-50 rounded-xl space-y-1">
+          <div class="p-3.5 bg-emerald-50 rounded-xl space-y-1 border border-emerald-100">
             <p class="font-bold text-emerald-900">Signed in account:</p>
             <p class="font-mono text-emerald-700">${currentUser.email}</p>
           </div>
           <div>
             <label class="block font-bold text-gray-700 uppercase mb-1">Delivery Address & Province</label>
-            <input type="text" id="userAddressInput" placeholder="District, Province, Street Landmark" class="w-full px-3 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
+            <input type="text" id="userAddressInput" placeholder="District, Province, Street Landmark" class="w-full px-3.5 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
           </div>
-          <button onclick="saveUserSettings()" class="w-full bg-[#064e3b] text-white font-bold py-2.5 rounded-xl uppercase transition cursor-pointer">Save Address Settings</button>
-          <button onclick="handleLogout()" class="w-full bg-red-100 text-red-700 font-bold py-2.5 rounded-xl uppercase transition cursor-pointer">Sign Out</button>
+          <button onclick="saveUserSettings()" class="w-full bg-[#064e3b] text-white font-bold py-2.5 rounded-xl uppercase transition cursor-pointer shadow-xs">Save Address Settings</button>
+          <button onclick="handleLogout()" class="w-full bg-red-50 hover:bg-red-100 text-red-700 font-bold py-2.5 rounded-xl uppercase transition cursor-pointer border border-red-200">Sign Out</button>
         </div>
       `;
     }
@@ -311,7 +310,7 @@
         }
         return;
       }
-      alert(`Proceeding to checkout for ${name} at K${price.toFixed(2)}. Payments are verified securely before order completion.`);
+      alert(`Proceeding to secure checkout for ${name} (K${price.toFixed(2)}). Orders are finalized only after payment confirmation.`);
     }
 
     function saveUserSettings() {
