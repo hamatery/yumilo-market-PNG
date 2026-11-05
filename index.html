@@ -59,27 +59,27 @@
           
           <!-- Dropdown Menu Box -->
           <div id="helpDropdownMenu" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-gray-200 text-gray-800 p-3 z-50 grid grid-cols-2 gap-2 text-xs">
-            <a href="#" onclick="helpAction('Buyer Help Center'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+            <a href="#" onclick="openHelpModal('faq'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
               <p class="font-bold">Buyer Help Center</p>
               <p class="text-[10px] text-gray-500">Guides & FAQs</p>
             </a>
-            <a href="#" onclick="helpAction('Live chat with customer support'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+            <a href="#" onclick="openHelpModal('chat'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
               <p class="font-bold">Live Chat Support</p>
               <p class="text-[10px] text-gray-500">Instant assistance</p>
             </a>
-            <a href="#" onclick="helpAction('Refunds & after-sales'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+            <a href="#" onclick="openHelpModal('refunds'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
               <p class="font-bold">Refunds & Returns</p>
-              <p class="text-[10px] text-gray-500">Track claims</p>
+              <p class="text-[10px] text-gray-500">Track claims (Login req.)</p>
             </a>
-            <a href="#" onclick="helpAction('File a trade dispute'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+            <a href="#" onclick="openHelpModal('dispute'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
               <p class="font-bold">File Dispute</p>
-              <p class="text-[10px] text-gray-500">Resolution desk</p>
+              <p class="text-[10px] text-gray-500">Resolution desk (Login req.)</p>
             </a>
-            <a href="#" onclick="helpAction('Report IP infringement'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+            <a href="#" onclick="openHelpModal('ip'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
               <p class="font-bold">Report IP</p>
               <p class="text-[10px] text-gray-500">Copyright claims</p>
             </a>
-            <a href="#" onclick="helpAction('Report a violation'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+            <a href="#" onclick="openHelpModal('violation'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
               <p class="font-bold">Report Violation</p>
               <p class="text-[10px] text-gray-500">Safety & trust</p>
             </a>
@@ -369,6 +369,19 @@
     </div>
   </div>
 
+  <!-- HELP CENTER INTERACTIVE MODAL -->
+  <div id="helpModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-black text-[#064e3b] text-base" id="helpModalTitle">Help Center</h3>
+        <button onclick="closeHelpModal()" class="text-gray-400 hover:text-gray-600 text-lg font-bold">&times;</button>
+      </div>
+      <div id="helpModalBody" class="space-y-4">
+        <!-- Dynamic content injected here -->
+      </div>
+    </div>
+  </div>
+
   <!-- SCRIPT -->
   <script>
     const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
@@ -450,8 +463,179 @@
       }
     }
 
-    function helpAction(topic) {
-      alert(`Help Center - ${topic}: Our support team is ready to assist you across all Zambian provinces. Contact support@yumilomarket.store for urgent desk requests.`);
+    // INTERACTIVE HELP CENTER MODAL & LOGIN GUARD LOGIC
+    function openHelpModal(type) {
+      // Check login requirement for Refunds & Returns and Trade Disputes
+      if ((type === 'refunds' || type === 'dispute') && !currentUser) {
+        if (confirm("You must be signed in to access " + (type === 'refunds' ? "Refunds & Returns" : "Trade Disputes") + ". Go to sign in?")) {
+          window.location.href = 'login.html';
+        }
+        return;
+      }
+
+      const modal = document.getElementById('helpModal');
+      const title = document.getElementById('helpModalTitle');
+      const body = document.getElementById('helpModalBody');
+      
+      modal.classList.remove('hidden');
+      document.getElementById('helpDropdownMenu').classList.add('hidden');
+
+      if (type === 'faq') {
+        title.textContent = 'Buyer Help Center & FAQs';
+        body.innerHTML = `
+          <div class="space-y-3 text-xs text-gray-700">
+            <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+              <p class="font-bold text-[#064e3b]">📦 How does nationwide delivery work?</p>
+              <p class="mt-1">Yumilo Market dispatches orders securely across all Zambian provinces through verified transport and courier partners.</p>
+            </div>
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <p class="font-bold text-gray-800">💳 What payment methods are supported?</p>
+              <p class="mt-1">We support secure mobile money transactions (MTN, Airtel, Zamtel) and international/local payment cards.</p>
+            </div>
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <p class="font-bold text-gray-800">📋 What is Minimum Order Quantity (MOQ)?</p>
+              <p class="mt-1">MOQ specifies the minimum units or wholesale quantity required by suppliers to fulfill a discounted bulk order.</p>
+            </div>
+          </div>
+        `;
+      } else if (type === 'chat') {
+        title.textContent = 'Live Customer Support Chat';
+        body.innerHTML = `
+          <div class="space-y-3 text-xs">
+            <div class="p-3 bg-gray-100 rounded-xl max-w-[85%] space-y-1">
+              <p class="font-bold text-[#064e3b]">Yumilo Support Desk</p>
+              <p>Hello! Welcome to Yumilo Market support. How can we assist you with your order or farm supply today?</p>
+              <span class="text-[9px] text-gray-400 block text-right">Just now</span>
+            </div>
+            <div class="flex space-x-2 pt-2">
+              <input type="text" id="chatInputMsg" placeholder="Type your message here..." class="flex-1 p-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
+              <button onclick="sendChatMessage()" class="bg-[#064e3b] text-white px-4 py-2.5 rounded-xl font-bold uppercase cursor-pointer">Send</button>
+            </div>
+          </div>
+        `;
+      } else if (type === 'refunds') {
+        title.textContent = 'Request Refund or Return (After-Sales)';
+        body.innerHTML = `
+          <div class="space-y-3 text-xs">
+            <p class="text-gray-600">Submit your order details to initiate a return or refund claim:</p>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Order ID / Transaction Reference</label>
+              <input type="text" id="refundOrderId" placeholder="e.g. YM-88392" class="w-full p-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Reason for Refund / Return</label>
+              <select id="refundReason" class="w-full p-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
+                <option value="Damaged Goods">Damaged or Defective Item</option>
+                <option value="Incorrect Item">Wrong Item Delivered</option>
+                <option value="Missing Quantity">Incomplete Quantity / Missing Items</option>
+                <option value="Late Delivery">Delayed Dispatch / Cancellation</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Upload Photo Proof (Optional)</label>
+              <input type="file" accept="image/*" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-[#064e3b] hover:file:bg-emerald-100">
+            </div>
+            <button onclick="submitRefundForm()" class="w-full bg-[#064e3b] text-white font-bold py-3 rounded-xl uppercase shadow-xs cursor-pointer">Submit Refund Claim</button>
+          </div>
+        `;
+      } else if (type === 'dispute') {
+        title.textContent = 'File a Formal Trade Dispute';
+        body.innerHTML = `
+          <div class="space-y-3 text-xs">
+            <p class="text-gray-600">Disputes are handled by the Yumilo Market Mediation Desk for buyer-supplier conflict resolution:</p>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Order ID / Invoice Reference</label>
+              <input type="text" id="disputeOrderId" placeholder="e.g. YM-99482" class="w-full p-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Supplier / Vendor Name</label>
+              <input type="text" id="disputeVendor" placeholder="e.g. Zamhatch Poultry / Local Supplier" class="w-full p-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Detailed Description of Dispute</label>
+              <textarea id="disputeDesc" rows="3" placeholder="Explain the issue clearly..." class="w-full p-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]"></textarea>
+            </div>
+            <button onclick="submitDisputeForm()" class="w-full bg-[#064e3b] text-white font-bold py-3 rounded-xl uppercase shadow-xs cursor-pointer">Submit Dispute for Mediation</button>
+          </div>
+        `;
+      } else if (type === 'ip') {
+        title.textContent = 'Report Intellectual Property Infringement';
+        body.innerHTML = `
+          <div class="space-y-3 text-xs">
+            <p class="text-gray-600">Submit trademark or copyright infringement notices for prompt investigation:</p>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Your Name / Company Name</label>
+              <input type="text" placeholder="Brand / Trademark Owner" class="w-full p-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Infringing Product URL / Listing Title</label>
+              <input type="text" placeholder="Paste product link or title" class="w-full p-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Details of Infringement</label>
+              <textarea rows="3" placeholder="Describe the trademark or copyright violation..." class="w-full p-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]"></textarea>
+            </div>
+            <button onclick="submitGenericReport('IP Infringement')" class="w-full bg-[#064e3b] text-white font-bold py-3 rounded-xl uppercase shadow-xs cursor-pointer">Submit IP Notice</button>
+          </div>
+        `;
+      } else if (type === 'violation') {
+        title.textContent = 'Report a Platform Violation / Safety Concern';
+        body.innerHTML = `
+          <div class="space-y-3 text-xs">
+            <p class="text-gray-600">Help us maintain a trusted marketplace across Zambia by reporting violations:</p>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Violation Type</label>
+              <select class="w-full p-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
+                <option>Fraudulent Listing or Scam</option>
+                <option>Prohibited Goods / Restricted Items</option>
+                <option>Misleading Product Description</option>
+                <option>Inappropriate Vendor Behavior</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Description & Evidence</label>
+              <textarea rows="3" placeholder="Provide details of the violation..." class="w-full p-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]"></textarea>
+            </div>
+            <button onclick="submitGenericReport('Platform Violation')" class="w-full bg-[#064e3b] text-white font-bold py-3 rounded-xl uppercase shadow-xs cursor-pointer">Submit Report</button>
+          </div>
+        `;
+      }
+    }
+
+    function closeHelpModal() {
+      document.getElementById('helpModal').classList.add('hidden');
+    }
+
+    function sendChatMessage() {
+      const msg = document.getElementById('chatInputMsg').value.trim();
+      if (!msg) return;
+      alert(`Message sent to Yumilo Support Desk: "${msg}". An agent will respond shortly via email/inbox.`);
+      closeHelpModal();
+    }
+
+    function submitRefundForm() {
+      const orderId = document.getElementById('refundOrderId').value.trim();
+      if (!orderId) {
+        alert('Please enter your Order ID.');
+        return;
+      }
+      alert(`Refund claim for Order ${orderId} submitted successfully. Our after-sales desk will review and contact you within 24 hours.`);
+      closeHelpModal();
+    }
+
+    function submitDisputeForm() {
+      const orderId = document.getElementById('disputeOrderId').value.trim();
+      if (!orderId) {
+        alert('Please enter your Order ID / Invoice reference.');
+        return;
+      }
+      alert(`Trade dispute for Order ${orderId} has been filed with the Yumilo Mediation Desk. Case reference: YM-DSP-${Math.floor(Math.random()*90000+10000)}.`);
+      closeHelpModal();
+    }
+
+    function submitGenericReport(type) {
+      alert(`Your ${type} report has been successfully submitted to our compliance and trust team. Thank you for keeping Yumilo Market secure.`);
+      closeHelpModal();
     }
 
     function renderProducts(products) {
