@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yumilo Market - Customer Login & Signup</title>
+  <title>Yumilo Market - Customer Login & Verification</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>body { background-color: #fcfbf9; }</style>
@@ -19,7 +19,7 @@
     </div>
 
     <!-- TAB SWITCHER -->
-    <div class="flex bg-gray-100 p-1 rounded-xl text-xs font-semibold">
+    <div id="tabContainer" class="flex bg-gray-100 p-1 rounded-xl text-xs font-semibold">
       <button onclick="switchTab('login')" id="tabLogin" class="flex-1 py-2.5 rounded-lg bg-white text-gray-900 shadow-sm transition cursor-pointer">Sign In</button>
       <button onclick="switchTab('signup')" id="tabSignup" class="flex-1 py-2.5 rounded-lg text-gray-500 transition cursor-pointer">Create Account</button>
     </div>
@@ -42,8 +42,8 @@
       </button>
     </form>
 
-    <!-- SIGN UP FORM -->
-    <form id="signupForm" onsubmit="handleSignup(event)" class="space-y-4 hidden">
+    <!-- SIGN UP FORM (Step 1: Details) -->
+    <form id="signupForm" onsubmit="handleRequestOtp(event)" class="space-y-4 hidden">
       <div>
         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Full Name</label>
         <input type="text" id="signupName" required placeholder="John Banda" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
@@ -57,7 +57,24 @@
         <input type="password" id="signupPassword" required placeholder="Min 6 characters" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
       </div>
       <button type="submit" id="signupBtn" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
-        Create Customer Account
+        Send Verification Code
+      </button>
+    </form>
+
+    <!-- OTP VERIFICATION FORM (Step 2) -->
+    <form id="otpForm" onsubmit="handleVerifyAndRegister(event)" class="space-y-4 hidden">
+      <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-xs text-emerald-800 text-center">
+        We have sent a 6-digit verification code to <span id="displayOtpEmail" class="font-bold"></span>. Please enter it below.
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">6-Digit Verification Code</label>
+        <input type="text" id="otpCode" required maxlength="6" placeholder="123456" class="w-full px-3 py-3 border rounded-xl text-center tracking-widest font-mono text-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+      </div>
+      <button type="submit" id="verifyBtn" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
+        Verify Code & Create Account
+      </button>
+      <button type="button" onclick="backToSignupDetails()" class="w-full text-center text-xs text-gray-500 hover:underline pt-1">
+        ← Back to account details
       </button>
     </form>
 
@@ -74,6 +91,8 @@
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
 
+    let tempUserData = { name: '', email: '', password: '', generatedOtp: '' };
+
     document.addEventListener('DOMContentLoaded', async () => {
       try {
         const { data: { session } } = await supabaseClient.auth.getSession();
@@ -86,19 +105,24 @@
     function switchTab(tab) {
       const loginForm = document.getElementById('loginForm');
       const signupForm = document.getElementById('signupForm');
+      const otpForm = document.getElementById('otpForm');
       const tabLogin = document.getElementById('tabLogin');
       const tabSignup = document.getElementById('tabSignup');
+      const tabContainer = document.getElementById('tabContainer');
       const alertBox = document.getElementById('authAlert');
       alertBox.classList.add('hidden');
+      otpForm.classList.add('hidden');
 
       if (tab === 'login') {
         loginForm.classList.remove('hidden');
         signupForm.classList.add('hidden');
+        tabContainer.classList.remove('hidden');
         tabLogin.className = 'flex-1 py-2.5 rounded-lg bg-white text-gray-900 shadow-sm transition cursor-pointer';
         tabSignup.className = 'flex-1 py-2.5 rounded-lg text-gray-500 transition cursor-pointer';
       } else {
         signupForm.classList.remove('hidden');
         loginForm.classList.add('hidden');
+        tabContainer.classList.remove('hidden');
         tabSignup.className = 'flex-1 py-2.5 rounded-lg bg-white text-gray-900 shadow-sm transition cursor-pointer';
         tabLogin.className = 'flex-1 py-2.5 rounded-lg text-gray-500 transition cursor-pointer';
       }
@@ -142,31 +166,97 @@
       }
     }
 
-    async function handleSignup(e) {
+    async function handleRequestOtp(e) {
       e.preventDefault();
-      const name = document.getElementById('signupName').value.trim();
-      const email = document.getElementById('signupEmail').value.trim();
-      const password = document.getElementById('signupPassword').value;
+      tempUserData.name = document.getElementById('signupName').value.trim();
+      tempUserData.email = document.getElementById('signupEmail').value.trim();
+      tempUserData.password = document.getElementById('signupPassword').value;
       const btn = document.getElementById('signupBtn');
+
+      btn.textContent = 'Sending verification code...';
+      btn.disabled = true;
+
+      tempUserData.generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
+      try {
+        const response = await fetch('/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: tempUserData.email,
+            passcode: tempUserData.generatedOtp
+          })
+        });
+
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || 'Failed to dispatch verification code.');
+        }
+
+        document.getElementById('signupForm').classList.add('hidden');
+        document.getElementById('tabContainer').classList.add('hidden');
+        document.getElementById('otpForm').classList.remove('hidden');
+        document.getElementById('displayOtpEmail').textContent = tempUserData.email;
+        showAlert('Verification code sent! Check your inbox.', false);
+
+      } catch (err) {
+        showAlert(err.message || 'Error sending verification code.');
+        btn.textContent = 'Send Verification Code';
+        btn.disabled = false;
+      }
+    }
+
+    function backToSignupDetails() {
+      document.getElementById('otpForm').classList.add('hidden');
+      document.getElementById('signupForm').classList.remove('hidden');
+      document.getElementById('tabContainer').classList.remove('hidden');
+      document.getElementById('signupBtn').textContent = 'Send Verification Code';
+      document.getElementById('signupBtn').disabled = false;
+      document.getElementById('authAlert').classList.add('hidden');
+    }
+
+    // Verify Code and Call Cloudflare /signup Endpoint
+    async function handleVerifyAndRegister(e) {
+      e.preventDefault();
+      const enteredCode = document.getElementById('otpCode').value.trim();
+      const btn = document.getElementById('verifyBtn');
+
+      if (enteredCode !== tempUserData.generatedOtp) {
+        showAlert('Invalid verification code. Please check your email and try again.');
+        return;
+      }
 
       btn.textContent = 'Creating account...';
       btn.disabled = true;
 
       try {
-        const { data, error } = await supabaseClient.auth.signUp({
-          email,
-          password,
-          options: { data: { full_name: name } }
+        const response = await fetch('/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: tempUserData.email,
+            password: tempUserData.password,
+            fullName: tempUserData.name
+          })
         });
 
-        if (error) throw error;
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || 'Failed to complete registration.');
+        }
 
-        showAlert('Account created successfully! Redirecting...', false);
-        setTimeout(() => redirectToDashboard(email), 1000);
+        // Automatically log them in after registration
+        await supabaseClient.auth.signInWithPassword({
+          email: tempUserData.email,
+          password: tempUserData.password
+        });
+
+        showAlert('Account verified and created successfully! Redirecting...', false);
+        setTimeout(() => redirectToDashboard(tempUserData.email), 1200);
 
       } catch (err) {
-        showAlert(err.message || 'Failed to create account.');
-        btn.textContent = 'Create Customer Account';
+        showAlert(err.message || 'Failed to complete registration.');
+        btn.textContent = 'Verify Code & Create Account';
         btn.disabled = false;
       }
     }
