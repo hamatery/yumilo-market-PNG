@@ -61,7 +61,7 @@
       </button>
     </form>
 
-    <!-- OTP VERIFICATION FORM (Step 2: Hidden initially) -->
+    <!-- OTP VERIFICATION FORM (Step 2) -->
     <form id="otpForm" onsubmit="handleVerifyAndRegister(event)" class="space-y-4 hidden">
       <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-xs text-emerald-800 text-center">
         We have sent a 6-digit verification code to <span id="displayOtpEmail" class="font-bold"></span>. Please enter it below.
@@ -166,7 +166,6 @@
       }
     }
 
-    // Step 1: Request OTP Code with diagnostic response inspection
     async function handleRequestOtp(e) {
       e.preventDefault();
       tempUserData.name = document.getElementById('signupName').value.trim();
@@ -189,16 +188,9 @@
           })
         });
 
-        const responseText = await response.text();
-        let result;
-        try {
-          result = JSON.parse(responseText);
-        } catch (parseErr) {
-          throw new Error(`Server endpoint error (${response.status}): ${responseText.slice(0, 120)}`);
-        }
-
+        const result = await response.json();
         if (!response.ok || !result.success) {
-          throw new Error(result.error || `Request failed with status ${response.status}`);
+          throw new Error(result.error || 'Failed to dispatch verification code.');
         }
 
         document.getElementById('signupForm').classList.add('hidden');
@@ -208,8 +200,7 @@
         showAlert('Verification code sent! Check your inbox.', false);
 
       } catch (err) {
-        console.error("OTP Error:", err);
-        showAlert(err.message || 'Error connecting to serverless function.');
+        showAlert(err.message || 'Error sending verification code.');
         btn.textContent = 'Send Verification Code';
         btn.disabled = false;
       }
@@ -224,7 +215,7 @@
       document.getElementById('authAlert').classList.add('hidden');
     }
 
-    // Step 2: Verify Code and Complete Supabase Signup
+    // Verify Code and Call Cloudflare /register Endpoint
     async function handleVerifyAndRegister(e) {
       e.preventDefault();
       const enteredCode = document.getElementById('otpCode').value.trim();
@@ -239,13 +230,26 @@
       btn.disabled = true;
 
       try {
-        const { data, error } = await supabaseClient.auth.signUp({
-          email: tempUserData.email,
-          password: tempUserData.password,
-          options: { data: { full_name: tempUserData.name } }
+        const response = await fetch('/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: tempUserData.email,
+            password: tempUserData.password,
+            fullName: tempUserData.name
+          })
         });
 
-        if (error) throw error;
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || 'Failed to complete registration.');
+        }
+
+        // Automatically sign in the user right after registration
+        await supabaseClient.auth.signInWithPassword({
+          email: tempUserData.email,
+          password: tempUserData.password
+        });
 
         showAlert('Account verified and created successfully! Redirecting...', false);
         setTimeout(() => redirectToDashboard(tempUserData.email), 1200);
