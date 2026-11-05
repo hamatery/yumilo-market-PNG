@@ -11,30 +11,26 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .fade-in { animation: fadeIn 0.4s ease-in-out forwards; }
+    .fade-in { animation: fadeIn 0.3s ease-in-out forwards; }
   </style>
 </head>
-<body class="min-h-screen text-gray-800 flex flex-col pb-32">
+<body class="min-h-screen text-gray-800 flex flex-col pb-28">
 
-  <!-- PROFESSIONAL STICKY HEADER (ALIBABA STYLE) -->
+  <!-- PROFESSIONAL HEADER -->
   <header class="bg-[#064e3b] text-white sticky top-0 z-50 shadow-md w-full">
-    
-    <!-- TOP BAR -->
-    <div class="w-full px-8 py-3.5 flex justify-between items-center border-b border-emerald-800/60">
+    <!-- Top Bar -->
+    <div class="w-full px-8 py-3 flex justify-between items-center border-b border-emerald-800/60">
       <div class="flex items-center space-x-6">
-        <!-- LOGO -->
         <a href="index.html" class="flex items-center space-x-2.5 cursor-pointer">
-          <div class="w-10 h-10 rounded-xl bg-[#f59e0b] flex items-center justify-center text-lg shadow">🌿</div>
+          <div class="w-9 h-9 rounded-xl bg-[#f59e0b] flex items-center justify-center text-base shadow">🌿</div>
           <div>
             <h1 class="text-base font-black tracking-tight leading-none text-white">Yumilo</h1>
             <h1 class="text-base font-black tracking-tight leading-none text-white">Market</h1>
           </div>
         </a>
-        
-        <!-- TOP NAV MODES -->
         <nav class="hidden md:flex items-center space-x-5 text-xs font-bold text-emerald-100">
           <button class="text-white border-b-2 border-[#f59e0b] pb-0.5">Products</button>
           <button onclick="switchNavTab('categories')" class="hover:text-white transition cursor-pointer">Categories</button>
@@ -43,102 +39,116 @@
         </nav>
       </div>
 
-      <!-- HEADER RIGHT (ACCOUNT / AUTH / NOTIFICATION) -->
       <div class="flex items-center space-x-3" id="headerRightSlot">
         <!-- Injected dynamically -->
       </div>
     </div>
 
-    <!-- SEARCH & DISCOVERY BAR -->
+    <!-- Search & Discovery Bar -->
     <div class="w-full px-8 py-3 bg-[#064e3b]">
-      <div class="max-w-4xl mx-auto flex items-center bg-white rounded-2xl p-1.5 shadow-md border border-emerald-700">
-        <div class="pl-4 pr-2 text-gray-400 text-lg">🔍</div>
-        <input type="text" id="searchInput" oninput="handleSearch(event)" placeholder="Search products, agricultural supplies, electronics, shops..." class="w-full py-2.5 px-2 text-sm text-gray-800 focus:outline-none bg-transparent">
-        <button onclick="applySearchAndFilter()" class="bg-[#064e3b] hover:bg-emerald-900 text-white font-bold px-7 py-3 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow-xs">
+      <div class="max-w-4xl mx-auto flex items-center bg-white rounded-2xl p-1 shadow-md border border-emerald-700">
+        <div class="pl-4 pr-2 text-gray-400 text-base">🔍</div>
+        <input type="text" id="searchInput" oninput="handleSearch(event)" placeholder="Search products, agricultural supplies, electronics, shops..." class="w-full py-2 px-2 text-xs text-gray-800 focus:outline-none bg-transparent">
+        <button onclick="applySearchAndFilter()" class="bg-[#064e3b] hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow-xs">
           Search
         </button>
       </div>
     </div>
   </header>
 
-  <!-- SUB-CATEGORY TABS BAR -->
-  <div class="bg-white border-b border-gray-200 shadow-xs sticky top-[112px] z-40 w-full px-8 py-2.5">
-    <div class="flex space-x-4 overflow-x-auto no-scrollbar items-center">
-      <span class="text-xs font-black text-[#064e3b] uppercase tracking-wider shrink-0 mr-2">Categories:</span>
-      <button onclick="filterCategory('All')" id="catBtnAll" class="px-5 py-2 rounded-full text-xs font-bold bg-[#f59e0b] text-gray-900 shadow-xs transition cursor-pointer shrink-0">All Products</button>
-      <button onclick="filterCategory('Food')" id="catBtnFood" class="px-5 py-2 rounded-full text-xs font-bold bg-[#ebe3d0] text-gray-800 hover:bg-[#e2d7c0] transition cursor-pointer shrink-0">Food & Groceries</button>
-      <button onclick="filterCategory('Agriculture')" id="catBtnAgriculture" class="px-5 py-2 rounded-full text-xs font-bold bg-[#ebe3d0] text-gray-800 hover:bg-[#e2d7c0] transition cursor-pointer shrink-0">Agriculture & Poultry</button>
-      <button onclick="filterCategory('Home')" id="catBtnHome" class="px-5 py-2 rounded-full text-xs font-bold bg-[#ebe3d0] text-gray-800 hover:bg-[#e2d7c0] transition cursor-pointer shrink-0">Home & Kitchen</button>
-      <button onclick="filterCategory('Fashion')" id="catBtnFashion" class="px-5 py-2 rounded-full text-xs font-bold bg-[#ebe3d0] text-gray-800 hover:bg-[#e2d7c0] transition cursor-pointer shrink-0">Fashion & Apparel</button>
-      <button onclick="filterCategory('Electronics')" id="catBtnElectronics" class="px-5 py-2 rounded-full text-xs font-bold bg-[#ebe3d0] text-gray-800 hover:bg-[#e2d7c0] transition cursor-pointer shrink-0">Electronics</button>
-      <button onclick="filterCategory('Services')" id="catBtnServices" class="px-5 py-2 rounded-full text-xs font-bold bg-[#ebe3d0] text-gray-800 hover:bg-[#e2d7c0] transition cursor-pointer shrink-0">Services & SMS</button>
-    </div>
-  </div>
-
-  <!-- MAIN CONTAINER (FULL LAPTOP WIDTH EDGE-TO-EDGE) -->
-  <main class="w-full px-8 py-6 flex-1 space-y-8">
+  <!-- MAIN DESKTOP CONTAINER (ALIBABA SPLIT LAYOUT) -->
+  <main class="w-full px-8 py-6 flex-1 space-y-6">
 
     <!-- VIEW 1: HOME -->
     <div id="viewHome" class="space-y-6 fade-in">
       
-      <!-- QUICK ACTION CARDS (ALIBABA STYLE SHORTCUTS) -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div onclick="filterCategory('Agriculture');" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex items-center space-x-3 cursor-pointer hover:border-[#064e3b] transition">
-          <span class="text-2xl p-2 bg-amber-50 rounded-xl">📦</span>
-          <div>
-            <h4 class="text-xs font-bold text-gray-800">Source by Category</h4>
-            <p class="text-[10px] text-gray-500">Verified Zambian farms</p>
+      <!-- HERO GRID: LEFT SIDEBAR CATEGORIES + CENTER/RIGHT PROMOS -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        
+        <!-- LEFT SIDEBAR CATEGORIES (Alibaba style) -->
+        <div class="lg:col-span-3 bg-white rounded-2xl border border-gray-200/80 shadow-xs p-4 space-y-2 hidden lg:block">
+          <h3 class="text-xs font-black text-[#064e3b] uppercase tracking-wider px-2 pb-2 border-b border-gray-100">Categories for you</h3>
+          <div class="space-y-1 text-xs">
+            <button onclick="filterCategory('Food')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
+              <span>🌾</span><span>Food & Groceries</span>
+            </button>
+            <button onclick="filterCategory('Agriculture')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
+              <span>🐣</span><span>Agriculture & Poultry</span>
+            </button>
+            <button onclick="filterCategory('Home')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
+              <span>🫖</span><span>Home & Kitchen</span>
+            </button>
+            <button onclick="filterCategory('Fashion')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
+              <span>🎒</span><span>Fashion & Apparel</span>
+            </button>
+            <button onclick="filterCategory('Electronics')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
+              <span>📱</span><span>Electronics & Gadgets</span>
+            </button>
+            <button onclick="filterCategory('Services')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 text-gray-700 hover:text-[#064e3b] font-medium flex items-center space-x-2 transition cursor-pointer">
+              <span>⚡</span><span>Services & SMS Broadcast</span>
+            </button>
           </div>
         </div>
-        <div onclick="switchNavTab('messages')" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex items-center space-x-3 cursor-pointer hover:border-[#064e3b] transition">
-          <span class="text-2xl p-2 bg-emerald-50 rounded-xl">📋</span>
-          <div>
-            <h4 class="text-xs font-bold text-gray-800">Request for Quote</h4>
-            <p class="text-[10px] text-gray-500">Bulk supply inquiries</p>
-          </div>
-        </div>
-        <div onclick="filterCategory('Food')" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex items-center space-x-3 cursor-pointer hover:border-[#064e3b] transition">
-          <span class="text-2xl p-2 bg-blue-50 rounded-xl">🏆</span>
-          <div>
-            <h4 class="text-xs font-bold text-gray-800">Top Ranking</h4>
-            <p class="text-[10px] text-gray-500">Best-selling items</p>
-          </div>
-        </div>
-        <div onclick="switchNavTab('orders')" class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex items-center space-x-3 cursor-pointer hover:border-[#064e3b] transition">
-          <span class="text-2xl p-2 bg-purple-50 rounded-xl">⚡</span>
-          <div>
-            <h4 class="text-xs font-bold text-gray-800">Zambia Express</h4>
-            <p class="text-[10px] text-gray-500">Fast nationwide dispatch</p>
-          </div>
-        </div>
-      </div>
 
-      <!-- PROMOTIONAL CAROUSEL BANNER -->
-      <div class="relative rounded-3xl overflow-hidden shadow-md h-40 flex items-center px-10 bg-cover bg-center w-full transition-all duration-700" id="bannerContainer" style="background-image: url('https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=1600&q=80');">
-        <div class="absolute inset-0 bg-gradient-to-r from-[#064e3b] via-[#064e3b]/90 to-transparent"></div>
-        <div class="relative z-10 space-y-1.5 max-w-lg text-white" id="bannerContent">
-          <h3 class="text-2xl md:text-3xl font-black tracking-tight leading-snug">Shop across Zambia</h3>
-          <p class="text-sm text-emerald-200 font-medium">Quality at Every Step. Verified vendors & secure payments.</p>
+        <!-- CENTER & RIGHT FEATURED PROMOS -->
+        <div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          <!-- Featured Card 1 -->
+          <div onclick="filterCategory('Agriculture')" class="bg-white rounded-2xl border border-gray-200/80 shadow-xs p-4 flex flex-col justify-between cursor-pointer hover:border-[#064e3b] transition">
+            <div class="flex justify-between items-start">
+              <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-md">Frequently searched</span>
+              <span class="text-xs text-gray-400">#1</span>
+            </div>
+            <div class="py-3 flex justify-center">
+              <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=300&q=80" alt="Poultry" class="h-24 object-contain">
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-gray-800">Broiler Feed & Chicks</h4>
+              <p class="text-[10px] text-gray-500">Zamhatch & Ross 308 breeds</p>
+            </div>
+          </div>
+
+          <!-- Featured Card 2 -->
+          <div onclick="filterCategory('Electronics')" class="bg-white rounded-2xl border border-gray-200/80 shadow-xs p-4 flex flex-col justify-between cursor-pointer hover:border-[#064e3b] transition">
+            <div class="flex justify-between items-start">
+              <span class="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-md">Frequently searched</span>
+              <span class="text-xs text-gray-400">#2</span>
+            </div>
+            <div class="py-3 flex justify-center">
+              <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=300&q=80" alt="Electronics" class="h-24 object-contain">
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-gray-800">Smartphones & Audio</h4>
+              <p class="text-[10px] text-gray-500">Direct wholesale prices</p>
+            </div>
+          </div>
+
+          <!-- Banner Card 3 -->
+          <div class="bg-gradient-to-br from-[#064e3b] to-emerald-800 text-white rounded-2xl p-5 flex flex-col justify-between shadow-sm relative overflow-hidden">
+            <div class="space-y-1 relative z-10">
+              <span class="text-[10px] font-bold bg-[#f59e0b] text-gray-900 px-2 py-0.5 rounded-md">Zambia Express</span>
+              <h4 class="text-sm font-black tracking-tight pt-1">Stock up, save up to 20%</h4>
+              <p class="text-[11px] text-emerald-200">Quality at every step across all provinces.</p>
+            </div>
+            <div class="pt-4 relative z-10">
+              <button onclick="switchNavTab('home')" class="w-full bg-white text-[#064e3b] font-bold py-2 rounded-xl text-xs uppercase shadow-xs hover:bg-emerald-50 transition">Shop Now</button>
+            </div>
+            <div class="absolute -right-4 -bottom-4 text-6xl opacity-20">🇿🇲</div>
+          </div>
+
         </div>
-        <div class="absolute right-10 bg-[#064e3b]/90 border border-emerald-500/40 p-4 rounded-2xl text-3xl z-10 shadow-lg text-emerald-300">
-          🇿🇲
-        </div>
-        <div class="absolute bottom-3 right-10 flex space-x-1.5 z-20" id="bannerDots">
-          <span class="w-2.5 h-2.5 rounded-full bg-white opacity-90 cursor-pointer" onclick="setSlide(0)"></span>
-          <span class="w-2.5 h-2.5 rounded-full bg-white opacity-40 cursor-pointer" onclick="setSlide(1)"></span>
-          <span class="w-2.5 h-2.5 rounded-full bg-white opacity-40 cursor-pointer" onclick="setSlide(2)"></span>
-        </div>
+
       </div>
 
       <!-- PRODUCT CATALOG SECTION -->
       <div class="space-y-4 pt-2">
         <div class="flex justify-between items-center">
-          <h3 class="text-xl font-black text-[#064e3b]">Top Picks & Available Now</h3>
+          <h3 class="text-base font-black text-[#064e3b]">Top Picks & Wholesale Catalog</h3>
           <span class="text-xs text-gray-500 font-medium" id="productCount">Showing all items</span>
         </div>
         
-        <!-- DENSE MULTI-COLUMN PRODUCT GRID (ALIBABA STYLE) -->
-        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+        <!-- DENSE MULTI-COLUMN PRODUCT GRID (6 COLUMNS ON LAPTOP) -->
+        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
           <!-- Populated dynamically -->
         </div>
       </div>
@@ -209,11 +219,11 @@
     </div>
 
     <!-- PROFESSIONAL FOOTER SECTION -->
-    <footer class="w-full pt-12 pb-6 border-t border-gray-300/60 mt-16 space-y-6 text-xs text-gray-600">
+    <footer class="w-full pt-10 pb-6 border-t border-gray-300/60 mt-16 space-y-6 text-xs text-gray-600">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div class="space-y-3">
           <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 rounded-xl bg-[#f59e0b] flex items-center justify-center text-sm shadow">🌿</div>
+            <div class="w-7 h-7 rounded-xl bg-[#f59e0b] flex items-center justify-center text-xs shadow">🌿</div>
             <span class="font-black text-sm text-[#064e3b]">Yumilo Market</span>
           </div>
           <p class="text-gray-500 leading-relaxed">Zambia's premier nationwide marketplace connecting trusted vendors, farmers, and shoppers across all provinces.</p>
@@ -248,8 +258,8 @@
 
   </main>
 
-  <!-- BOTTOM APP NAVIGATION BAR (EDGE-TO-EDGE) -->
-  <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow-2xl z-50 py-3 px-8 w-full">
+  <!-- BOTTOM APP NAVIGATION BAR (MOBILE) -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow-2xl z-50 py-3 px-8 w-full md:hidden">
     <div class="w-full flex justify-between items-center max-w-7xl mx-auto">
       <button onclick="switchNavTab('home')" id="navHome" class="flex flex-col items-center text-[#064e3b] cursor-pointer space-y-1 flex-1">
         <span class="text-xl">🏠</span>
@@ -285,55 +295,6 @@
     let currentUser = null;
     let currentCategory = 'All';
 
-    // Banner Slides Data
-    const bannerSlides = [
-      {
-        title: "Shop across Zambia",
-        subtitle: "Quality at Every Step. Fast nationwide delivery.",
-        bg: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=1600&q=80",
-        badge: "🇿🇲"
-      },
-      {
-        title: "Fresh Farm Produce & Poultry",
-        subtitle: "Directly from Zambian farms to your doorstep.",
-        bg: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1600&q=80",
-        badge: "🌾"
-      },
-      {
-        title: "Secure Mobile Money & Cards",
-        subtitle: "Seamless payments via MTN, Airtel, Zamtel & Cards.",
-        bg: "https://images.unsplash.com/photo-1556742049-0a67d55362ec?auto=format&fit=crop&w=1600&q=80",
-        badge: "💳"
-      }
-    ];
-
-    let currentSlideIndex = 0;
-
-    function initBannerCarousel() {
-      setInterval(() => {
-        currentSlideIndex = (currentSlideIndex + 1) % bannerSlides.length;
-        setSlide(currentSlideIndex);
-      }, 4500);
-    }
-
-    function setSlide(index) {
-      currentSlideIndex = index;
-      const slide = bannerSlides[index];
-      const container = document.getElementById('bannerContainer');
-      const content = document.getElementById('bannerContent');
-      const dots = document.getElementById('bannerDots').children;
-
-      container.style.backgroundImage = `url('${slide.bg}')`;
-      content.innerHTML = `
-        <h3 class="text-2xl md:text-3xl font-black tracking-tight leading-snug">${slide.title}</h3>
-        <p class="text-sm text-emerald-200 font-medium">${slide.subtitle}</p>
-      `;
-
-      for (let i = 0; i < dots.length; i++) {
-        dots[i].style.opacity = (i === index) ? '0.9' : '0.4';
-      }
-    }
-
     const mockProducts = [
       { id: 1, name: 'Rice - 5kg', category: 'Food', price: 85.00, minOrder: '1 piece', verified: true, img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80' },
       { id: 2, name: 'Cooking Oil - 1L', category: 'Food', price: 120.00, minOrder: '2 pieces', verified: true, img: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=400&q=80' },
@@ -355,7 +316,6 @@
       renderHeader();
       renderProducts(mockProducts);
       renderAccountView();
-      initBannerCarousel();
     }
 
     function renderHeader() {
@@ -391,7 +351,7 @@
       }
       grid.innerHTML = products.map(p => `
         <div class="bg-white rounded-2xl border border-gray-200/80 shadow-xs p-3.5 flex flex-col justify-between space-y-3 hover:shadow-md transition">
-          <div class="h-36 bg-[#faf8f5] rounded-xl overflow-hidden flex items-center justify-center p-2 relative">
+          <div class="h-32 bg-[#faf8f5] rounded-xl overflow-hidden flex items-center justify-center p-2 relative">
             <img src="${p.img}" alt="${p.name}" class="h-full object-contain">
             ${p.verified ? '<span class="absolute top-2 left-2 bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded-md">Verified</span>' : ''}
           </div>
@@ -410,17 +370,8 @@
 
     function filterCategory(cat) {
       currentCategory = cat;
-      ['All', 'Food', 'Agriculture', 'Home', 'Fashion', 'Electronics', 'Services'].forEach(c => {
-        const btn = document.getElementById(`catBtn${c}`);
-        if (btn) {
-          if (c === cat) {
-            btn.className = 'px-5 py-2 rounded-full text-xs font-bold bg-[#f59e0b] text-gray-900 shadow-xs transition cursor-pointer shrink-0';
-          } else {
-            btn.className = 'px-5 py-2 rounded-full text-xs font-bold bg-[#ebe3d0] text-gray-800 hover:bg-[#e2d7c0] transition cursor-pointer shrink-0';
-          }
-        }
-      });
       applySearchAndFilter();
+      window.scrollTo({ top: 300, behavior: 'smooth' });
     }
 
     function handleSearch(e) {
@@ -445,14 +396,6 @@
     function switchNavTab(tabName) {
       ['home', 'categories', 'messages', 'orders', 'account'].forEach(t => {
         document.getElementById(`view${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.toggle('hidden', t !== tabName);
-        const navBtn = document.getElementById(`nav${t.charAt(0).toUpperCase() + t.slice(1)}`);
-        if (navBtn) {
-          if (t === tabName) {
-            navBtn.className = 'flex flex-col items-center text-[#064e3b] cursor-pointer space-y-1 flex-1';
-          } else {
-            navBtn.className = 'flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-1 flex-1';
-          }
-        }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
