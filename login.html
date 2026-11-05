@@ -215,7 +215,7 @@
       document.getElementById('authAlert').classList.add('hidden');
     }
 
-    // Verify Code and Call Cloudflare /register Endpoint
+    // Verify Code and Create Account directly via Supabase Auth Client
     async function handleVerifyAndRegister(e) {
       e.preventDefault();
       const enteredCode = document.getElementById('otpCode').value.trim();
@@ -230,26 +230,15 @@
       btn.disabled = true;
 
       try {
-        const response = await fetch('/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: tempUserData.email,
-            password: tempUserData.password,
-            fullName: tempUserData.name
-          })
-        });
-
-        const result = await response.json();
-        if (!response.ok || !result.success) {
-          throw new Error(result.error || 'Failed to complete registration.');
-        }
-
-        // Automatically sign in the user right after registration
-        await supabaseClient.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signUp({
           email: tempUserData.email,
-          password: tempUserData.password
+          password: tempUserData.password,
+          options: {
+            data: { full_name: tempUserData.name }
+          }
         });
+
+        if (error) throw error;
 
         showAlert('Account verified and created successfully! Redirecting...', false);
         setTimeout(() => redirectToDashboard(tempUserData.email), 1200);
