@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body { background-color: #fcfbf9; }
+    body { background-color: #f6f3ed; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -60,13 +60,17 @@
         <button onclick="filterCategory('Electronics')" id="catBtnElectronics" class="px-6 py-2.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer shrink-0">Electronics</button>
       </div>
 
-      <!-- PROMOTIONAL BANNER -->
-      <div class="bg-[#064e3b] text-white rounded-3xl p-6 shadow-md flex justify-between items-center relative overflow-hidden">
-        <div class="space-y-1 z-10 max-w-[240px]">
+      <!-- PROMOTIONAL BANNER (EXACT MOCKUP PHOTO BACKGROUND WITH OVERLAY) -->
+      <div class="relative rounded-3xl overflow-hidden shadow-md h-36 flex items-center p-6 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=1200&q=80');">
+        <!-- Dark Green Gradient Overlay on the left -->
+        <div class="absolute inset-0 bg-gradient-to-r from-[#064e3b] via-[#064e3b]/90 to-transparent"></div>
+        
+        <div class="relative z-10 space-y-1 max-w-[240px] text-white">
           <h3 class="text-xl font-black tracking-tight leading-snug">Shop across Zambia</h3>
           <p class="text-xs text-emerald-200 font-medium">Quality at Every Step.</p>
         </div>
-        <div class="bg-emerald-800/80 p-3.5 rounded-2xl border border-emerald-600/50 text-2xl z-10 shadow-inner">
+
+        <div class="absolute right-6 bg-[#064e3b]/90 border border-emerald-500/40 p-3.5 rounded-2xl text-2xl z-10 shadow-lg text-emerald-300">
           🗺️
         </div>
       </div>
@@ -180,10 +184,34 @@
     let currentUser = null;
 
     const mockProducts = [
-      { id: 1, name: 'Rice - 5kg', category: 'Food', price: 85.00, emoji: '🌾' },
-      { id: 2, name: 'Cooking Oil - 1L', category: 'Food', price: 120.00, emoji: '🫗' },
-      { id: 3, name: 'School Backpack', category: 'Fashion', price: 450.00, emoji: '🎒' },
-      { id: 4, name: 'Kitchen Kettle', category: 'Home', price: 680.00, emoji: '🫖' }
+      { 
+        id: 1, 
+        name: 'Rice - 5kg', 
+        category: 'Food', 
+        price: 85.00, 
+        img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=300&q=80' 
+      },
+      { 
+        id: 2, 
+        name: 'Cooking Oil - 1L', 
+        category: 'Food', 
+        price: 120.00, 
+        img: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=300&q=80' 
+      },
+      { 
+        id: 3, 
+        name: 'School Backpack', 
+        category: 'Fashion', 
+        price: 450.00, 
+        img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=300&q=80' 
+      },
+      { 
+        id: 4, 
+        name: 'Kitchen Kettle', 
+        category: 'Home', 
+        price: 680.00, 
+        img: 'https://images.unsplash.com/photo-1594213813735-86d1b73e351d?auto=format&fit=crop&w=300&q=80' 
+      }
     ];
 
     async function initApp() {
@@ -198,7 +226,6 @@
     function renderHeader() {
       const slot = document.getElementById('headerRightSlot');
       if (currentUser) {
-        // Logged In: Notification Bell matching mockup
         slot.innerHTML = `
           <button onclick="switchNavTab('messages')" class="relative p-2 text-white hover:bg-emerald-800 rounded-xl transition cursor-pointer">
             <span class="text-xl">🔔</span>
@@ -206,7 +233,6 @@
           </button>
         `;
       } else {
-        // Logged Out: Sign in & Create account buttons matching mockup
         slot.innerHTML = `
           <div class="flex items-center space-x-2">
             <a href="login.html" class="bg-transparent hover:bg-emerald-800 text-white text-xs font-bold px-3.5 py-2 rounded-xl border border-emerald-600 transition">Sign in</a>
@@ -231,7 +257,9 @@
       const grid = document.getElementById('productGrid');
       grid.innerHTML = products.map(p => `
         <div class="bg-white rounded-2xl border border-gray-200/80 shadow-xs p-3.5 flex flex-col justify-between space-y-3">
-          <div class="text-4xl text-center py-5 bg-gray-50/80 rounded-xl">${p.emoji}</div>
+          <div class="h-28 bg-gray-50 rounded-xl overflow-hidden flex items-center justify-center p-2">
+            <img src="${p.img}" alt="${p.name}" class="h-full object-contain">
+          </div>
           <div class="space-y-0.5">
             <h4 class="text-xs font-bold text-gray-800 line-clamp-1">${p.name}</h4>
             <p class="text-sm font-black text-[#064e3b]">K${p.price.toFixed(2)}</p>
