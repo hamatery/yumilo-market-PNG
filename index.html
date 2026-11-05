@@ -6,126 +6,171 @@
   <title>Yumilo Market - Nationwide Marketplace Across Zambia</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>body { background-color: #fcfbf9; }</style>
+  <style>
+    body { background-color: #fcfbf9; }
+    /* Hide scrollbar for category pills */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
-<body class="min-h-screen text-gray-800 flex flex-col">
+<body class="min-h-screen text-gray-800 flex flex-col pb-20">
 
   <!-- TOP HEADER -->
-  <header class="bg-[#064e3b] text-white sticky top-0 z-50 shadow-md">
-    <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center gap-4">
-      <a href="index.html" class="text-lg font-black tracking-wide">YUMILO MARKET</a>
+  <header class="bg-[#064e3b] text-white sticky top-0 z-45 shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4">
       
-      <!-- SEARCH BAR -->
-      <div class="flex-1 max-w-md hidden md:block">
-        <input type="text" id="searchInput" placeholder="Search products across Zambia..." class="w-full px-4 py-2 rounded-xl text-xs text-gray-800 bg-white focus:outline-none shadow-inner">
-      </div>
-
-      <!-- DYNAMIC AUTH & CART CONTROLS -->
-      <div class="flex items-center space-x-3" id="headerAuthArea">
-        <button onclick="toggleCartDrawer(true)" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition cursor-pointer flex items-center space-x-1.5">
-          <span>🛒 Cart</span>
-          <span id="cartCountBadge" class="bg-white text-[#064e3b] px-1.5 py-0.5 rounded-full text-[10px] font-black">0</span>
-        </button>
-        <div id="authNavSlot">
-          <a href="login.html" class="bg-white text-[#064e3b] hover:bg-emerald-50 text-xs font-bold px-4 py-2 rounded-xl transition shadow">Sign In</a>
+      <!-- LOGO -->
+      <a href="index.html" class="flex items-center space-x-2.5">
+        <div class="w-10 h-10 rounded-xl bg-[#f59e0b] flex items-center justify-center text-xl shadow">🌿</div>
+        <div>
+          <h1 class="text-lg font-black tracking-tight leading-none">Yumilo</h1>
+          <h1 class="text-lg font-black tracking-tight leading-none">Market</h1>
         </div>
-      </div>
-    </div>
+      </a>
 
-    <!-- CATEGORIES RIBBON -->
-    <div class="bg-emerald-900/80 border-t border-emerald-800 px-6 py-2 overflow-x-auto">
-      <div class="max-w-7xl mx-auto flex space-x-6 text-xs font-semibold whitespace-nowrap">
-        <button onclick="filterCategory('All')" class="hover:text-emerald-200 transition cursor-pointer text-white">All Categories</button>
-        <button onclick="filterCategory('Electronics')" class="hover:text-emerald-200 transition cursor-pointer text-emerald-100">Electronics</button>
-        <button onclick="filterCategory('Fashion')" class="hover:text-emerald-200 transition cursor-pointer text-emerald-100">Fashion</button>
-        <button onclick="filterCategory('Groceries')" class="hover:text-emerald-200 transition cursor-pointer text-emerald-100">Groceries</button>
-        <button onclick="filterCategory('Agri & Livestock')" class="hover:text-emerald-200 transition cursor-pointer text-emerald-100">Agri & Livestock</button>
+      <!-- HEADER RIGHT (DYNAMIC: Logged Out vs Logged In) -->
+      <div class="flex items-center space-x-4" id="headerRightSlot">
+        <!-- Rendered dynamically by script -->
       </div>
     </div>
   </header>
 
-  <!-- MAIN STORE CONTENT -->
-  <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full space-y-10">
+  <!-- MAIN VIEW CONTAINER (Single Page Hub) -->
+  <main class="max-w-4xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
 
-    <!-- HERO BANNER -->
-    <div class="bg-[#064e3b] text-white rounded-3xl p-8 md:p-12 shadow-lg flex flex-col md:flex-row justify-between items-center gap-8">
-      <div class="space-y-3 max-w-xl text-center md:text-left">
-        <span class="bg-emerald-800 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Zambia • Quality At Every Step</span>
-        <h2 class="text-3xl md:text-4xl font-black tracking-tight">Good finds. Right here.</h2>
-        <p class="text-xs md:text-sm text-emerald-100 leading-relaxed">Shop products from across Zambia. Verified vendors, secure mobile money escrow, and reliable nationwide delivery.</p>
+    <!-- VIEW 1: HOME FEED -->
+    <div id="viewHome" class="space-y-6">
+      
+      <!-- DYNAMIC GREETING -->
+      <div class="space-y-1">
+        <h2 id="greetingText" class="text-2xl md:text-3xl font-black text-[#064e3b]">Welcome to Yumilo Market</h2>
       </div>
-      <div class="bg-emerald-900/60 border border-emerald-700/50 p-6 rounded-2xl text-center text-xs space-y-1 shadow-inner">
-        <p class="font-bold text-emerald-200 uppercase">Nationwide Logistics Hub</p>
-        <p class="text-emerald-300">Active Dispatches to All Provinces</p>
+
+      <!-- SEARCH BAR -->
+      <div class="relative">
+        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search products, shops..." class="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white border border-gray-200 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#064e3b] shadow-sm">
+      </div>
+
+      <!-- CATEGORY PILLS -->
+      <div class="flex space-x-3 overflow-x-auto no-scrollbar py-1">
+        <button onclick="filterCategory('All')" id="catBtnAll" class="px-6 py-2.5 rounded-full text-xs font-bold bg-[#f59e0b] text-gray-900 shadow-sm transition cursor-pointer shrink-0">All</button>
+        <button onclick="filterCategory('Food')" id="catBtnFood" class="px-6 py-2.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer shrink-0">Food</button>
+        <button onclick="filterCategory('Home')" id="catBtnHome" class="px-6 py-2.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer shrink-0">Home</button>
+        <button onclick="filterCategory('Fashion')" id="catBtnFashion" class="px-6 py-2.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer shrink-0">Fashion</button>
+        <button onclick="filterCategory('Electronics')" id="catBtnElectronics" class="px-6 py-2.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer shrink-0">Electronics</button>
+      </div>
+
+      <!-- PROMOTIONAL BANNER -->
+      <div class="bg-[#064e3b] text-white rounded-3xl p-6 shadow-md flex justify-between items-center relative overflow-hidden">
+        <div class="space-y-1.5 z-10 max-w-[260px]">
+          <h3 class="text-xl font-black tracking-tight">Shop across Zambia</h3>
+          <p class="text-xs text-emerald-200">Quality at Every Step.</p>
+        </div>
+        <div class="bg-emerald-800/80 p-3 rounded-2xl border border-emerald-600/50 text-2xl z-10 shadow-inner">
+          🗺️
+        </div>
+      </div>
+
+      <!-- AVAILABLE NOW SECTION -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-black text-[#064e3b]">Available now</h3>
+        
+        <div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <!-- Populated by JavaScript -->
+        </div>
       </div>
     </div>
 
-    <!-- PRODUCT CATALOG -->
-    <div class="space-y-6">
-      <div class="flex justify-between items-center">
-        <h3 class="text-lg font-black text-[#064e3b]">Featured Products</h3>
-        <span class="text-xs text-gray-400">Verified items ready for nationwide delivery</span>
+    <!-- VIEW 2: CATEGORIES (Loaded via Bottom Nav) -->
+    <div id="viewCategories" class="space-y-6 hidden">
+      <h3 class="text-xl font-black text-[#064e3b]">Market Categories</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <div onclick="filterCategory('Food'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm text-center cursor-pointer hover:border-[#064e3b] transition">
+          <span class="text-3xl">🌾</span>
+          <h4 class="font-bold text-sm mt-2 text-[#064e3b]">Food & Groceries</h4>
+        </div>
+        <div onclick="filterCategory('Home'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm text-center cursor-pointer hover:border-[#064e3b] transition">
+          <span class="text-3xl">🫖</span>
+          <h4 class="font-bold text-sm mt-2 text-[#064e3b]">Home & Kitchen</h4>
+        </div>
+        <div onclick="filterCategory('Fashion'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm text-center cursor-pointer hover:border-[#064e3b] transition">
+          <span class="text-3xl">🎒</span>
+          <h4 class="font-bold text-sm mt-2 text-[#064e3b]">Fashion & Apparel</h4>
+        </div>
+        <div onclick="filterCategory('Electronics'); switchNavTab('home')" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm text-center cursor-pointer hover:border-[#064e3b] transition">
+          <span class="text-3xl">📱</span>
+          <h4 class="font-bold text-sm mt-2 text-[#064e3b]">Electronics</h4>
+        </div>
       </div>
+    </div>
 
-      <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        <!-- Products populated dynamically -->
+    <!-- VIEW 3: MESSAGES & INBOX -->
+    <div id="viewMessages" class="space-y-6 hidden">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-black text-[#064e3b]">Messages & Inbox</h3>
+        <span class="text-xs text-gray-400">Vendor & Yumilo Broadcasts</span>
+      </div>
+      <div class="space-y-3">
+        <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm space-y-1">
+          <div class="flex justify-between text-[11px] font-bold text-[#064e3b]">
+            <span>Yumilo Market System</span>
+            <span>Today</span>
+          </div>
+          <p class="text-xs text-gray-700">Welcome to Yumilo Market! Your account is active and verified securely across Zambia.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: MY ORDERS -->
+    <div id="viewOrders" class="space-y-6 hidden">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-black text-[#064e3b]">My Orders & Tracking</h3>
+        <button onclick="loadOrders()" class="text-xs bg-gray-100 px-3 py-1.5 rounded-xl font-bold text-gray-700">Refresh</button>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 text-center space-y-3">
+        <p class="text-3xl">📦</p>
+        <p class="text-xs text-gray-500">No active orders placed yet.</p>
+      </div>
+    </div>
+
+    <!-- VIEW 5: ACCOUNT & SETTINGS -->
+    <div id="viewAccount" class="space-y-6 hidden">
+      <h3 class="text-xl font-black text-[#064e3b]">Account Settings</h3>
+      <div id="accountContent" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-4">
+        <!-- Populated dynamically based on auth status -->
       </div>
     </div>
 
   </main>
 
-  <!-- SLIDE-OUT CART & CHECKOUT DRAWER -->
-  <div id="cartDrawer" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden flex justify-end transition-opacity">
-    <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col p-6 space-y-6 overflow-y-auto">
-      <div class="flex justify-between items-center border-b pb-4">
-        <h3 class="text-base font-black text-[#064e3b]">Your Shopping Cart</h3>
-        <button onclick="toggleCartDrawer(false)" class="text-gray-400 hover:text-gray-700 font-bold text-lg cursor-pointer">✕</button>
-      </div>
-
-      <div id="cartItemsList" class="flex-1 space-y-4 overflow-y-auto divide-y divide-gray-100">
-        <p class="text-xs text-gray-400 text-center py-10">Your cart is empty.</p>
-      </div>
-
-      <div class="border-t pt-4 space-y-3">
-        <div class="flex justify-between text-sm font-bold text-gray-800">
-          <span>Total:</span>
-          <span id="cartTotalPrice">K0.00</span>
-        </div>
-        <button onclick="proceedToCheckout()" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
-          Proceed to Secure Checkout
-        </button>
-        <p class="text-[10px] text-center text-gray-400">Orders are completed only after payment verification.</p>
-      </div>
+  <!-- BOTTOM APP NAVIGATION BAR (Mockup Style Footer) -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow-lg z-50 py-2 px-6">
+    <div class="max-w-md mx-auto flex justify-between items-center">
+      <button onclick="switchNavTab('home')" id="navHome" class="flex flex-col items-center text-[#064e3b] cursor-pointer space-y-0.5">
+        <span class="text-lg">🏠</span>
+        <span class="text-[10px] font-bold">Home</span>
+      </button>
+      <button onclick="switchNavTab('categories')" id="navCategories" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-0.5">
+        <span class="text-lg">📂</span>
+        <span class="text-[10px] font-bold">Categories</span>
+      </button>
+      <button onclick="switchNavTab('messages')" id="navMessages" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-0.5">
+        <span class="text-lg">💬</span>
+        <span class="text-[10px] font-bold">Messages</span>
+      </button>
+      <button onclick="switchNavTab('orders')" id="navOrders" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-0.5">
+        <span class="text-lg">📦</span>
+        <span class="text-[10px] font-bold">My Orders</span>
+      </button>
+      <button onclick="switchNavTab('account')" id="navAccount" class="flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-0.5">
+        <span class="text-lg">👤</span>
+        <span class="text-[10px] font-bold">Account</span>
+      </button>
     </div>
-  </div>
+  </nav>
 
-  <!-- ACCOUNT SETTINGS MODAL (Triggered when logged in) -->
-  <div id="accountModal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 space-y-6">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="text-base font-bold text-[#064e3b]">Account Settings & Inbox</h3>
-        <button onclick="toggleAccountModal(false)" class="text-gray-400 hover:text-gray-700 font-bold cursor-pointer">✕</button>
-      </div>
-      <div class="space-y-4 text-xs">
-        <div class="p-3 bg-emerald-50 rounded-xl space-y-1">
-          <p class="font-bold text-emerald-900">Signed in as:</p>
-          <p id="modalUserEmail" class="font-mono text-emerald-700"></p>
-        </div>
-        <div>
-          <label class="block font-bold text-gray-700 uppercase mb-1">Update Delivery Address</label>
-          <input type="text" id="modalUserAddress" placeholder="Street, City, Province" class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600">
-        </div>
-        <button onclick="saveAccountSettings()" class="w-full bg-[#064e3b] text-white font-bold py-2.5 rounded-xl uppercase transition cursor-pointer">Save Settings</button>
-        <button onclick="handleLogout()" class="w-full bg-red-100 text-red-700 font-bold py-2.5 rounded-xl uppercase transition cursor-pointer">Sign Out</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="text-center py-6 text-xs text-gray-400 border-t border-gray-100 mt-auto">
-    &copy; 2026 Yumilo Market. All rights reserved. Secure Nationwide Delivery.
-  </footer>
-
+  <!-- SCRIPT -->
   <script>
     const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
@@ -133,110 +178,144 @@
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
 
-    let cart = [];
     let currentUser = null;
 
-    const sampleProducts = [
-      { id: 1, name: 'X-Series Smart Phone 128GB', category: 'Electronics', price: 3450.00, image: '📱' },
-      { id: 2, name: 'Premium Cotton Casual Tee', category: 'Fashion', price: 180.00, image: '👕' },
-      { id: 3, name: 'Super Meal Roller Meal (25kg)', category: 'Groceries', price: 240.00, image: '🌾' },
-      { id: 4, name: 'Whole Broiler Chicken (Zamhatch)', category: 'Agri & Livestock', price: 95.00, image: '🍗' }
+    const mockProducts = [
+      { id: 1, name: 'Rice - 5kg', category: 'Food', price: 85.00, emoji: '🌾' },
+      { id: 2, name: 'Cooking Oil - 1L', category: 'Food', price: 120.00, emoji: '🫗' },
+      { id: 3, name: 'School Backpack', category: 'Fashion', price: 450.00, emoji: '🎒' },
+      { id: 4, name: 'Kitchen Kettle', category: 'Home', price: 680.00, emoji: '🫖' }
     ];
 
-    async function initStore() {
+    async function initApp() {
       const { data: { session } } = await supabaseClient.auth.getSession();
-      if (session) {
-        currentUser = session.user;
-        document.getElementById('authNavSlot').innerHTML = `
-          <button onclick="toggleAccountModal(true)" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition cursor-pointer">
-            ⚙️ Account Settings
+      currentUser = session ? session.user : null;
+      renderHeader();
+      renderGreeting();
+      renderProducts(mockProducts);
+      renderAccountView();
+    }
+
+    function renderHeader() {
+      const slot = document.getElementById('headerRightSlot');
+      if (currentUser) {
+        // Logged In: Notification Bell
+        slot.innerHTML = `
+          <button onclick="switchNavTab('messages')" class="relative p-2 text-white hover:bg-emerald-800 rounded-xl transition cursor-pointer">
+            <span class="text-xl">🔔</span>
+            <span class="absolute top-1 right-1 w-2 h-2 bg-[#f59e0b] rounded-full"></span>
           </button>
         `;
+      } else {
+        // Logged Out: Sign in & Create account buttons
+        slot.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <a href="login.html" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3 py-2 rounded-xl transition">Sign in</a>
+            <a href="login.html" class="bg-[#f59e0b] hover:bg-amber-600 text-gray-900 text-xs font-bold px-3 py-2 rounded-xl transition shadow">Create account</a>
+          </div>
+        `;
       }
-      renderProducts(sampleProducts);
+    }
+
+    function renderGreeting() {
+      const greet = document.getElementById('greetingText');
+      if (currentUser) {
+        const emailName = currentUser.email.split('@')[0];
+        const capitalized = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+        greet.textContent = `Good afternoon, ${capitalized}`;
+      } else {
+        greet.textContent = `Welcome to Yumilo Market`;
+      }
     }
 
     function renderProducts(products) {
       const grid = document.getElementById('productGrid');
       grid.innerHTML = products.map(p => `
-        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 flex flex-col justify-between space-y-4">
-          <div class="text-4xl text-center py-6 bg-gray-50 rounded-xl">${p.image}</div>
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-emerald-700 uppercase">${p.category}</span>
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 flex flex-col justify-between space-y-3">
+          <div class="text-4xl text-center py-6 bg-gray-50 rounded-xl">${p.emoji}</div>
+          <div class="space-y-0.5">
             <h4 class="text-xs font-bold text-gray-800 line-clamp-1">${p.name}</h4>
             <p class="text-sm font-black text-[#064e3b]">K${p.price.toFixed(2)}</p>
           </div>
-          <button onclick="addToCart(${p.id})" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
-            Add to Cart
+          <button onclick="viewProduct('${p.name}', ${p.price})" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-2 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
+            View
           </button>
         </div>
       `).join('');
     }
 
     function filterCategory(cat) {
+      ['All', 'Food', 'Home', 'Fashion', 'Electronics'].forEach(c => {
+        const btn = document.getElementById(`catBtn${c}`);
+        if (btn) {
+          if (c === cat) {
+            btn.className = 'px-6 py-2.5 rounded-full text-xs font-bold bg-[#f59e0b] text-gray-900 shadow-sm transition cursor-pointer shrink-0';
+          } else {
+            btn.className = 'px-6 py-2.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition cursor-pointer shrink-0';
+          }
+        }
+      });
+
       if (cat === 'All') {
-        renderProducts(sampleProducts);
+        renderProducts(mockProducts);
       } else {
-        renderProducts(sampleProducts.filter(p => p.category === cat));
+        renderProducts(mockProducts.filter(p => p.category === cat));
       }
     }
 
-    function addToCart(id) {
-      const product = sampleProducts.find(p => p.id === id);
-      const existing = cart.find(item => item.id === id);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({ ...product, qty: 1 });
-      }
-      updateCartUI();
-      toggleCartDrawer(true);
+    function switchNavTab(tabName) {
+      ['home', 'categories', 'messages', 'orders', 'account'].forEach(t => {
+        document.getElementById(`view${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.toggle('hidden', t !== tabName);
+        const navBtn = document.getElementById(`nav${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (t === tabName) {
+          navBtn.className = 'flex flex-col items-center text-[#064e3b] cursor-pointer space-y-0.5';
+        } else {
+          navBtn.className = 'flex flex-col items-center text-gray-400 hover:text-gray-600 cursor-pointer space-y-0.5';
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function updateCartUI() {
-      document.getElementById('cartCountBadge').textContent = cart.reduce((sum, item) => sum + item.qty, 0);
-      const list = document.getElementById('cartItemsList');
-      if (cart.length === 0) {
-        list.innerHTML = `<p class="text-xs text-gray-400 text-center py-10">Your cart is empty.</p>`;
-        document.getElementById('cartTotalPrice').textContent = 'K0.00';
-        return;
-      }
-      list.innerHTML = cart.map(item => `
-        <div class="py-3 flex justify-between items-center text-xs">
-          <div>
-            <p class="font-bold text-gray-800">${item.name}</p>
-            <p class="text-gray-500">K${item.price.toFixed(2)} x ${item.qty}</p>
-          </div>
-          <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 font-bold px-2">Remove</button>
-        </div>
-      `).join('');
-      const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      document.getElementById('cartTotalPrice').textContent = `K${total.toFixed(2)}`;
-    }
-
-    function removeFromCart(id) {
-      cart = cart.filter(item => item.id !== id);
-      updateCartUI();
-    }
-
-    function toggleCartDrawer(open) {
-      document.getElementById('cartDrawer').classList.toggle('hidden', !open);
-    }
-
-    function toggleAccountModal(open) {
-      if (open && currentUser) {
-        document.getElementById('modalUserEmail').textContent = currentUser.email;
-      }
-      document.getElementById('accountModal').classList.toggle('hidden', !open);
-    }
-
-    function proceedToCheckout() {
+    function renderAccountView() {
+      const container = document.getElementById('accountContent');
       if (!currentUser) {
-        alert('Please sign in or create an account to proceed with checkout.');
-        window.location.href = 'login.html';
+        container.innerHTML = `
+          <div class="text-center space-y-3 py-6">
+            <p class="text-xs text-gray-500">You are not signed in.</p>
+            <a href="login.html" class="inline-block bg-[#064e3b] text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase">Sign In or Register</a>
+          </div>
+        `;
         return;
       }
-      alert('Redirecting to secure mobile money escrow payment gateway. Orders will only be completed upon payment confirmation.');
+
+      container.innerHTML = `
+        <div class="space-y-4 text-xs">
+          <div class="p-3 bg-emerald-50 rounded-xl space-y-1">
+            <p class="font-bold text-emerald-900">Signed in account:</p>
+            <p class="font-mono text-emerald-700">${currentUser.email}</p>
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 uppercase mb-1">Delivery Address & Province</label>
+            <input type="text" id="userAddressInput" placeholder="District, Province, Street Landmark" class="w-full px-3 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#064e3b]">
+          </div>
+          <button onclick="saveUserSettings()" class="w-full bg-[#064e3b] text-white font-bold py-2.5 rounded-xl uppercase transition cursor-pointer">Save Address Settings</button>
+          <button onclick="handleLogout()" class="w-full bg-red-100 text-red-700 font-bold py-2.5 rounded-xl uppercase transition cursor-pointer">Sign Out</button>
+        </div>
+      `;
+    }
+
+    function viewProduct(name, price) {
+      if (!currentUser) {
+        if (confirm(`You selected ${name} (K${price.toFixed(2)}). Sign in to proceed with secure checkout.`)) {
+          window.location.href = 'login.html';
+        }
+        return;
+      }
+      alert(`Proceeding to checkout for ${name} at K${price.toFixed(2)}. Payments are verified securely before order completion.`);
+    }
+
+    function saveUserSettings() {
+      alert('Delivery address settings updated successfully!');
     }
 
     async function handleLogout() {
@@ -244,12 +323,11 @@
       window.location.reload();
     }
 
-    function saveAccountSettings() {
-      alert('Account settings saved successfully!');
-      toggleAccountModal(false);
+    function loadOrders() {
+      alert('Orders are up to date.');
     }
 
-    initStore();
+    initApp();
   </script>
 </body>
 </html>
