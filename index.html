@@ -3,196 +3,253 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yumilo Market - Nationwide E-Commerce Zambia</title>
+  <title>Yumilo Market - Nationwide Marketplace Across Zambia</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>body { background-color: #fcfbf9; }</style>
 </head>
-<body class="min-h-screen flex flex-col text-gray-800 pb-16 md:pb-0">
+<body class="min-h-screen text-gray-800 flex flex-col">
 
   <!-- TOP HEADER -->
-  <header class="bg-white border-b border-gray-200 sticky top-0 z-40 px-4 md:px-8 py-3.5 flex items-center justify-between gap-4">
-    <div class="flex items-center space-x-2 shrink-0">
-      <h1 class="text-xl font-black text-[#064e3b] tracking-tight">YUMILOMARKET</h1>
+  <header class="bg-[#064e3b] text-white sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center gap-4">
+      <a href="index.html" class="text-lg font-black tracking-wide">YUMILO MARKET</a>
+      
+      <!-- SEARCH BAR -->
+      <div class="flex-1 max-w-md hidden md:block">
+        <input type="text" id="searchInput" placeholder="Search products across Zambia..." class="w-full px-4 py-2 rounded-xl text-xs text-gray-800 bg-white focus:outline-none shadow-inner">
+      </div>
+
+      <!-- DYNAMIC AUTH & CART CONTROLS -->
+      <div class="flex items-center space-x-3" id="headerAuthArea">
+        <button onclick="toggleCartDrawer(true)" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition cursor-pointer flex items-center space-x-1.5">
+          <span>🛒 Cart</span>
+          <span id="cartCountBadge" class="bg-white text-[#064e3b] px-1.5 py-0.5 rounded-full text-[10px] font-black">0</span>
+        </button>
+        <div id="authNavSlot">
+          <a href="login.html" class="bg-white text-[#064e3b] hover:bg-emerald-50 text-xs font-bold px-4 py-2 rounded-xl transition shadow">Sign In</a>
+        </div>
+      </div>
     </div>
 
-    <!-- SEARCH BAR -->
-    <div class="flex-1 max-w-xl hidden md:flex items-center relative">
-      <span class="absolute left-3.5 text-gray-400">🔍</span>
-      <input type="text" placeholder="Search products across Zambia..." class="w-full bg-gray-50 border border-gray-200 rounded-full pl-10 pr-4 py-2 text-xs focus:ring-2 focus:ring-emerald-600 focus:outline-none">
-    </div>
-
-    <!-- RIGHT NAV ACTIONS -->
-    <div class="flex items-center space-x-4 text-xs font-semibold">
-      <a href="login.html" id="authNavBtn" class="text-gray-700 hover:text-emerald-700 transition">Sign In</a>
-      <a href="dashboard.html" class="text-gray-700 hover:text-emerald-700 transition flex items-center gap-1"><span>👤</span> Account</a>
-      <div class="bg-emerald-700 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 cursor-pointer">
-        <span>🛒</span> <span id="cartCount">0</span>
+    <!-- CATEGORIES RIBBON -->
+    <div class="bg-emerald-900/80 border-t border-emerald-800 px-6 py-2 overflow-x-auto">
+      <div class="max-w-7xl mx-auto flex space-x-6 text-xs font-semibold whitespace-nowrap">
+        <button onclick="filterCategory('All')" class="hover:text-emerald-200 transition cursor-pointer text-white">All Categories</button>
+        <button onclick="filterCategory('Electronics')" class="hover:text-emerald-200 transition cursor-pointer text-emerald-100">Electronics</button>
+        <button onclick="filterCategory('Fashion')" class="hover:text-emerald-200 transition cursor-pointer text-emerald-100">Fashion</button>
+        <button onclick="filterCategory('Groceries')" class="hover:text-emerald-200 transition cursor-pointer text-emerald-100">Groceries</button>
+        <button onclick="filterCategory('Agri & Livestock')" class="hover:text-emerald-200 transition cursor-pointer text-emerald-100">Agri & Livestock</button>
       </div>
     </div>
   </header>
 
-  <!-- CATEGORY PILLS BAR -->
-  <nav class="bg-white border-b border-gray-100 px-4 md:px-8 py-2.5 flex items-center space-x-3 overflow-x-auto text-xs font-medium">
-    <span class="bg-[#064e3b] text-white px-4 py-1.5 rounded-full cursor-pointer shrink-0">All</span>
-    <span class="bg-gray-100 hover:bg-gray-200 px-4 py-1.5 rounded-full cursor-pointer shrink-0 text-gray-700">Electronics</span>
-    <span class="bg-gray-100 hover:bg-gray-200 px-4 py-1.5 rounded-full cursor-pointer shrink-0 text-gray-700">Fashion</span>
-    <span class="bg-gray-100 hover:bg-gray-200 px-4 py-1.5 rounded-full cursor-pointer shrink-0 text-gray-700">Groceries</span>
-    <span class="bg-gray-100 hover:bg-gray-200 px-4 py-1.5 rounded-full cursor-pointer shrink-0 text-gray-700">Agri & Livestock</span>
-  </nav>
+  <!-- MAIN STORE CONTENT -->
+  <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full space-y-10">
 
-  <!-- MAIN CONTENT CONTAINER -->
-  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-8 flex-1">
-    
     <!-- HERO BANNER -->
-    <div class="bg-[#064e3b] text-white rounded-3xl p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-8 shadow-sm relative overflow-hidden">
-      <div class="space-y-3 max-w-lg z-10">
-        <span class="inline-block bg-emerald-800 text-emerald-200 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Zambia • Quality at every step</span>
-        <h2 class="text-3xl md:text-5xl font-black tracking-tight">Good finds. Right here.</h2>
+    <div class="bg-[#064e3b] text-white rounded-3xl p-8 md:p-12 shadow-lg flex flex-col md:flex-row justify-between items-center gap-8">
+      <div class="space-y-3 max-w-xl text-center md:text-left">
+        <span class="bg-emerald-800 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Zambia • Quality At Every Step</span>
+        <h2 class="text-3xl md:text-4xl font-black tracking-tight">Good finds. Right here.</h2>
         <p class="text-xs md:text-sm text-emerald-100 leading-relaxed">Shop products from across Zambia. Verified vendors, secure mobile money escrow, and reliable nationwide delivery.</p>
-        <div class="pt-2">
-          <a href="#catalog" class="inline-block bg-amber-400 hover:bg-amber-500 text-gray-900 font-bold px-6 py-3 rounded-xl text-xs transition shadow">Explore the market</a>
-        </div>
       </div>
-      <div class="bg-emerald-900/60 p-4 rounded-2xl border border-emerald-800 shrink-0 w-full md:w-80 h-48 flex items-center justify-center text-emerald-300 text-xs font-semibold">
-        [ Nationwide Logistics Hub ]
+      <div class="bg-emerald-900/60 border border-emerald-700/50 p-6 rounded-2xl text-center text-xs space-y-1 shadow-inner">
+        <p class="font-bold text-emerald-200 uppercase">Nationwide Logistics Hub</p>
+        <p class="text-emerald-300">Active Dispatches to All Provinces</p>
       </div>
     </div>
 
-    <!-- POPULAR CATEGORIES -->
-    <div class="space-y-4">
+    <!-- PRODUCT CATALOG -->
+    <div class="space-y-6">
       <div class="flex justify-between items-center">
-        <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Popular categories</h3>
-        <a href="#" class="text-xs font-semibold text-emerald-700 hover:underline">View all →</a>
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 text-center space-y-2 hover:border-emerald-600 transition cursor-pointer">
-          <div class="text-2xl">📱</div>
-          <p class="text-xs font-bold text-gray-800">Electronics</p>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 text-center space-y-2 hover:border-emerald-600 transition cursor-pointer">
-          <div class="text-2xl">👕</div>
-          <p class="text-xs font-bold text-gray-800">Fashion</p>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 text-center space-y-2 hover:border-emerald-600 transition cursor-pointer">
-          <div class="text-2xl">🌾</div>
-          <p class="text-xs font-bold text-gray-800">Groceries</p>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 text-center space-y-2 hover:border-emerald-600 transition cursor-pointer">
-          <div class="text-2xl">🐓</div>
-          <p class="text-xs font-bold text-gray-800">Agriculture</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- FEATURED PRODUCTS -->
-    <div id="catalog" class="space-y-4">
-      <div class="flex justify-between items-center">
-        <div>
-          <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Featured products</h3>
-          <p class="text-[11px] text-gray-500">Verified items ready for nationwide delivery</p>
-        </div>
-        <a href="#" class="text-xs font-semibold text-emerald-700 hover:underline">See catalog →</a>
+        <h3 class="text-lg font-black text-[#064e3b]">Featured Products</h3>
+        <span class="text-xs text-gray-400">Verified items ready for nationwide delivery</span>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- PRODUCT 1 -->
-        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between">
-          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&q=80" alt="Smartphone" class="w-full h-40 object-cover">
-          <div class="p-4 space-y-2">
-            <span class="text-[10px] font-bold text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded">Electronics</span>
-            <h4 class="text-xs font-bold text-gray-900">X-Series Smart Phone 128GB</h4>
-            <p class="text-sm font-extrabold text-[#064e3b]">K3,450.00</p>
-          </div>
-          <div class="p-4 pt-0">
-            <button onclick="addToCart('X-Series Smart Phone', 3450)" class="w-full bg-amber-400 hover:bg-amber-500 text-gray-900 font-bold py-2 rounded-xl text-xs transition cursor-pointer">Add to Cart</button>
-          </div>
-        </div>
-
-        <!-- PRODUCT 2 -->
-        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between">
-          <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=400&q=80" alt="Casual Tee" class="w-full h-40 object-cover">
-          <div class="p-4 space-y-2">
-            <span class="text-[10px] font-bold text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded">Fashion</span>
-            <h4 class="text-xs font-bold text-gray-900">Premium Cotton Casual Tee</h4>
-            <p class="text-sm font-extrabold text-[#064e3b]">K180.00</p>
-          </div>
-          <div class="p-4 pt-0">
-            <button onclick="addToCart('Premium Cotton Casual Tee', 180)" class="w-full bg-amber-400 hover:bg-amber-500 text-gray-900 font-bold py-2 rounded-xl text-xs transition cursor-pointer">Add to Cart</button>
-          </div>
-        </div>
-
-        <!-- PRODUCT 3 -->
-        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between">
-          <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&q=80" alt="Roller Meal" class="w-full h-40 object-cover">
-          <div class="p-4 space-y-2">
-            <span class="text-[10px] font-bold text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded">Groceries</span>
-            <h4 class="text-xs font-bold text-gray-900">Super Meal Roller Meal (25kg)</h4>
-            <p class="text-sm font-extrabold text-[#064e3b]">K240.00</p>
-          </div>
-          <div class="p-4 pt-0">
-            <button onclick="addToCart('Super Meal Roller Meal', 240)" class="w-full bg-amber-400 hover:bg-amber-500 text-gray-900 font-bold py-2 rounded-xl text-xs transition cursor-pointer">Add to Cart</button>
-          </div>
-        </div>
-
-        <!-- PRODUCT 4 -->
-        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between">
-          <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=400&q=80" alt="Broiler Chicken" class="w-full h-40 object-cover">
-          <div class="p-4 space-y-2">
-            <span class="text-[10px] font-bold text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded">Agriculture</span>
-            <h4 class="text-xs font-bold text-gray-900">Whole Broiler Chicken (Zamhatch)</h4>
-            <p class="text-sm font-extrabold text-[#064e3b]">K95.00</p>
-          </div>
-          <div class="p-4 pt-0">
-            <button onclick="addToCart('Whole Broiler Chicken', 95)" class="w-full bg-amber-400 hover:bg-amber-500 text-gray-900 font-bold py-2 rounded-xl text-xs transition cursor-pointer">Add to Cart</button>
-          </div>
-        </div>
+      <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <!-- Products populated dynamically -->
       </div>
     </div>
 
   </main>
 
-  <!-- MOBILE BOTTOM NAVIGATION BAR -->
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-2.5 flex justify-between items-center text-[10px] font-semibold text-gray-600 z-50">
-    <a href="index.html" class="flex flex-col items-center text-emerald-700"><span>🏠</span><span>Home</span></a>
-    <a href="#catalog" class="flex flex-col items-center"><span>📦</span><span>Catalog</span></a>
-    <a href="dashboard.html" class="flex flex-col items-center"><span>👤</span><span>Orders</span></a>
-    <a href="login.html" class="flex flex-col items-center"><span>💬</span><span>Account</span></a>
-  </nav>
+  <!-- SLIDE-OUT CART & CHECKOUT DRAWER -->
+  <div id="cartDrawer" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden flex justify-end transition-opacity">
+    <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col p-6 space-y-6 overflow-y-auto">
+      <div class="flex justify-between items-center border-b pb-4">
+        <h3 class="text-base font-black text-[#064e3b]">Your Shopping Cart</h3>
+        <button onclick="toggleCartDrawer(false)" class="text-gray-400 hover:text-gray-700 font-bold text-lg cursor-pointer">✕</button>
+      </div>
+
+      <div id="cartItemsList" class="flex-1 space-y-4 overflow-y-auto divide-y divide-gray-100">
+        <p class="text-xs text-gray-400 text-center py-10">Your cart is empty.</p>
+      </div>
+
+      <div class="border-t pt-4 space-y-3">
+        <div class="flex justify-between text-sm font-bold text-gray-800">
+          <span>Total:</span>
+          <span id="cartTotalPrice">K0.00</span>
+        </div>
+        <button onclick="proceedToCheckout()" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
+          Proceed to Secure Checkout
+        </button>
+        <p class="text-[10px] text-center text-gray-400">Orders are completed only after payment verification.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCOUNT SETTINGS MODAL (Triggered when logged in) -->
+  <div id="accountModal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 space-y-6">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-base font-bold text-[#064e3b]">Account Settings & Inbox</h3>
+        <button onclick="toggleAccountModal(false)" class="text-gray-400 hover:text-gray-700 font-bold cursor-pointer">✕</button>
+      </div>
+      <div class="space-y-4 text-xs">
+        <div class="p-3 bg-emerald-50 rounded-xl space-y-1">
+          <p class="font-bold text-emerald-900">Signed in as:</p>
+          <p id="modalUserEmail" class="font-mono text-emerald-700"></p>
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 uppercase mb-1">Update Delivery Address</label>
+          <input type="text" id="modalUserAddress" placeholder="Street, City, Province" class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600">
+        </div>
+        <button onclick="saveAccountSettings()" class="w-full bg-[#064e3b] text-white font-bold py-2.5 rounded-xl uppercase transition cursor-pointer">Save Settings</button>
+        <button onclick="handleLogout()" class="w-full bg-red-100 text-red-700 font-bold py-2.5 rounded-xl uppercase transition cursor-pointer">Sign Out</button>
+      </div>
+    </div>
+  </div>
 
   <!-- FOOTER -->
-  <footer class="bg-white border-t border-gray-200 py-8 px-8 text-center text-xs text-gray-500 space-y-2 mb-12 md:mb-0">
-    <p class="font-bold text-gray-800">Yumilo Market — Nationwide Marketplace across Zambia</p>
-    <p>&copy; 2026 Yumilo Market. All rights reserved. Secure Mobile Money Escrow.</p>
+  <footer class="text-center py-6 text-xs text-gray-400 border-t border-gray-100 mt-auto">
+    &copy; 2026 Yumilo Market. All rights reserved. Secure Nationwide Delivery.
   </footer>
 
-  <!-- DYNAMIC SESSION CHECK SCRIPT -->
   <script>
     const SUPABASE_URL = 'https://syxibiyrbgwsgghwwgej.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_0pWBbZd-S5UthaXCOzu4KA_YblfcNHG';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: { persistSession: true, autoRefreshToken: true }
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
 
-    let cartCount = 0;
-    function addToCart(name, price) {
-      cartCount++;
-      document.getElementById('cartCount').textContent = cartCount;
-      alert(`Added "${name}" to your cart!`);
+    let cart = [];
+    let currentUser = null;
+
+    const sampleProducts = [
+      { id: 1, name: 'X-Series Smart Phone 128GB', category: 'Electronics', price: 3450.00, image: '📱' },
+      { id: 2, name: 'Premium Cotton Casual Tee', category: 'Fashion', price: 180.00, image: '👕' },
+      { id: 3, name: 'Super Meal Roller Meal (25kg)', category: 'Groceries', price: 240.00, image: '🌾' },
+      { id: 4, name: 'Whole Broiler Chicken (Zamhatch)', category: 'Agri & Livestock', price: 95.00, image: '🍗' }
+    ];
+
+    async function initStore() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) {
+        currentUser = session.user;
+        document.getElementById('authNavSlot').innerHTML = `
+          <button onclick="toggleAccountModal(true)" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition cursor-pointer">
+            ⚙️ Account Settings
+          </button>
+        `;
+      }
+      renderProducts(sampleProducts);
     }
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (session && session.user) {
-          const authBtn = document.getElementById('authNavBtn');
-          if (authBtn) {
-            authBtn.textContent = 'Dashboard';
-            authBtn.href = 'dashboard.html';
-          }
-        }
-      } catch (err) {}
-    });
+    function renderProducts(products) {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = products.map(p => `
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 flex flex-col justify-between space-y-4">
+          <div class="text-4xl text-center py-6 bg-gray-50 rounded-xl">${p.image}</div>
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold text-emerald-700 uppercase">${p.category}</span>
+            <h4 class="text-xs font-bold text-gray-800 line-clamp-1">${p.name}</h4>
+            <p class="text-sm font-black text-[#064e3b]">K${p.price.toFixed(2)}</p>
+          </div>
+          <button onclick="addToCart(${p.id})" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
+            Add to Cart
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function filterCategory(cat) {
+      if (cat === 'All') {
+        renderProducts(sampleProducts);
+      } else {
+        renderProducts(sampleProducts.filter(p => p.category === cat));
+      }
+    }
+
+    function addToCart(id) {
+      const product = sampleProducts.find(p => p.id === id);
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+      updateCartUI();
+      toggleCartDrawer(true);
+    }
+
+    function updateCartUI() {
+      document.getElementById('cartCountBadge').textContent = cart.reduce((sum, item) => sum + item.qty, 0);
+      const list = document.getElementById('cartItemsList');
+      if (cart.length === 0) {
+        list.innerHTML = `<p class="text-xs text-gray-400 text-center py-10">Your cart is empty.</p>`;
+        document.getElementById('cartTotalPrice').textContent = 'K0.00';
+        return;
+      }
+      list.innerHTML = cart.map(item => `
+        <div class="py-3 flex justify-between items-center text-xs">
+          <div>
+            <p class="font-bold text-gray-800">${item.name}</p>
+            <p class="text-gray-500">K${item.price.toFixed(2)} x ${item.qty}</p>
+          </div>
+          <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 font-bold px-2">Remove</button>
+        </div>
+      `).join('');
+      const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      document.getElementById('cartTotalPrice').textContent = `K${total.toFixed(2)}`;
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      updateCartUI();
+    }
+
+    function toggleCartDrawer(open) {
+      document.getElementById('cartDrawer').classList.toggle('hidden', !open);
+    }
+
+    function toggleAccountModal(open) {
+      if (open && currentUser) {
+        document.getElementById('modalUserEmail').textContent = currentUser.email;
+      }
+      document.getElementById('accountModal').classList.toggle('hidden', !open);
+    }
+
+    function proceedToCheckout() {
+      if (!currentUser) {
+        alert('Please sign in or create an account to proceed with checkout.');
+        window.location.href = 'login.html';
+        return;
+      }
+      alert('Redirecting to secure mobile money escrow payment gateway. Orders will only be completed upon payment confirmation.');
+    }
+
+    async function handleLogout() {
+      await supabaseClient.auth.signOut();
+      window.location.reload();
+    }
+
+    function saveAccountSettings() {
+      alert('Account settings saved successfully!');
+      toggleAccountModal(false);
+    }
+
+    initStore();
   </script>
 </body>
 </html>

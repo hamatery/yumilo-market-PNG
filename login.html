@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yumilo Market - Customer Login & Verification</title>
+  <title>Yumilo Market - Customer Authentication</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>body { background-color: #fcfbf9; }</style>
@@ -24,7 +24,7 @@
       <button onclick="switchTab('signup')" id="tabSignup" class="flex-1 py-2.5 rounded-lg text-gray-500 transition cursor-pointer">Create Account</button>
     </div>
 
-    <!-- ERROR / SUCCESS ALERTS -->
+    <!-- ALERTS -->
     <div id="authAlert" class="hidden p-3 rounded-lg text-xs font-medium"></div>
 
     <!-- SIGN IN FORM -->
@@ -37,12 +37,15 @@
         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Password</label>
         <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
       </div>
+      <div class="flex justify-between items-center text-xs">
+        <a href="#" onclick="showResetModal(event)" class="text-emerald-700 hover:underline">Forgot password?</a>
+      </div>
       <button type="submit" id="loginBtn" class="w-full bg-[#064e3b] hover:bg-emerald-900 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow">
         Sign In to Account
       </button>
     </form>
 
-    <!-- SIGN UP FORM (Step 1) -->
+    <!-- SIGN UP FORM (Step 1 with Province & District) -->
     <form id="signupForm" onsubmit="handleRequestOtp(event)" class="space-y-4 hidden">
       <div>
         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Full Name</label>
@@ -51,6 +54,27 @@
       <div>
         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Email Address</label>
         <input type="email" id="signupEmail" required placeholder="you@example.com" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Province</label>
+          <select id="signupProvince" class="w-full px-2 py-2.5 border rounded-xl text-xs bg-white focus:outline-none">
+            <option value="Luapula">Luapula</option>
+            <option value="Lusaka">Lusaka</option>
+            <option value="Copperbelt">Copperbelt</option>
+            <option value="Southern">Southern</option>
+            <option value="Northern">Northern</option>
+            <option value="Eastern">Eastern</option>
+            <option value="North-Western">North-Western</option>
+            <option value="Central">Central</option>
+            <option value="Muchinga">Muchinga</option>
+            <option value="Western">Western</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 uppercase mb-1">District</label>
+          <input type="text" id="signupDistrict" required placeholder="Mansa" class="w-full px-3 py-2.5 border rounded-xl text-xs focus:outline-none">
+        </div>
       </div>
       <div>
         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Create Password</label>
@@ -91,7 +115,7 @@
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
 
-    let tempUserData = { name: '', email: '', password: '', generatedOtp: '' };
+    let tempUserData = { name: '', email: '', province: '', district: '', password: '', generatedOtp: '' };
 
     function switchTab(tab) {
       document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
@@ -111,14 +135,6 @@
       alertBox.classList.remove('hidden');
     }
 
-    function redirectToDashboard(email) {
-      if (email.includes('admin') || email === 'henrymwansa16@gmail.com') {
-        window.location.replace('admin.html');
-      } else {
-        window.location.replace('dashboard.html');
-      }
-    }
-
     async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
@@ -129,10 +145,10 @@
       btn.disabled = true;
 
       try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        showAlert('Login successful! Redirecting...', false);
-        setTimeout(() => redirectToDashboard(email), 800);
+        showAlert('Login successful! Redirecting to store...', false);
+        setTimeout(() => window.location.replace('index.html'), 800);
       } catch (err) {
         showAlert(err.message || 'Failed to sign in.');
         btn.textContent = 'Sign In to Account';
@@ -144,6 +160,8 @@
       e.preventDefault();
       tempUserData.name = document.getElementById('signupName').value.trim();
       tempUserData.email = document.getElementById('signupEmail').value.trim();
+      tempUserData.province = document.getElementById('signupProvince').value;
+      tempUserData.district = document.getElementById('signupDistrict').value.trim();
       tempUserData.password = document.getElementById('signupPassword').value;
       const btn = document.getElementById('signupBtn');
 
@@ -203,7 +221,6 @@
       btn.disabled = true;
 
       try {
-        // Calls the verified /send-otp function with action: 'signup'
         const response = await fetch('/send-otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -211,7 +228,7 @@
             action: 'signup',
             email: tempUserData.email,
             password: tempUserData.password,
-            fullName: tempUserData.name
+            fullName: `${tempUserData.name} (${tempUserData.district}, ${tempUserData.province})`
           })
         });
 
@@ -220,18 +237,31 @@
           throw new Error(result.error || 'Failed to complete registration.');
         }
 
-        // Automatically log them in after registration
         await supabaseClient.auth.signInWithPassword({
           email: tempUserData.email,
           password: tempUserData.password
         });
 
         showAlert('Account created successfully! Redirecting...', false);
-        setTimeout(() => redirectToDashboard(tempUserData.email), 1200);
+        setTimeout(() => window.location.replace('index.html'), 1200);
       } catch (err) {
         showAlert(err.message || 'Failed to create user account.');
         btn.textContent = 'Verify Code & Create Account';
         btn.disabled = false;
+      }
+    }
+
+    async function showResetModal(e) {
+      e.preventDefault();
+      const email = prompt('Enter your account email address to reset password:');
+      if (!email) return;
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/login.html'
+      });
+      if (error) {
+        alert(error.message);
+      } else {
+        alert('Password reset instructions have been sent to your email.');
       }
     }
   </script>
