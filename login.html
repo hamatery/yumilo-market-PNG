@@ -166,7 +166,7 @@
       }
     }
 
-    // Step 1: Request OTP Code via /send-otp (sent as 'passcode')
+    // Step 1: Request OTP Code with diagnostic response inspection
     async function handleRequestOtp(e) {
       e.preventDefault();
       tempUserData.name = document.getElementById('signupName').value.trim();
@@ -189,9 +189,16 @@
           })
         });
 
-        const result = await response.json();
+        const responseText = await response.text();
+        let result;
+        try {
+          result = JSON.parse(responseText);
+        } catch (parseErr) {
+          throw new Error(`Server endpoint error (${response.status}): ${responseText.slice(0, 120)}`);
+        }
+
         if (!response.ok || !result.success) {
-          throw new Error(result.error || 'Failed to dispatch verification code.');
+          throw new Error(result.error || `Request failed with status ${response.status}`);
         }
 
         document.getElementById('signupForm').classList.add('hidden');
@@ -201,7 +208,8 @@
         showAlert('Verification code sent! Check your inbox.', false);
 
       } catch (err) {
-        showAlert(err.message || 'Error sending verification code.');
+        console.error("OTP Error:", err);
+        showAlert(err.message || 'Error connecting to serverless function.');
         btn.textContent = 'Send Verification Code';
         btn.disabled = false;
       }
