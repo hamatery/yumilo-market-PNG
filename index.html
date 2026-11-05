@@ -17,7 +17,7 @@
     .fade-in { animation: fadeIn 0.3s ease-in-out forwards; }
   </style>
 </head>
-<body class="min-h-screen text-gray-800 flex flex-col pb-28">
+<body class="min-h-screen text-gray-800 flex flex-col pb-28" onclick="closeAllDropdowns(event)">
 
   <!-- UNIFIED PROFESSIONAL HEADER (ALIBABA STYLE) -->
   <header class="bg-[#064e3b] text-white sticky top-0 z-50 shadow-md w-full">
@@ -41,7 +41,7 @@
       </div>
 
       <!-- Right: Utility Links & Account -->
-      <div class="flex items-center space-x-5 text-[11px] font-medium text-emerald-100">
+      <div class="flex items-center space-x-5 text-[11px] font-medium text-emerald-100 relative">
         <div class="hidden xl:flex items-center space-x-1 cursor-pointer hover:text-white" onclick="openDeliveryModal()" title="Select province & district">
           <span>📍 Deliver to:</span>
           <span id="selectedLocationLabel" class="font-bold text-white">Zambia</span>
@@ -49,7 +49,43 @@
         <span class="hidden xl:inline text-emerald-600">|</span>
         <span class="hidden xl:inline cursor-pointer hover:text-white">English - ZMW</span>
         <span class="hidden xl:inline text-emerald-600">|</span>
-        <a href="#" onclick="alert('Help Center: Contact support at support@yumilomarket.store or call our Lusaka/Mansa desks.'); return false;" class="hover:text-white hidden md:inline">Help Center</a>
+        
+        <!-- HELP CENTER WITH INTERACTIVE DROPDOWN -->
+        <div class="relative inline-block text-left" id="helpDropdownContainer">
+          <button onclick="toggleHelpDropdown(event)" class="hover:text-white hidden md:flex items-center space-x-1 cursor-pointer focus:outline-none">
+            <span>Help Center</span>
+            <span>▾</span>
+          </button>
+          
+          <!-- Dropdown Menu Box -->
+          <div id="helpDropdownMenu" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-gray-200 text-gray-800 p-3 z-50 grid grid-cols-2 gap-2 text-xs">
+            <a href="#" onclick="helpAction('Buyer Help Center'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+              <p class="font-bold">Buyer Help Center</p>
+              <p class="text-[10px] text-gray-500">Guides & FAQs</p>
+            </a>
+            <a href="#" onclick="helpAction('Live chat with customer support'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+              <p class="font-bold">Live Chat Support</p>
+              <p class="text-[10px] text-gray-500">Instant assistance</p>
+            </a>
+            <a href="#" onclick="helpAction('Refunds & after-sales'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+              <p class="font-bold">Refunds & Returns</p>
+              <p class="text-[10px] text-gray-500">Track claims</p>
+            </a>
+            <a href="#" onclick="helpAction('File a trade dispute'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+              <p class="font-bold">File Dispute</p>
+              <p class="text-[10px] text-gray-500">Resolution desk</p>
+            </a>
+            <a href="#" onclick="helpAction('Report IP infringement'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+              <p class="font-bold">Report IP</p>
+              <p class="text-[10px] text-gray-500">Copyright claims</p>
+            </a>
+            <a href="#" onclick="helpAction('Report a violation'); return false;" class="p-2.5 rounded-xl hover:bg-emerald-50 hover:text-[#064e3b] transition font-medium">
+              <p class="font-bold">Report Violation</p>
+              <p class="text-[10px] text-gray-500">Safety & trust</p>
+            </a>
+          </div>
+        </div>
+
         <a href="#" onclick="alert('Sell on Yumarket: Register as a vendor to list your products across all Zambian provinces.'); return false;" class="text-[#f59e0b] font-bold hover:underline hidden md:inline">Sell on Yumarket</a>
         
         <!-- Cart & Auth Slot -->
@@ -399,6 +435,23 @@
           </div>
         `;
       }
+    }
+
+    function toggleHelpDropdown(event) {
+      event.stopPropagation();
+      const menu = document.getElementById('helpDropdownMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    function closeAllDropdowns(event) {
+      const menu = document.getElementById('helpDropdownMenu');
+      if (menu && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+      }
+    }
+
+    function helpAction(topic) {
+      alert(`Help Center - ${topic}: Our support team is ready to assist you across all Zambian provinces. Contact support@yumilomarket.store for urgent desk requests.`);
     }
 
     function renderProducts(products) {
